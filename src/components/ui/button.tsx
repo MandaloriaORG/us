@@ -17,9 +17,9 @@ const buttonVariants = cva(
       },
       size: {
         sm: "h-8 px-3 text-xs",
-        md: "h-10 px-5",
+        md: "h-11 px-5",
         lg: "h-12 px-6 text-base",
-        icon: "h-10 w-10",
+        icon: "h-11 w-11",
       },
     },
     defaultVariants: {
@@ -35,19 +35,35 @@ export interface ButtonProps
   loading?: boolean;
 }
 
+/**
+ * shadcn/Radix Slot adaptation using Mandaloria tokens and interaction states.
+ * Use for actions and action-like links; use a normal Link for navigation that
+ * should read as inline text. The consumer owns pending/error announcements and
+ * must provide an accessible name for icon-only buttons.
+ *
+ * @see https://ui.shadcn.com/docs/components/button
+ */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, loading, disabled, children, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
+    const isDisabled = Boolean(disabled || loading);
 
     return (
       <Comp
+        aria-busy={loading || undefined}
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
-        disabled={disabled || loading}
+        {...(asChild ? { "aria-disabled": isDisabled || undefined } : { disabled: isDisabled })}
         {...props}
       >
-        {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-        {children}
+        {asChild ? (
+          children
+        ) : (
+          <>
+            {loading && <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" />}
+            {children}
+          </>
+        )}
       </Comp>
     );
   },

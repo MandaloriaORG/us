@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/cn";
+import { Button } from "@/components/ui/button";
 
 interface EmptyStateAction {
   label: string;
@@ -25,54 +26,38 @@ export function EmptyState({
   className,
 }: EmptyStateProps) {
   return (
-    <div className={cn("flex flex-col items-center justify-center py-16 text-center", className)}>
-      {/* Icon — sober, contextual */}
+    <div className={cn("flex flex-col items-center justify-center py-10 text-center", className)}>
       {icon && (
-        <div className="mb-6 rounded-full border border-border bg-bg-raised p-5 text-fg-muted">
+        <div aria-hidden="true" className="mb-4 text-fg-subtle">
           {icon}
         </div>
       )}
 
-      {/* Title */}
-      <h3 className="text-xl font-semibold text-fg">{title}</h3>
+      <h3 className="text-base font-semibold text-fg">{title}</h3>
 
-      {/* Description — why empty, what user can do */}
       {description && <p className="mt-2 max-w-md text-sm text-fg-muted">{description}</p>}
 
-      {/* Actions */}
-      <div className="mt-6 flex items-center gap-3">
+      <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
         {action &&
           (action.href ? (
-            <Link
-              href={action.href}
-              className="inline-flex h-10 items-center gap-2 rounded-md bg-brand px-5 text-sm font-medium text-brand-fg transition-colors duration-fast hover:opacity-90"
-            >
-              {action.label}
-            </Link>
+            <Button asChild>
+              <Link href={action.href}>{action.label}</Link>
+            </Button>
           ) : (
-            <button
-              onClick={action.onClick}
-              className="inline-flex h-10 items-center gap-2 rounded-md bg-brand px-5 text-sm font-medium text-brand-fg transition-colors duration-fast hover:opacity-90"
-            >
+            <Button type="button" onClick={action.onClick}>
               {action.label}
-            </button>
+            </Button>
           ))}
 
         {secondaryAction &&
           (secondaryAction.href ? (
-            <Link
-              href={secondaryAction.href}
-              className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium text-fg transition-colors duration-fast hover:bg-surface"
-            >
-              {secondaryAction.label}
-            </Link>
+            <Button asChild variant="secondary">
+              <Link href={secondaryAction.href}>{secondaryAction.label}</Link>
+            </Button>
           ) : (
-            <button
-              onClick={secondaryAction.onClick}
-              className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium text-fg transition-colors duration-fast hover:bg-surface"
-            >
+            <Button type="button" variant="secondary" onClick={secondaryAction.onClick}>
               {secondaryAction.label}
-            </button>
+            </Button>
           ))}
       </div>
     </div>

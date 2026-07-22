@@ -52,6 +52,13 @@
 
 **Purpose**: a copy-paste toolkit of refined, reusable controls with solid mechanics.
 
+**Operational source note (2026-07)**: Origin UI now resolves to coss UI. Its
+registry is configured as `@coss` in `components.json`. The current upstream uses
+Base UI and Tailwind CSS 4 patterns, while Mandaloria remains on React 18, Radix,
+and Tailwind CSS 3. Inspect registry source with `shadcn view`, then port only the
+needed mechanics into `src/components/origin/**`; do not install or paste the
+upstream stack wholesale without an explicit architecture decision.
+
 **Use for**:
 
 - Text, search, and password inputs.
@@ -108,6 +115,12 @@
 ### 4. ReUI — Dense interfaces, dashboards, and data
 
 **Purpose**: information-rich product surfaces with complex operations.
+
+**Operational source note**: ReUI is configured as `@reui` in `components.json`.
+Inspect every registry item before adoption. Prefer the smallest server-renderable
+adaptation that satisfies the current product contract; only introduce its optional
+TanStack, drag-and-drop, or Base UI dependencies when the required interaction
+actually justifies them.
 
 **Use for**:
 

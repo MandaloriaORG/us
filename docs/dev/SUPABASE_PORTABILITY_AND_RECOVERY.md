@@ -6,6 +6,128 @@ Mandaloria will use a single primary Supabase project during the MVP. From the f
 
 Active-active, bidirectional replication or federation will not be implemented during the MVP.
 
+## Phase 1 hosted-online baseline
+
+Mandaloria uses the hosted Supabase project by default. Application runtime access
+comes from `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`; the
+`SUPABASE_SERVICE_ROLE_KEY` remains server-only. A service-role key is not a
+database migration credential. Schema changes use the authenticated, linked
+Supabase CLI or an explicitly supplied, secret `SUPABASE_DB_URL`.
+
+The reproducible online workflow is:
+
+```bash
+pnpm dlx supabase@latest db push --linked --dry-run
+pnpm dlx supabase@latest db push --linked
+pnpm dlx supabase@latest test db --linked supabase/tests/database/identity_security_contract.test.sql
+pnpm dlx supabase@latest db lint --linked --schema public,private,storage --level warning --fail-on error
+pnpm dlx supabase@latest migration list --linked
+```
+
+Before any remote write, verify that the linked project ref and the host in
+`NEXT_PUBLIC_SUPABASE_URL` identify the same project. Never print keys while doing
+that check.
+
+Hosted Auth configuration is versioned in `supabase/config.toml`: email
+confirmation is required, password length is at least eight characters, secure
+password changes are enabled, and local URLs are not hardcoded. Supplying these
+non-secret deployment values is required before running
+`supabase config push`:
+
+- `NEXT_PUBLIC_SITE_URL`: the canonical application origin;
+- `SUPABASE_AUTH_CALLBACK_URL`: the exact `/auth/callback` URL;
+- `SUPABASE_AUTH_RESET_CALLBACK_URL`: the exact recovery callback URL, including
+  `?next=/auth/reset-password`.
+
+Do not substitute placeholders or an invented domain when pushing Auth config.
+The redirect allow-list must match the URLs emitted by the application.
+
+### Identity and avatar contract
+
+Migrations `0001` through `0006` are the source of truth for the following
+contract:
+
+- `profiles.avatar_path` stores only `<user uuid>/<object uuid>.webp`;
+- legacy `profiles.avatar_url` remains `NULL` and is not editable;
+- `profiles.profile_visibility` is `public`, `members`, or `private`;
+- `profiles.website` is `NULL` or a credential-free HTTP(S) URL of at most 2048
+  characters, without whitespace or control bytes;
+- non-NULL `profiles.avatar_path` values have a partial unique index;
+- the `avatars` bucket is private, limited to 5 MiB, and accepts generated WebP
+  objects only;
+- Storage reads mirror profile visibility and require `avatar_path = object.name`;
+- browser-facing `anon` and `authenticated` roles cannot mutate avatar objects;
+  three restrictive RLS policies preserve this boundary even if another bucket
+  later gains a permissive mutation policy;
+- Supabase owns the baseline `storage.objects` table ACL, so its visible DML
+  grants remain provider-managed; RLS and the provider's delete-protection
+  trigger are the effective enforcement boundary;
+- upload and cleanup use `SUPABASE_SERVICE_ROLE_KEY` only inside server-only code;
+  the namespace must be validated before upload and the generated object must be
+  `<user uuid>/<object uuid>.webp`;
+- signed avatar URLs are ephemeral presentation data, expire after 300 seconds,
+  and must never be persisted as file identity;
+- the user session, not service role, calls compare-and-swap through
+  `set_profile_avatar(expected,new)` and `reset_profile_avatar(expected)`;
+- first upload passes an empty expected string, which the database normalizes to
+  `NULL`; SQL `NULL` and malformed non-empty expected paths are rejected;
+- after upload, CAS failure/error deletes the new object, while CAS success alone
+  permits deletion of the previous object. Cleanup failure is a recoverable
+  orphan and does not roll back the committed profile pointer.
+
+The public member RPCs intentionally expose narrow projections:
+
+- `list_member_profiles(text, integer, integer)` returns `id`, `display_name`,
+  `avatar_path`, `bio`, `website`, `created_at`, `role_names`, and `total_count`;
+- `get_member_profile(uuid)` returns `id`, `display_name`, `avatar_path`, `bio`,
+  `website`, `created_at`, `updated_at`, and `role_names`.
+
+They do not return `profile_visibility`, `avatar_url`, email, account status, or
+permission mappings. Invisible, inactive, and missing member details all return
+zero rows. `get_member_profile` and `council_get_user` retain a runtime
+cardinality of zero or one row, but declare `ROWS 1000` as a PostgREST/typegen
+cardinality hint so generated RPC `Returns` stay arrays. Callers narrow them with
+`.maybeSingle()` and use the generated array element type.
+
+Council mutations are permission-checked, transition-specific, serialized where
+needed, and audited atomically. Status changes call
+`council_set_user_status(user, expected_status, status, reason)`: the target row
+is locked and a stale expected status is rejected with `22023` before choosing
+the transition-specific permission/audit action or performing any mutation. The
+obsolete three-argument overload is absent. Expected SQLSTATE categories are
+`42501` for authentication/authorization or inactive-account denial, `22023`
+for invalid input, stale state, and no-op transitions, and `23514` when removal
+would delete the last Administrator assignment.
+
+Council audit history is exposed only through the authenticated
+`council_list_audit_logs` RPC and requires the exact
+`admin.view_audit_logs` permission. Its filters are action, actor, target, and a
+half-open `[created_from, created_before)` timestamp range; pagination is bounded
+and ordered deterministically by `created_at DESC, id DESC`. The return value is
+a scalar allowlist: audit/actor/target identifiers, nullable current display
+names, action, target type, nullable reason, allowlisted old/new statuses or role
+name, creation time, and filtered `total_count`. Raw `old_values`, `new_values`,
+`metadata`, role IDs, and assignment IDs never cross the RPC boundary. Historical
+`actor_id` is retained even after its profile disappears; missing display names
+and unsupported derived fields fall back to `NULL`.
+
+### Verification record — 2026-07-22
+
+Migrations `0000` through `0006` were applied to the linked hosted project.
+Remote migration history matches the repository. The hosted database passed all
+160 identity-security pgTAP assertions. `db lint` reported no errors in `public`,
+`private`, or `storage`; the only `storage` output was provider-owned
+`warning extra` analysis of dynamic SQL in `storage.search_by_timestamp`. Linked
+type generation confirmed array returns for both detail RPCs, required string
+arguments for avatar CAS, and `p_expected_status: string` on the four-argument
+Council status CAS. It also confirmed optional string timestamp arguments
+`p_created_from`/`p_created_before` and the minimized scalar return for Council
+audit listing. PostgreSQL `RETURNS TABLE` does not encode output nullability for
+generated TypeScript, so consumers must continue treating the documented
+nullable audit fields defensively. Tests run in a transaction and roll back their
+fixtures. The Auth config push remains intentionally pending until the three real
+deployment URLs listed above are provided.
+
 ## Goals
 
 - Switch to another Supabase project without redesigning the application.

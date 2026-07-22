@@ -1,0 +1,6 @@
+.next/
+.opencode/
+.remember/
+node_modules/
+supabase/.temp/
+pnpm-lock.yaml

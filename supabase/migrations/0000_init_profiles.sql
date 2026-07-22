@@ -2,7 +2,8 @@
 -- Identity foundation: profiles, roles, permissions, RLS
 
 -- ── Extensions ──
-create extension if not exists "uuid-ossp";
+create schema if not exists extensions;
+create extension if not exists "uuid-ossp" with schema extensions;
 
 -- ── Profiles ──
 create table public.profiles (
@@ -23,7 +24,7 @@ create index idx_profiles_status on public.profiles(status);
 
 -- ── Roles ──
 create table public.roles (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default extensions.uuid_generate_v4(),
   name text not null unique check (char_length(name) between 2 and 50),
   description text,
   is_protected boolean not null default false,
@@ -32,7 +33,7 @@ create table public.roles (
 
 -- ── Permissions ──
 create table public.permissions (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default extensions.uuid_generate_v4(),
   name text not null unique check (char_length(name) between 2 and 100),
   description text,
   created_at timestamptz not null default now()
@@ -40,7 +41,7 @@ create table public.permissions (
 
 -- ── User Roles (many-to-many) ──
 create table public.user_roles (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default extensions.uuid_generate_v4(),
   user_id uuid not null references auth.users(id) on delete cascade,
   role_id uuid not null references public.roles(id) on delete cascade,
   assigned_by uuid references auth.users(id),
@@ -53,7 +54,7 @@ create index idx_user_roles_role on public.user_roles(role_id);
 
 -- ── Role Permissions (many-to-many) ──
 create table public.role_permissions (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default extensions.uuid_generate_v4(),
   role_id uuid not null references public.roles(id) on delete cascade,
   permission_id uuid not null references public.permissions(id) on delete cascade,
   unique(role_id, permission_id)

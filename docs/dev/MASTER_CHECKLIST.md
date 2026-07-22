@@ -8,108 +8,108 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 
 ## 0. Foundation
 
-- [ ] Next.js project created.
-- [ ] TypeScript configured.
-- [ ] Supabase configured.
-- [ ] Supabase CLI initialized.
-- [ ] Versioned migrations configured.
-- [ ] Reproducible seed configured.
+- [x] Next.js project created.
+- [x] TypeScript configured.
+- [x] Supabase configured.
+- [x] Supabase CLI initialized.
+- [x] Versioned migrations configured.
+- [x] Reproducible seed configured.
 - [ ] Full schema rebuilds from empty base.
-- [ ] RLS, grants, functions, triggers and indexes live in migrations.
-- [ ] Storage buckets and policies are reproducible.
-- [ ] Supabase clients centralized in infrastructure.
-- [ ] Project URL/ref and keys are not hardcoded.
-- [ ] `.env.example` exists without secrets.
-- [ ] Database types are generated and not edited manually.
-- [ ] Environment variables documented.
-- [ ] Base layout created.
-- [ ] Main navigation created.
-- [ ] Initial visual theme created.
-- [ ] Base UI components created.
-- [ ] Loading states defined.
-- [ ] Error states defined.
-- [ ] Empty states defined.
-- [ ] 404 page created.
-- [ ] Access denied page created.
-- [ ] Protected routes created.
-- [ ] Admin routes protected.
-- [ ] Service role key never exposed to the client.
+- [x] RLS, grants, functions, triggers and indexes live in migrations.
+- [x] Storage buckets and policies are reproducible.
+- [x] Supabase clients centralized in infrastructure.
+- [x] Project URL/ref and keys are not hardcoded.
+- [x] `.env.example` exists without secrets.
+- [x] Database types are generated and not edited manually.
+- [x] Environment variables documented.
+- [x] Base layout created.
+- [x] Main navigation created.
+- [x] Initial visual theme created.
+- [x] Base UI components created.
+- [x] Loading states defined.
+- [x] Error states defined.
+- [x] Empty states defined.
+- [x] 404 page created.
+- [x] Access denied page created.
+- [x] Protected routes created.
+- [x] Admin routes protected.
+- [x] Service role key never exposed to the client.
 - [ ] Database/Auth backup defined.
 - [ ] Storage objects backup defined separately.
 - [ ] Restore to a new project documented and tested before production.
 
 ## 1. Navigation and areas
 
-- [ ] Home exists.
-- [ ] Plazas exists.
-- [ ] Codex Libre exists.
-- [ ] Holochat exists or has placeholder.
-- [ ] Clans/Houses exists or has placeholder.
-- [ ] Members exists.
-- [ ] Council exists only for authorized roles.
-- [ ] Mobile nav works.
-- [ ] Desktop nav works.
-- [ ] User sees actions according to permissions.
+- [x] Home exists.
+- [x] Plazas exists.
+- [x] Codex Libre exists.
+- [x] Holochat exists or has placeholder.
+- [x] Clans/Houses exists or has placeholder.
+- [x] Members exists.
+- [x] Council exists only for authorized roles.
+- [x] Mobile nav works.
+- [x] Desktop nav works.
+- [x] User sees actions according to permissions.
 
 ## 2. Auth
 
-- [ ] Registration.
-- [ ] Login.
-- [ ] Logout.
-- [ ] Password recovery.
-- [ ] Email verification.
+- [x] Registration.
+- [x] Login.
+- [x] Logout.
+- [x] Password recovery.
+- [x] Email verification.
 - [ ] Change email.
-- [ ] Change password.
-- [ ] Handle unverified email.
-- [ ] Handle suspended account.
-- [ ] Handle banned account.
-- [ ] Create profile on registration.
-- [ ] Post-login redirect.
-- [ ] Post-logout redirect.
-- [ ] Protection against actions without session.
+- [x] Change password.
+- [x] Handle unverified email.
+- [x] Handle suspended account.
+- [x] Handle banned account.
+- [x] Create profile on registration.
+- [x] Post-login redirect.
+- [x] Post-logout redirect.
+- [x] Protection against actions without session.
 
 ## 3. Profile
 
-- [ ] View public profile.
-- [ ] Edit display name.
+- [x] View public profile.
+- [x] Edit display name.
 - [ ] Validate reserved names.
 - [ ] Validate duplicate names if applicable.
-- [ ] Edit avatar.
-- [ ] Reset avatar.
-- [ ] Edit bio.
-- [ ] Sanitize bio.
-- [ ] Edit links.
-- [ ] Configure basic privacy.
+- [x] Edit avatar.
+- [x] Reset avatar.
+- [x] Edit bio.
+- [x] Sanitize bio.
+- [x] Edit links.
+- [x] Configure basic privacy.
 - [ ] View user's posts.
 - [ ] View user's comments.
 - [ ] View badges.
 - [ ] View rank.
-- [ ] View visible roles.
+- [x] View visible roles.
 - [ ] View clan/house.
 - [ ] View friends if privacy allows.
-- [ ] Show suspended/banned status according to permissions.
+- [x] Show suspended/banned status according to permissions.
 
 ## 4. Roles and permissions
 
-- [ ] roles table.
-- [ ] permissions table.
-- [ ] user_roles table.
-- [ ] role_permissions table.
-- [ ] Seed user role.
-- [ ] Seed verified member role.
-- [ ] Seed archivist role.
-- [ ] Seed moderator role.
-- [ ] Seed guardian role.
-- [ ] Seed administrator role.
-- [ ] Helper to verify permissions server-side.
-- [ ] UI hides actions without permission.
-- [ ] Backend rejects actions without permission.
-- [ ] RLS protects sensitive tables.
-- [ ] User cannot change their role.
-- [ ] Moderator cannot change global roles.
-- [ ] Admin can assign role.
-- [ ] Admin can remove role.
-- [ ] Role changes are logged in audit log.
+- [x] roles table.
+- [x] permissions table.
+- [x] user_roles table.
+- [x] role_permissions table.
+- [x] Seed user role.
+- [x] Seed verified member role.
+- [x] Seed archivist role.
+- [x] Seed moderator role.
+- [x] Seed guardian role.
+- [x] Seed administrator role.
+- [x] Helper to verify permissions server-side.
+- [x] UI hides actions without permission.
+- [x] Backend rejects actions without permission.
+- [x] RLS protects sensitive tables.
+- [x] User cannot change their role.
+- [x] Moderator cannot change global roles.
+- [x] Admin can assign role.
+- [x] Admin can remove role.
+- [x] Role changes are logged in audit log.
 
 ## 5. Plazas
 
@@ -243,14 +243,14 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] Moderator can pin comment.
 - [ ] Moderator can lock replies.
 - [ ] Moderator can warn user.
-- [ ] Moderator can suspend user if they have permission.
-- [ ] Moderator can ban user if they have permission.
+- [x] Moderator can suspend user if they have permission.
+- [x] Moderator can ban user if they have permission.
 - [ ] Moderator can add internal note.
 - [ ] Moderator sees user history.
-- [ ] Moderator only acts within their scope.
-- [ ] Moderator cannot moderate admins.
+- [x] Moderator only acts within their scope.
+- [x] Moderator cannot moderate admins.
 - [ ] Sensitive actions are logged in moderator_actions.
-- [ ] Sensitive actions are logged in audit_logs.
+- [x] Sensitive actions are logged in audit_logs.
 - [ ] Hiding and quarantine are reversible.
 - [ ] Restore recovers the last allowed state.
 - [ ] Permanent deletion requires higher permission, reason and confirmation.
@@ -265,15 +265,15 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] Comment count.
 - [ ] Open report count.
 - [ ] Recent activity.
-- [ ] User management.
-- [ ] Search users.
-- [ ] Filter users by status.
-- [ ] View admin user detail.
-- [ ] Change user status.
-- [ ] Suspend user.
-- [ ] Ban user.
-- [ ] Unban.
-- [ ] Role management.
+- [x] User management.
+- [x] Search users.
+- [x] Filter users by status.
+- [x] View admin user detail.
+- [x] Change user status.
+- [x] Suspend user.
+- [x] Ban user.
+- [x] Unban.
+- [x] Role management.
 - [ ] Create role.
 - [ ] Edit role.
 - [ ] Delete unprotected role.
@@ -296,8 +296,8 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] Settings management.
 - [ ] View settings history.
 - [ ] Restore valid settings version.
-- [ ] View audit logs.
-- [ ] Filter audit logs.
+- [x] View audit logs.
+- [x] Filter audit logs.
 - [ ] Export logs if decided.
 
 ## 12. Codex Libre
@@ -583,11 +583,11 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 
 ## 24. Security
 
-- [ ] RLS on profiles.
-- [ ] RLS on roles.
-- [ ] RLS on user_roles.
-- [ ] RLS on permissions.
-- [ ] RLS on role_permissions.
+- [x] RLS on profiles.
+- [x] RLS on roles.
+- [x] RLS on user_roles.
+- [x] RLS on permissions.
+- [x] RLS on role_permissions.
 - [ ] RLS on spaces.
 - [ ] RLS on posts.
 - [ ] RLS on comments.
@@ -595,7 +595,7 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] RLS on reports.
 - [ ] RLS on moderation_queue.
 - [ ] RLS on moderator_actions.
-- [ ] RLS on audit_logs.
+- [x] RLS on audit_logs.
 - [ ] RLS on clans.
 - [ ] RLS on clan_members.
 - [ ] RLS on library_articles.
@@ -606,9 +606,9 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] RLS on chat_channels.
 - [ ] RLS on chat_messages.
 - [ ] RLS on notifications.
-- [ ] Server-side validation on actions.
+- [x] Server-side validation on actions.
 - [ ] Markdown sanitization.
-- [ ] Bio/profile sanitization.
+- [x] Bio/profile sanitization.
 - [ ] Rate limit posting.
 - [ ] Rate limit commenting.
 - [ ] Rate limit replying.
@@ -618,20 +618,20 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] Rate limit chat.
 - [ ] Rate limit file upload.
 - [ ] Soft delete on community content.
-- [ ] Audit logs on admin/mod changes.
-- [ ] XSS protection.
-- [ ] Private data protection.
-- [ ] Search respects permissions.
-- [ ] Restricted storage.
-- [ ] Private variables not exposed.
+- [x] Audit logs on admin/mod changes.
+- [x] XSS protection.
+- [x] Private data protection.
+- [x] Search respects permissions.
+- [x] Restricted storage.
+- [x] Private variables not exposed.
 
 ## 25. Audit and logs
 
-- [ ] Log assign role.
-- [ ] Log remove role.
+- [x] Log assign role.
+- [x] Log remove role.
 - [ ] Log change permissions.
-- [ ] Log ban user.
-- [ ] Log suspend user.
+- [x] Log ban user.
+- [x] Log suspend user.
 - [ ] Log hide content.
 - [ ] Log restore content.
 - [ ] Log delete content as mod/admin.
@@ -643,11 +643,11 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] Log change channel visibility.
 - [ ] Log change clan/house visibility.
 - [ ] Log change clan/house leader.
-- [ ] Admin can view logs.
-- [ ] Logs have actor.
-- [ ] Logs have target.
-- [ ] Logs have timestamp.
-- [ ] Logs have metadata.
+- [x] Admin can view logs.
+- [x] Logs have actor.
+- [x] Logs have target.
+- [x] Logs have timestamp.
+- [x] Logs have metadata.
 
 ## 26. Quality before production
 

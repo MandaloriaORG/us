@@ -22,6 +22,8 @@ Fall back to `rg` for non-code files, literal strings, configuration, or insuffi
 
 Session hooks inject `.agent/DESIGN_RULES.md` (design rules + coding standards + routing). If it was not injected, read it before working.
 
+If `.agent/COORDINATION.md` exists, read it before editing and whenever its phase or ownership table changes. It is the temporary source of truth for parallel-agent file ownership and handoffs.
+
 Also read `.agent/CONTEXT.md` for domain terminology (Plazas, Codex Libre, Casas, etc.) when dealing with domain-specific features.
 
 Do not load every document at startup. Use the routing table in `.agent/DESIGN_RULES.md` and read only the files relevant to the current task. For large checklists, locate the relevant heading instead of reading the entire file.

@@ -50,30 +50,30 @@ Make Mandaloria manageable and moderatable.
 ## Users
 
 - [ ] Warn user.
-- [ ] Suspend user.
-- [ ] Ban user.
-- [ ] Unban user.
+- [x] Suspend user.
+- [x] Ban user.
+- [x] Unban user.
 - [ ] View user moderation history.
 - [ ] Add internal note.
 
 ## Logs
 
-- [ ] Log moderation actions.
-- [ ] Log admin actions.
-- [ ] View audit logs.
-- [ ] Filter logs.
+- [x] Log moderation actions.
+- [x] Log admin actions.
+- [x] View audit logs.
+- [x] Filter logs.
 
 ## Security
 
-- [ ] Moderator only acts within their scope.
-- [ ] Moderator cannot moderate admins.
-- [ ] Strong actions require specific permission.
-- [ ] Every sensitive change is audited.
+- [x] Moderator only acts within their scope.
+- [x] Moderator cannot moderate admins.
+- [x] Strong actions require specific permission.
+- [x] Every sensitive change is audited.
 
 ## Done when
 
 - [ ] A user can report.
 - [ ] A moderator can resolve reports.
-- [ ] An admin can audit actions.
+- [x] An admin can audit actions.
 - [ ] A moderator can delete/hide messages and posts according to permissions.
 - [ ] Reversible actions can be undone without editing the database manually.

@@ -6,55 +6,55 @@ Create user identity and permission foundation.
 
 ## Auth
 
-- [ ] Registration.
-- [ ] Login.
-- [ ] Logout.
-- [ ] Recover password.
-- [ ] Verify email.
-- [ ] Handle unverified user.
-- [ ] Handle banned/suspended user.
+- [x] Registration.
+- [x] Login.
+- [x] Logout.
+- [x] Recover password.
+- [x] Verify email.
+- [x] Handle unverified user.
+- [x] Handle banned/suspended user.
 
 ## Profiles
 
-- [ ] Create profile automatically upon registration.
-- [ ] View public profile.
-- [ ] Edit display name.
-- [ ] Edit avatar.
-- [ ] Edit bio.
-- [ ] Edit links.
-- [ ] Configure basic privacy.
+- [x] Create profile automatically upon registration.
+- [x] View public profile.
+- [x] Edit display name.
+- [x] Edit avatar.
+- [x] Edit bio.
+- [x] Edit links.
+- [x] Configure basic privacy.
 - [ ] Show rank.
-- [ ] Show public roles if applicable.
+- [x] Show public roles if applicable.
 - [ ] Show badges.
 - [ ] Show clan/casa.
 
 ## Roles and permissions
 
-- [ ] Create roles table.
-- [ ] Create permissions table.
-- [ ] Create user_roles.
-- [ ] Create role_permissions.
-- [ ] Seed initial roles.
-- [ ] Seed initial permissions.
-- [ ] Server-side helper to check permissions.
-- [ ] RLS for identity tables.
-- [ ] Prevent user from changing their own roles.
+- [x] Create roles table.
+- [x] Create permissions table.
+- [x] Create user_roles.
+- [x] Create role_permissions.
+- [x] Seed initial roles.
+- [x] Seed initial permissions.
+- [x] Server-side helper to check permissions.
+- [x] RLS for identity tables.
+- [x] Prevent user from changing their own roles.
 
 ## Basic admin
 
-- [ ] View user list.
-- [ ] Search user.
-- [ ] View user admin detail.
-- [ ] Assign role.
-- [ ] Remove role.
-- [ ] Suspend user.
-- [ ] Ban user.
-- [ ] Log audit trail.
+- [x] View user list.
+- [x] Search user.
+- [x] View user admin detail.
+- [x] Assign role.
+- [x] Remove role.
+- [x] Suspend user.
+- [x] Ban user.
+- [x] Log audit trail.
 
 ## Done when
 
-- [ ] A visitor can register.
-- [ ] A user can log in.
-- [ ] A user has a profile.
-- [ ] An admin can change roles.
-- [ ] A normal user cannot access the Council.
+- [x] A visitor can register.
+- [x] A user can log in.
+- [x] A user has a profile.
+- [x] An admin can change roles.
+- [x] A normal user cannot access the Council.

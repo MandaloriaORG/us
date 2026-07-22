@@ -23,6 +23,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# local multi-agent coordination
+.agent/COORDINATION.md
+
 # local env files
 .env*.local
 .env
