@@ -1,0 +1,4 @@
+-- Seed: Development data for Mandaloria
+-- Roles and permissions are seeded in migration 0000_init_profiles.
+-- Add additional development data here as needed.
+-- Run with: pnpm db:seed

@@ -1,0 +1,96 @@
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        bg: "hsl(var(--color-bg) / <alpha-value>)",
+        "bg-raised": "hsl(var(--color-bg-raised) / <alpha-value>)",
+        "bg-overlay": "hsl(var(--color-bg-overlay) / <alpha-value>)",
+        surface: "hsl(var(--color-surface) / <alpha-value>)",
+        "surface-raised": "hsl(var(--color-surface-raised) / <alpha-value>)",
+        fg: "hsl(var(--color-fg) / <alpha-value>)",
+        "fg-muted": "hsl(var(--color-fg-muted) / <alpha-value>)",
+        "fg-subtle": "hsl(var(--color-fg-subtle) / <alpha-value>)",
+        border: "hsl(var(--color-border) / <alpha-value>)",
+        "border-raised": "hsl(var(--color-border-raised) / <alpha-value>)",
+        "border-focus": "hsl(var(--color-border-focus) / <alpha-value>)",
+        brand: "hsl(var(--color-brand) / <alpha-value>)",
+        "brand-muted": "hsl(var(--color-brand-muted) / <alpha-value>)",
+        "brand-fg": "hsl(var(--color-brand-fg) / <alpha-value>)",
+        success: "hsl(var(--color-success) / <alpha-value>)",
+        warning: "hsl(var(--color-warning) / <alpha-value>)",
+        error: "hsl(var(--color-error) / <alpha-value>)",
+        info: "hsl(var(--color-info) / <alpha-value>)",
+      },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+        mono: ["JetBrains Mono", "Fira Code", "monospace"],
+        display: ["Cinzel", "Inter", "serif"],
+      },
+      fontSize: {
+        xs: ["0.75rem", { lineHeight: "1rem" }],
+        sm: ["0.875rem", { lineHeight: "1.25rem" }],
+        base: ["1rem", { lineHeight: "1.6rem" }],
+        lg: ["1.125rem", { lineHeight: "1.75rem" }],
+        xl: ["1.25rem", { lineHeight: "1.75rem" }],
+        "2xl": ["1.5rem", { lineHeight: "2rem" }],
+        "3xl": ["1.875rem", { lineHeight: "2.25rem" }],
+        "4xl": ["2.25rem", { lineHeight: "2.5rem" }],
+        "5xl": ["3rem", { lineHeight: "1.2" }],
+      },
+      spacing: {
+        1: "0.25rem",
+        2: "0.5rem",
+        3: "0.75rem",
+        4: "1rem",
+        5: "1.25rem",
+        6: "1.5rem",
+        8: "2rem",
+        10: "2.5rem",
+        12: "3rem",
+        16: "4rem",
+        20: "5rem",
+        24: "6rem",
+      },
+      borderRadius: {
+        sm: "0.25rem",
+        md: "0.5rem",
+        lg: "0.75rem",
+        xl: "1rem",
+        full: "9999px",
+      },
+      boxShadow: {
+        sm: "0 1px 2px rgb(0 0 0 / 0.3)",
+        md: "0 4px 6px rgb(0 0 0 / 0.4)",
+        lg: "0 10px 25px rgb(0 0 0 / 0.5)",
+        xl: "0 20px 50px rgb(0 0 0 / 0.6)",
+      },
+      zIndex: {
+        base: "0",
+        raised: "10",
+        dropdown: "100",
+        overlay: "200",
+        toast: "300",
+        tooltip: "400",
+      },
+      transitionTimingFunction: {
+        "ease-out": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "ease-in-out": "cubic-bezier(0.65, 0, 0.35, 1)",
+      },
+      transitionDuration: {
+        fast: "150ms",
+        normal: "250ms",
+        slow: "400ms",
+      },
+    },
+  },
+  plugins: [],
+};
+
+export default config;

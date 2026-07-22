@@ -1,6 +1,4 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "instructions": [
-    ".agent/CONTEXT.md"
-  ]
+  "instructions": [".agent/DESIGN_RULES.md", ".agent/CONTEXT.md"]
 }

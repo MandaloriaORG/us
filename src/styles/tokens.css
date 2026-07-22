@@ -1,0 +1,80 @@
+/*
+ * Mandaloria Design Tokens
+ * Dark mode default. Beskar palette (muted gold/amber).
+ * Never hardcode colors in components — use these CSS variables.
+ */
+
+:root {
+  /* ── Background Hierarchy ── */
+  --color-bg: 210 15% 6%; /* Deep space — fondo principal */
+  --color-bg-raised: 210 15% 9%; /* Cards, modals */
+  --color-bg-overlay: 210 15% 12%; /* Dropdowns, popovers, sheets */
+
+  /* ── Surfaces ── */
+  --color-surface: 210 12% 13%; /* Sidebars, paneles laterales */
+  --color-surface-raised: 210 12% 17%; /* Paneles elevados, hover */
+
+  /* ── Foreground ── */
+  --color-fg: 210 10% 94%; /* Texto principal */
+  --color-fg-muted: 210 8% 65%; /* Texto secundario, placeholders */
+  --color-fg-subtle: 210 8% 45%; /* Texto terciario, captions */
+
+  /* ── Borders ── */
+  --color-border: 210 10% 18%; /* Bordes estándar */
+  --color-border-raised: 210 10% 24%; /* Bordes elevados */
+  --color-border-focus: 210 30% 50%; /* Focus rings */
+
+  /* ── Brand: Beskar (Mandalorian iron) ── */
+  --color-brand: 42 40% 55%; /* Beskar gold */
+  --color-brand-muted: 42 20% 30%; /* Brand backgrounds */
+  --color-brand-fg: 42 50% 20%; /* Texto sobre brand */
+
+  /* ── Feedback ── */
+  --color-success: 150 45% 45%;
+  --color-warning: 36 70% 50%;
+  --color-error: 0 65% 55%;
+  --color-info: 200 55% 55%;
+
+  /* ── Typography ── */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-display: "Cinzel", "Inter", serif;
+
+  /* ── Motion ── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+
+  /* ── Shadows (dark mode) ── */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 25px rgb(0 0 0 / 0.5);
+  --shadow-xl: 0 20px 50px rgb(0 0 0 / 0.6);
+
+  /* ── Z-Index Scale ── */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-overlay: 200;
+  --z-toast: 300;
+  --z-tooltip: 400;
+}
+
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

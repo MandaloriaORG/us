@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply bg-bg text-fg antialiased;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply min-h-screen bg-bg text-fg;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-border-focus ring-offset-2 ring-offset-bg;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--color-bg));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--color-border-raised));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--color-fg-subtle));
+  }
+
+  ::selection {
+    background: hsl(var(--color-brand-muted));
+    color: hsl(var(--color-fg));
+  }
+}
+
+@layer components {
+  .skeleton {
+    @apply animate-pulse rounded-md bg-surface-raised;
+  }
+}
+
+@layer utilities {
+  .prose-width {
+    max-width: 65ch;
+  }
+
+  .scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+}

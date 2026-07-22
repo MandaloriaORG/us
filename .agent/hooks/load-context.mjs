@@ -26,19 +26,25 @@ if (!root) {
   process.exit(0);
 }
 
-const contextPath = join(root, ".agent", "CONTEXT.md");
+// Load DESIGN_RULES.md as primary injected context (actionable rules for agents)
+const designRulesPath = join(root, ".agent", "DESIGN_RULES.md");
 let context;
 
 try {
-  context = readFileSync(contextPath, "utf8").trim();
+  context = readFileSync(designRulesPath, "utf8").trim();
 } catch {
-  process.exit(0);
+  // Fallback to CONTEXT.md if DESIGN_RULES.md doesn't exist
+  try {
+    context = readFileSync(join(root, ".agent", "CONTEXT.md"), "utf8").trim();
+  } catch {
+    process.exit(0);
+  }
 }
 
 if (context.length > maxChars) {
   context = [
     "Mandaloria context exceeded its 5000-character budget.",
-    "Read .agent/CONTEXT.md before working and reduce it before adding more rules.",
+    "Read .agent/DESIGN_RULES.md before working and reduce it before adding more rules.",
   ].join(" ");
 }
 

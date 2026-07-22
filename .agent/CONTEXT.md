@@ -30,6 +30,10 @@ Mandaloria is a community and free-knowledge network: Plazas for durable discuss
 - Architecture/performance: `docs/dev/CORE_SYSTEM_RULES.md` and `docs/dev/SYSTEM_SIMPLICITY_AND_PERFORMANCE.md`.
 - Codex/destillation/attribution: `docs/KNOWLEDGE_LIFECYCLE.md` and `docs/dev/CODEX_EDITOR.md`.
 - Admin/moderation: `docs/dev/ADMIN_PANEL.md` and phase 03.
+- Design system, tokens, typography, colors, empty states, motion: `docs/DESIGN_SYSTEM.md`.
+- Component architecture, library domains (ReUI/Origin UI/Tailark/shadcn/custom): `docs/COMPONENT_ARCHITECTURE.md`.
+- Design verification by phase: `docs/dev/DESIGN_VERIFICATION.md`.
+- Tech stack decisions: `docs/adr/0002-tech-stack-design-system.md`.
 - Review or completion: `docs/always-review/PR_REVIEW_CHECKLIST.md` and `docs/always-review/PHASE_REVIEW_CHECKLIST.md`.
 
-Do not mark a feature complete until behavior, permissions, RLS, validation, privacy, moderation, audit, error states and proportional tests are implemented and verified.
+Do not mark a feature complete until behavior, permissions, RLS, validation, privacy, moderation, audit, error states, design system compliance, and proportional tests are implemented and verified.
