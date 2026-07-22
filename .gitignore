@@ -1,0 +1,35 @@
+# Sensitive
+.env
+.env.local
+*.key
+*.pem
+secrets/
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+dist/
+build/
+.next/
+.out/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Personal session memory
+.remember/
+
+# Logs
+*.log
+npm-debug.log*
