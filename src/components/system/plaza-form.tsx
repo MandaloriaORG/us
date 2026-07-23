@@ -62,10 +62,7 @@ export function PlazaForm(props: PlazaFormProps) {
     });
   }
 
-  const [state, formAction] = useFormState<PlazaActionResult | null, FormData>(
-    submitAction,
-    null,
-  );
+  const [state, formAction] = useFormState<PlazaActionResult | null, FormData>(submitAction, null);
 
   useEffect(() => {
     if (props.mode === "create" && state?.ok) {

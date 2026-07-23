@@ -79,12 +79,8 @@ describe("PlazaForm", () => {
     };
     render(<PlazaForm mode="create" />);
 
-    expect(
-      screen.getByText("Use lowercase words separated by hyphens"),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("Check the highlighted fields and try again."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Use lowercase words separated by hyphens")).toBeInTheDocument();
+    expect(screen.getByText("Check the highlighted fields and try again.")).toBeInTheDocument();
     expect(mocks.push).not.toHaveBeenCalled();
   });
 

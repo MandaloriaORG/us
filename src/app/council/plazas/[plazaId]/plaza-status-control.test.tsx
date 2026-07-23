@@ -19,9 +19,7 @@ describe("PlazaStatusControl", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Archive Plaza" }));
 
-    expect(
-      screen.getByText("Give a reason of at least 3 characters."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Give a reason of at least 3 characters.")).toBeInTheDocument();
     expect(mocks.setPlazaStatus).not.toHaveBeenCalled();
   });
 
@@ -79,7 +77,9 @@ describe("PlazaStatusControl", () => {
     fireEvent.click(screen.getByRole("button", { name: "Archive Plaza" }));
 
     expect(
-      await screen.findByText("This Plaza changed while you were viewing it. Reload and try again."),
+      await screen.findByText(
+        "This Plaza changed while you were viewing it. Reload and try again.",
+      ),
     ).toBeInTheDocument();
   });
 });

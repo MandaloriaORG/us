@@ -99,16 +99,19 @@ describe("ReportControl", () => {
     ["conflict", "Another moderator changed this report. Reload and try again."],
     ["invalid_request", "That is not valid for the current state."],
     ["retry", "That could not be saved. Try again."],
-  ])("shows the server's honest %s message inline and keeps the form open", async (code, message) => {
-    mocks.createReport.mockResolvedValue({ ok: false, code, message });
-    render(<ReportControl targetType="post" targetId={postId} />);
-    open();
-    fireEvent.change(screen.getByLabelText("Reason"), { target: { value: "spam" } });
-    fireEvent.click(screen.getByRole("button", { name: "Submit report" }));
+  ])(
+    "shows the server's honest %s message inline and keeps the form open",
+    async (code, message) => {
+      mocks.createReport.mockResolvedValue({ ok: false, code, message });
+      render(<ReportControl targetType="post" targetId={postId} />);
+      open();
+      fireEvent.change(screen.getByLabelText("Reason"), { target: { value: "spam" } });
+      fireEvent.click(screen.getByRole("button", { name: "Submit report" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(message);
-    expect(screen.getByRole("button", { name: "Submit report" })).toBeInTheDocument();
-  });
+      expect(await screen.findByRole("alert")).toHaveTextContent(message);
+      expect(screen.getByRole("button", { name: "Submit report" })).toBeInTheDocument();
+    },
+  );
 
   it("shows the field-level error for invalid_input next to the details field", async () => {
     mocks.createReport.mockResolvedValue({
@@ -122,9 +125,7 @@ describe("ReportControl", () => {
     fireEvent.change(screen.getByLabelText("Reason"), { target: { value: "spam" } });
     fireEvent.click(screen.getByRole("button", { name: "Submit report" }));
 
-    expect(
-      await screen.findByText("Details must be at most 1000 characters"),
-    ).toBeInTheDocument();
+    expect(await screen.findByText("Details must be at most 1000 characters")).toBeInTheDocument();
     expect(screen.getByLabelText("Details (optional)")).toHaveAttribute("aria-invalid", "true");
   });
 });

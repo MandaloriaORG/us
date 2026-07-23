@@ -70,10 +70,7 @@ describe("CouncilNavigation", () => {
       />,
     );
 
-    expect(screen.getByRole("link", { name: "Plazas" })).toHaveAttribute(
-      "href",
-      "/council/plazas",
-    );
+    expect(screen.getByRole("link", { name: "Plazas" })).toHaveAttribute("href", "/council/plazas");
     expect(screen.getAllByRole("link")).toHaveLength(1);
   });
 

@@ -83,9 +83,9 @@ describe("CouncilPlazaDetailPage", () => {
     mocks.getCouncilPlazaAccess.mockResolvedValue({ allowed: true });
     mocks.listPlazas.mockResolvedValue([]);
 
-    await expect(
-      CouncilPlazaDetailPage({ params: Promise.resolve({ plazaId }) }),
-    ).rejects.toThrow("NEXT_NOT_FOUND");
+    await expect(CouncilPlazaDetailPage({ params: Promise.resolve({ plazaId }) })).rejects.toThrow(
+      "NEXT_NOT_FOUND",
+    );
   });
 
   it("resolves the id to a slug, then loads the full detail for the form", async () => {
