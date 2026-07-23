@@ -1,26 +1,157 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Mandaloria Design Tokens (Tailwind v4)
+ * Dark mode default. Beskar palette (muted gold/amber).
+ * Never hardcode colors in components — use these tokens.
+ */
+@theme {
+  /* ── Background hierarchy ── */
+  --color-bg: hsl(210 15% 6%);
+  --color-bg-raised: hsl(210 15% 9%);
+  --color-bg-overlay: hsl(210 15% 12%);
+
+  /* ── Surfaces ── */
+  --color-surface: hsl(210 12% 13%);
+  --color-surface-raised: hsl(210 12% 17%);
+
+  /* ── Foreground ── */
+  --color-fg: hsl(210 10% 94%);
+  --color-fg-muted: hsl(210 8% 65%);
+  --color-fg-subtle: hsl(210 8% 45%);
+
+  /* ── Borders ── */
+  --color-border: hsl(210 10% 18%);
+  --color-border-raised: hsl(210 10% 24%);
+  --color-border-focus: hsl(210 30% 50%);
+
+  /* ── Brand: Beskar ── */
+  --color-brand: hsl(42 40% 55%);
+  --color-brand-muted: hsl(42 20% 30%);
+  --color-brand-fg: hsl(42 50% 20%);
+
+  /* ── Feedback ── */
+  --color-success: hsl(150 45% 45%);
+  --color-warning: hsl(36 70% 50%);
+  --color-error: hsl(0 65% 55%);
+  --color-info: hsl(200 55% 55%);
+
+  /* ── shadcn/coss/reui compat aliases — same Beskar values, standard names.
+   *    Registry components (coss/ReUI/Tailark/shadcn) reference these names.
+   *    Do NOT hardcode; keep as `var(--color-*)` aliases. */
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-fg);
+  --color-card: var(--color-bg-raised);
+  --color-card-foreground: var(--color-fg);
+  --color-popover: var(--color-bg-overlay);
+  --color-popover-foreground: var(--color-fg);
+  --color-primary: var(--color-brand);
+  --color-primary-foreground: var(--color-brand-fg);
+  --color-secondary: var(--color-surface);
+  --color-secondary-foreground: var(--color-fg);
+  --color-muted: var(--color-surface);
+  --color-muted-foreground: var(--color-fg-muted);
+  --color-accent: var(--color-surface-raised);
+  --color-accent-foreground: var(--color-fg);
+  --color-destructive: var(--color-error);
+  --color-destructive-foreground: var(--color-fg);
+  --color-input: var(--color-border);
+  --color-ring: var(--color-border-focus);
+  --color-chart-1: var(--color-brand);
+  --color-chart-2: var(--color-info);
+  --color-chart-3: var(--color-success);
+  --color-chart-4: var(--color-warning);
+  --color-chart-5: var(--color-error);
+
+  /* ── Typography ── */
+  --font-sans: Inter, system-ui, -apple-system, sans-serif;
+  --font-mono: JetBrains Mono, Fira Code, monospace;
+  --font-display: Cinzel, Inter, serif;
+
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.6rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 2rem;
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: 2.25rem;
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 2.5rem;
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 1.2;
+
+  /* ── Radius ── */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+  --radius: var(--radius-md);
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 25px rgb(0 0 0 / 0.5);
+  --shadow-xl: 0 20px 50px rgb(0 0 0 / 0.6);
+
+  /* ── Z-index ── */
+  --z-index-base: 0;
+  --z-index-raised: 10;
+  --z-index-dropdown: 100;
+  --z-index-overlay: 200;
+  --z-index-toast: 300;
+  --z-index-tooltip: 400;
+
+  /* ── Motion ── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --transition-duration-fast: 150ms;
+  --transition-duration-normal: 250ms;
+  --transition-duration-slow: 400ms;
+}
+
+/*
+ * Tailwind v4 default border color is `currentcolor`. Restore Beskar border.
+ */
 @layer base {
-  * {
-    @apply border-border;
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border);
   }
 
   html {
-    @apply bg-bg text-fg antialiased;
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    -webkit-font-smoothing: antialiased;
     scroll-behavior: smooth;
   }
 
   body {
-    @apply min-h-screen bg-bg text-fg;
+    min-height: 100vh;
+    background-color: var(--color-bg);
+    color: var(--color-fg);
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-border-focus ring-offset-2 ring-offset-bg;
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-bg),
+      0 0 0 4px var(--color-border-focus);
   }
 
   ::-webkit-scrollbar {
@@ -29,40 +160,62 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(var(--color-bg));
+    background: var(--color-bg);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--color-border-raised));
+    background: var(--color-border-raised);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--color-fg-subtle));
+    background: var(--color-fg-subtle);
   }
 
   ::selection {
-    background: hsl(var(--color-brand-muted));
-    color: hsl(var(--color-fg));
+    background: var(--color-brand-muted);
+    color: var(--color-fg);
   }
 }
 
-@layer components {
-  .skeleton {
-    @apply animate-pulse rounded-md bg-surface-raised;
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-duration-fast: 0ms;
+    --transition-duration-normal: 0ms;
+    --transition-duration-slow: 0ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-@layer utilities {
-  .prose-width {
-    max-width: 65ch;
-  }
+@utility skeleton {
+  @apply bg-surface-raised animate-pulse rounded-md;
+}
 
-  .scrollbar-hidden {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hidden::-webkit-scrollbar {
+@utility prose-width {
+  max-width: 65ch;
+}
+
+@utility scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
     display: none;
   }
+}
+
+/* ReUI/coss extra compat tokens — keep Beskar feedback palette, add `invert`. */
+@theme {
+  --color-success-foreground: var(--color-fg);
+  --color-warning-foreground: var(--color-fg);
+  --color-info-foreground: var(--color-fg);
+  --color-invert: var(--color-fg);
+  --color-invert-foreground: var(--color-bg);
 }

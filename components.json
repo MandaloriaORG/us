@@ -5,7 +5,7 @@
   "tsx": true,
   "tailwind": {
     "config": "tailwind.config.ts",
-    "css": "src/app/globals.css",
+    "css": "src/styles/globals.css",
     "baseColor": "slate",
     "cssVariables": true,
     "prefix": ""
@@ -16,7 +16,10 @@
     "ui": "@/components/ui",
     "lib": "@/lib",
     "hooks": "@/hooks",
-    "utils": "@/lib/cn"
+    "utils": "@/lib/cn",
+    "@coss": "@/components/origin",
+    "@reui": "@/components/reui",
+    "@tailark": "@/components/marketing"
   },
   "registries": {
     "@coss": "https://coss.com/ui/r/{name}.json",
