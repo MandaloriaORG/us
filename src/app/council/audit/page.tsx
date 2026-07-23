@@ -45,7 +45,7 @@ function renderAuditFilters(
   return (
     <form
       action="/council/audit"
-      className="border-border mt-6 grid gap-4 border-y py-4 md:grid-cols-2 xl:grid-cols-[12rem_minmax(13rem,1fr)_minmax(13rem,1fr)_10rem_10rem_auto] xl:items-end"
+      className="border-border mt-6 grid gap-4 border-y py-4 md:grid-cols-2 2xl:grid-cols-[12rem_minmax(13rem,1fr)_minmax(13rem,1fr)_10rem_10rem_auto] 2xl:items-end"
       method="get"
     >
       <NativeSelect
@@ -113,7 +113,7 @@ function renderAuditFilters(
       </Button>
 
       {errors.page ? (
-        <p className="text-error text-xs md:col-span-2 xl:col-span-full" role="alert">
+        <p className="text-error text-xs md:col-span-2 2xl:col-span-full" role="alert">
           Page: {errors.page}
         </p>
       ) : null}
