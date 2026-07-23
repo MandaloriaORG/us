@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useFormState } from "react-dom";
-import { AlertCircle, CheckCircle, Mail } from "lucide-react";
+import { WarningCircleIcon, CheckCircleIcon, EnvelopeIcon } from "@phosphor-icons/react/dist/ssr";
 import { AuthShell } from "@/app/auth/AuthShell";
 import { PasswordInput } from "@/components/origin/password-input";
 import { TextInput } from "@/components/origin/text-input";
@@ -40,8 +40,8 @@ export default function LoginPage() {
 
   return (
     <AuthShell>
-      <h1 className="text-center text-2xl font-semibold text-fg">Sign in</h1>
-      <p className="mt-1 text-center text-sm text-fg-muted">Access your Mandaloria account.</p>
+      <h1 className="text-fg text-center text-2xl font-semibold">Sign in</h1>
+      <p className="text-fg-muted mt-1 text-center text-sm">Access your Mandaloria account.</p>
 
       <form action={formAction} className="mt-6 space-y-4">
         <input type="hidden" name="next" value={next} />
@@ -51,7 +51,7 @@ export default function LoginPage() {
           name="email"
           type="email"
           label="Email"
-          icon={Mail}
+          icon={EnvelopeIcon}
           autoComplete="email"
           required
           placeholder="you@example.com"
@@ -77,9 +77,9 @@ export default function LoginPage() {
             }`}
           >
             {reason.kind === "error" ? (
-              <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+              <WarningCircleIcon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
             ) : (
-              <CheckCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+              <CheckCircleIcon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
             )}
             {reason.text}
           </div>
@@ -88,9 +88,9 @@ export default function LoginPage() {
         {state.error && (
           <div
             role="alert"
-            className="flex items-start gap-2 rounded-md border border-error/30 px-3 py-2 text-sm text-error"
+            className="border-error/30 text-error flex items-start gap-2 rounded-md border px-3 py-2 text-sm"
           >
-            <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+            <WarningCircleIcon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
             <span>
               {state.error}
               {state.errorCode === "email_unverified" && (
@@ -105,7 +105,7 @@ export default function LoginPage() {
         <div className="flex min-h-11 items-center justify-end">
           <Link
             href="/auth/forgot-password"
-            className="inline-flex min-h-11 items-center text-sm text-fg-muted underline-offset-4 transition-colors duration-fast hover:text-fg hover:underline focus:outline-none focus:ring-2 focus:ring-border-focus"
+            className="text-fg-muted duration-fast hover:text-fg focus:ring-border-focus inline-flex min-h-11 items-center text-sm underline-offset-4 transition-colors hover:underline focus:ring-2 focus:outline-hidden"
           >
             Forgot password?
           </Link>
@@ -115,7 +115,7 @@ export default function LoginPage() {
           Sign in
         </SubmitButton>
 
-        <p className="text-center text-sm text-fg-muted">
+        <p className="text-fg-muted text-center text-sm">
           Don&apos;t have an account?{" "}
           <Link href="/auth/register" className="text-brand underline-offset-4 hover:underline">
             Create one

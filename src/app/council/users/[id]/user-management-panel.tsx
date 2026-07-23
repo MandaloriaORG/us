@@ -9,7 +9,7 @@ import {
   type CouncilUserStatus,
 } from "@/app/council/actions";
 import { NativeSelect } from "@/components/origin/native-select";
-import { StatusBadge } from "@/components/origin/status-badge";
+import { Badge } from "@/components/origin/badge";
 import { Button } from "@/components/ui/button";
 
 export interface CouncilRoleOption {
@@ -281,16 +281,16 @@ export function UserManagementPanel({
           : "confirmation";
 
   return (
-    <section className="mt-8 border-t border-border pt-6" aria-labelledby={`${id}-title`}>
-      <h2 id={`${id}-title`} className="text-lg font-semibold text-fg">
+    <section className="border-border mt-8 border-t pt-6" aria-labelledby={`${id}-title`}>
+      <h2 id={`${id}-title`} className="text-fg text-lg font-semibold">
         Manage user
       </h2>
-      <p className="mt-1 text-sm text-fg-muted">
+      <p className="text-fg-muted mt-1 text-sm">
         Changes are permission-checked and recorded in the Council audit log.
       </p>
 
       <div className="mt-5 flex max-w-xl flex-col gap-2">
-        <label htmlFor={reasonId} className="text-sm font-medium text-fg">
+        <label htmlFor={reasonId} className="text-fg text-sm font-medium">
           Reason
           <span aria-hidden="true" className="text-error">
             {" "}
@@ -312,15 +312,15 @@ export function UserManagementPanel({
             setReason(event.target.value);
             if (reasonTouched) setReasonTouched(true);
           }}
-          className="min-h-24 w-full resize-y rounded-md border border-border bg-bg px-3 py-2.5 text-sm text-fg outline-none transition-colors duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-2 focus-visible:ring-border-focus/40 disabled:cursor-not-allowed disabled:opacity-50 aria-[invalid=true]:border-error aria-[invalid=true]:focus-visible:ring-error/30"
+          className="border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
           placeholder="Explain why this change is needed"
         />
         {reasonError ? (
-          <p id={reasonErrorId} className="text-xs text-error" role="alert">
+          <p id={reasonErrorId} className="text-error text-xs" role="alert">
             {reasonError}
           </p>
         ) : (
-          <p className="text-xs text-fg-muted">3–500 characters. Visible in the audit record.</p>
+          <p className="text-fg-muted text-xs">3–500 characters. Visible in the audit record.</p>
         )}
       </div>
 
@@ -336,17 +336,17 @@ export function UserManagementPanel({
       {confirmation ? (
         <div
           ref={confirmationRef}
-          className="mt-5 max-w-xl rounded-md bg-bg-raised p-4"
+          className="bg-bg-raised mt-5 max-w-xl rounded-md p-4"
           role="group"
           tabIndex={-1}
           aria-live="assertive"
           aria-labelledby={confirmationTitleId}
           aria-describedby={confirmationDescriptionId}
         >
-          <h3 id={confirmationTitleId} className="text-sm font-semibold text-fg">
+          <h3 id={confirmationTitleId} className="text-fg text-sm font-semibold">
             Confirm change
           </h3>
-          <p id={confirmationDescriptionId} className="mt-1 text-sm text-fg-muted">
+          <p id={confirmationDescriptionId} className="text-fg-muted mt-1 text-sm">
             {confirmation.kind === "status"
               ? confirmation.transition.confirmation
               : confirmation.kind === "assign-role"
@@ -376,8 +376,8 @@ export function UserManagementPanel({
       ) : null}
 
       {transitions.length > 0 ? (
-        <div className="mt-6 max-w-xl border-t border-border pt-5">
-          <h3 className="text-sm font-semibold text-fg">Account status</h3>
+        <div className="border-border mt-6 max-w-xl border-t pt-5">
+          <h3 className="text-fg text-sm font-semibold">Account status</h3>
           <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end">
             <NativeSelect
               id={`${id}-status`}
@@ -411,8 +411,8 @@ export function UserManagementPanel({
       ) : null}
 
       {canManageRoles ? (
-        <div className="mt-6 border-t border-border pt-5">
-          <h3 className="text-sm font-semibold text-fg">Roles</h3>
+        <div className="border-border mt-6 border-t pt-5">
+          <h3 className="text-fg text-sm font-semibold">Roles</h3>
 
           {availableRoles.length > 0 ? (
             <div className="mt-3 flex max-w-xl flex-col gap-3 sm:flex-row sm:items-end">
@@ -449,10 +449,10 @@ export function UserManagementPanel({
               </Button>
             </div>
           ) : (
-            <p className="mt-3 text-sm text-fg-muted">No additional roles are available.</p>
+            <p className="text-fg-muted mt-3 text-sm">No additional roles are available.</p>
           )}
 
-          <div className="mt-5 divide-y divide-border border-y border-border">
+          <div className="divide-border border-border mt-5 divide-y border-y">
             {roles.length > 0 ? (
               roles.map((role) => {
                 const protectedWithoutPermission =
@@ -465,13 +465,15 @@ export function UserManagementPanel({
                   >
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="break-words text-sm font-medium text-fg">{role.name}</span>
-                        {role.isProtected ? (
-                          <StatusBadge tone="warning">Protected</StatusBadge>
-                        ) : null}
+                        <span className="text-fg text-sm font-medium wrap-break-word">
+                          {role.name}
+                        </span>
+                        {role.isProtected ? <Badge variant="warning">Protected</Badge> : null}
                       </div>
                       {role.description ? (
-                        <p className="mt-1 break-words text-xs text-fg-muted">{role.description}</p>
+                        <p className="text-fg-muted mt-1 text-xs wrap-break-word">
+                          {role.description}
+                        </p>
                       ) : null}
                     </div>
                     <Button
@@ -488,7 +490,7 @@ export function UserManagementPanel({
                 );
               })
             ) : (
-              <p className="px-1 py-3 text-sm text-fg-muted">This member has no assigned roles.</p>
+              <p className="text-fg-muted px-1 py-3 text-sm">This member has no assigned roles.</p>
             )}
           </div>
         </div>

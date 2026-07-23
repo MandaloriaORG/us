@@ -1,7 +1,13 @@
 "use client";
 
 import { useFormState } from "react-dom";
-import { User, FileText, Globe, AlertCircle, CheckCircle } from "lucide-react";
+import {
+  UserIcon,
+  FileTextIcon,
+  GlobeIcon,
+  WarningCircleIcon,
+  CheckCircleIcon,
+} from "@phosphor-icons/react/dist/ssr";
 
 import { NativeSelect } from "@/components/origin/native-select";
 import { TextInput } from "@/components/origin/text-input";
@@ -34,27 +40,27 @@ function Feedback({ state }: { state: ProfileResult }) {
       {state.success ? (
         <div
           role="status"
-          className="flex items-center gap-2 rounded-md border border-success/30 bg-success/10 px-3 py-2 text-sm text-success"
+          className="border-success/30 bg-success/10 text-success flex items-center gap-2 rounded-md border px-3 py-2 text-sm"
         >
-          <CheckCircle aria-hidden="true" className="h-4 w-4 shrink-0" />
+          <CheckCircleIcon aria-hidden="true" className="h-4 w-4 shrink-0" />
           {state.success}
         </div>
       ) : null}
       {state.warning ? (
         <div
           role="status"
-          className="flex items-center gap-2 rounded-md border border-warning/30 bg-warning/10 px-3 py-2 text-sm text-warning"
+          className="border-warning/30 bg-warning/10 text-warning flex items-center gap-2 rounded-md border px-3 py-2 text-sm"
         >
-          <AlertCircle aria-hidden="true" className="h-4 w-4 shrink-0" />
+          <WarningCircleIcon aria-hidden="true" className="h-4 w-4 shrink-0" />
           {state.warning}
         </div>
       ) : null}
       {state.error ? (
         <div
           role="alert"
-          className="flex items-center gap-2 rounded-md border border-error/30 bg-error/10 px-3 py-2 text-sm text-error"
+          className="border-error/30 bg-error/10 text-error flex items-center gap-2 rounded-md border px-3 py-2 text-sm"
         >
-          <AlertCircle aria-hidden="true" className="h-4 w-4 shrink-0" />
+          <WarningCircleIcon aria-hidden="true" className="h-4 w-4 shrink-0" />
           {state.error}
         </div>
       ) : null}
@@ -81,10 +87,10 @@ export function ProfileEditor({
     <div className="mt-8 space-y-10">
       <section aria-labelledby="avatar-heading" className="space-y-4">
         <div>
-          <h2 id="avatar-heading" className="text-lg font-semibold text-fg">
+          <h2 id="avatar-heading" className="text-fg text-lg font-semibold">
             Avatar
           </h2>
-          <p className="mt-1 text-sm text-fg-muted">Upload a static JPEG, PNG, or WebP image.</p>
+          <p className="text-fg-muted mt-1 text-sm">Upload a static JPEG, PNG, or WebP image.</p>
         </div>
 
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
@@ -101,7 +107,7 @@ export function ProfileEditor({
             <form action={avatarAction} aria-label="Upload avatar" className="space-y-3">
               <input type="hidden" name="expectedAvatarPath" value={avatarPath ?? ""} />
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="avatar" className="text-sm font-medium text-fg">
+                <label htmlFor="avatar" className="text-fg text-sm font-medium">
                   Avatar image
                 </label>
                 <input
@@ -112,13 +118,13 @@ export function ProfileEditor({
                   required
                   aria-describedby={[avatarDescriptionId, avatarErrorId].filter(Boolean).join(" ")}
                   aria-invalid={Boolean(avatarErrorId)}
-                  className="min-h-11 w-full rounded-md border border-border bg-bg text-sm text-fg file:mr-3 file:min-h-11 file:border-0 file:border-r file:border-border file:bg-bg-raised file:px-3 file:text-sm file:font-medium file:text-fg hover:border-border-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
+                  className="border-border bg-bg text-fg file:border-border file:bg-bg-raised file:text-fg hover:border-border-raised focus-visible:ring-border-focus min-h-11 w-full rounded-md border text-sm file:mr-3 file:min-h-11 file:border-0 file:border-r file:px-3 file:text-sm file:font-medium focus-visible:ring-2 focus-visible:outline-hidden"
                 />
-                <p id={avatarDescriptionId} className="text-xs text-fg-muted">
+                <p id={avatarDescriptionId} className="text-fg-muted text-xs">
                   Maximum 5 MiB and 40 megapixels. Output is resized to 512 pixels.
                 </p>
                 {avatarState.fieldErrors?.avatar ? (
-                  <p id={avatarErrorId} className="text-xs text-error">
+                  <p id={avatarErrorId} className="text-error text-xs">
                     {avatarState.fieldErrors.avatar}
                   </p>
                 ) : null}
@@ -144,7 +150,7 @@ export function ProfileEditor({
           name="displayName"
           type="text"
           label="Display name"
-          icon={User}
+          icon={UserIcon}
           required
           minLength={2}
           maxLength={50}
@@ -154,11 +160,14 @@ export function ProfileEditor({
         />
 
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bio" className="mb-1.5 block text-sm font-medium text-fg">
+          <label htmlFor="bio" className="text-fg mb-1.5 block text-sm font-medium">
             Bio
           </label>
           <div className="relative">
-            <FileText aria-hidden="true" className="absolute left-3 top-3 h-4 w-4 text-fg-muted" />
+            <FileTextIcon
+              aria-hidden="true"
+              className="text-fg-muted absolute top-3 left-3 h-4 w-4"
+            />
             <textarea
               id="bio"
               name="bio"
@@ -169,15 +178,15 @@ export function ProfileEditor({
               aria-describedby={bioErrorId}
               aria-invalid={Boolean(state.fieldErrors?.bio)}
               className={cn(
-                "w-full resize-y rounded-md border bg-bg px-4 py-3 pl-10 text-sm text-fg transition-colors duration-fast placeholder:text-fg-subtle",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus/40",
+                "bg-bg text-fg duration-fast placeholder:text-fg-subtle w-full resize-y rounded-md border px-4 py-3 pl-10 text-sm transition-colors",
+                "focus-visible:ring-border-focus/40 focus-visible:ring-2 focus-visible:outline-hidden",
                 state.fieldErrors?.bio ? "border-error" : "border-border",
               )}
             />
           </div>
           {state.fieldErrors?.bio ? (
-            <p id={bioErrorId} className="flex items-start gap-1.5 text-xs text-error">
-              <AlertCircle aria-hidden="true" className="mt-px h-4 w-4 shrink-0" />
+            <p id={bioErrorId} className="text-error flex items-start gap-1.5 text-xs">
+              <WarningCircleIcon aria-hidden="true" className="mt-px h-4 w-4 shrink-0" />
               <span>{state.fieldErrors.bio}</span>
             </p>
           ) : null}
@@ -189,7 +198,7 @@ export function ProfileEditor({
           type="url"
           inputMode="url"
           label="Website"
-          icon={Globe}
+          icon={GlobeIcon}
           maxLength={2048}
           autoComplete="url"
           defaultValue={website}

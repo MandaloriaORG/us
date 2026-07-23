@@ -220,8 +220,8 @@ describe("member profile", () => {
     );
 
     render(await MemberProfilePage({ params: { id: memberId } }));
-    expect(screen.getByRole("heading", { name: "A".repeat(50) })).toHaveClass("break-words");
-    expect(screen.getByText(/Line one/)).toHaveClass("whitespace-pre-wrap", "break-words");
+    expect(screen.getByRole("heading", { name: "A".repeat(50) })).toHaveClass("wrap-break-word");
+    expect(screen.getByText(/Line one/)).toHaveClass("whitespace-pre-wrap", "wrap-break-word");
   });
 
   it("renders a recoverable profile error", async () => {

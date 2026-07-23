@@ -1,4 +1,4 @@
-import { DataTable, type DataTableColumn } from "@/components/reui/data-table";
+import { DataTable, type DataTableColumn } from "@/components/ui/data-table";
 import { EmptyState } from "@/components/ui/empty-state";
 
 import { getAuditActionDetail, getAuditActionLabel, type AuditLogDto } from "./audit-log-dto";
@@ -34,20 +34,20 @@ function AuditDetails({ auditLog }: { auditLog: AuditLogDto }) {
 
   return (
     <details className="group max-w-md">
-      <summary className="min-h-11 cursor-pointer content-center rounded-sm text-fg-muted underline-offset-4 hover:text-fg hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-border-focus">
+      <summary className="text-fg-muted hover:text-fg focus-visible:ring-border-focus min-h-11 cursor-pointer content-center rounded-xs underline-offset-4 hover:underline focus:outline-hidden focus-visible:ring-2">
         View details
       </summary>
-      <dl className="mt-1 space-y-2 border-l border-border pl-3 text-sm">
+      <dl className="border-border mt-1 space-y-2 border-l pl-3 text-sm">
         {actionDetail && (
           <div>
             <dt className="sr-only">Change</dt>
-            <dd className="break-words text-fg">{actionDetail}</dd>
+            <dd className="text-fg wrap-break-word">{actionDetail}</dd>
           </div>
         )}
         {auditLog.reason && (
           <div>
-            <dt className="font-medium text-fg-muted">Reason</dt>
-            <dd className="break-words text-fg">{auditLog.reason}</dd>
+            <dt className="text-fg-muted font-medium">Reason</dt>
+            <dd className="text-fg wrap-break-word">{auditLog.reason}</dd>
           </div>
         )}
       </dl>
@@ -69,20 +69,22 @@ const columns: readonly DataTableColumn<AuditLogDto>[] = [
     header: () => "Actor",
     cellClassName: "max-w-48",
     cell: (auditLog) => (
-      <span className="break-words font-medium text-fg">{auditLog.actorDisplayName}</span>
+      <span className="text-fg font-medium wrap-break-word">{auditLog.actorDisplayName}</span>
     ),
   },
   {
     id: "action",
     header: () => "Action",
     cellClassName: "max-w-48",
-    cell: (auditLog) => <span className="break-words">{getAuditActionLabel(auditLog.action)}</span>,
+    cell: (auditLog) => (
+      <span className="wrap-break-word">{getAuditActionLabel(auditLog.action)}</span>
+    ),
   },
   {
     id: "target",
     header: () => "Target",
     cellClassName: "max-w-48",
-    cell: (auditLog) => <span className="break-words">{auditLog.targetDisplayName}</span>,
+    cell: (auditLog) => <span className="wrap-break-word">{auditLog.targetDisplayName}</span>,
   },
   {
     id: "details",
@@ -108,7 +110,7 @@ export function AuditLogTable({ auditLogs, hasFilters, total }: AuditLogTablePro
 
   return (
     <div>
-      <p aria-live="polite" className="min-h-6 text-sm tabular-nums text-fg-muted">
+      <p aria-live="polite" className="text-fg-muted min-h-6 text-sm tabular-nums">
         {safeTotal === 1 ? "1 audit event" : `${safeTotal} audit events`}
       </p>
       <DataTable
@@ -120,7 +122,7 @@ export function AuditLogTable({ auditLogs, hasFilters, total }: AuditLogTablePro
         emptyState={emptyState}
         rowKey={(auditLog) => auditLog.id}
         rows={auditLogs}
-        tableClassName="min-w-[64rem]"
+        tableClassName="min-w-5xl"
       />
     </div>
   );

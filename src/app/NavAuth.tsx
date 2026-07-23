@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Loader2, LogOut } from "lucide-react";
+import { CircleNotchIcon, SignOutIcon } from "@phosphor-icons/react/dist/ssr";
 import { useFormStatus } from "react-dom";
 
 import { Avatar } from "@/components/ui/avatar";
@@ -21,12 +21,12 @@ function LogoutButton() {
       disabled={pending}
       aria-busy={pending || undefined}
       aria-label={pending ? "Signing out" : "Sign out"}
-      className="flex h-11 w-11 items-center justify-center rounded-md text-fg-muted transition-colors duration-fast hover:bg-surface hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:cursor-wait disabled:opacity-60"
+      className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg flex h-11 w-11 items-center justify-center rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:cursor-wait disabled:opacity-60"
     >
       {pending ? (
-        <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" />
+        <CircleNotchIcon aria-hidden="true" className="h-4 w-4 animate-spin" />
       ) : (
-        <LogOut aria-hidden="true" className="h-4 w-4" />
+        <SignOutIcon aria-hidden="true" className="h-4 w-4" />
       )}
     </button>
   );
@@ -37,7 +37,7 @@ export function NavAuth({ user, profile }: NavAuthProps) {
     return (
       <Link
         href="/auth/login"
-        className="ml-2 inline-flex h-11 items-center rounded-md border border-border px-3 text-xs font-medium text-fg-muted transition-colors duration-fast hover:bg-surface hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+        className="border-border text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg ml-2 inline-flex h-11 items-center rounded-md border px-3 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
       >
         Sign in
       </Link>
@@ -49,7 +49,7 @@ export function NavAuth({ user, profile }: NavAuthProps) {
       <Link
         href="/profile/edit"
         aria-label="Edit profile"
-        className="flex min-h-11 items-center gap-2 rounded-md px-2 py-1 text-sm text-fg-muted transition-colors duration-fast hover:bg-surface hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+        className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg flex min-h-11 items-center gap-2 rounded-md px-2 py-1 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
       >
         <Avatar
           name={profile?.display_name ?? "Profile"}

@@ -1,11 +1,14 @@
-import { UserRoundSearch } from "lucide-react";
+import { UserFocusIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCouncilUserAccess } from "@/app/council/access";
 import { NativeSelect } from "@/components/origin/native-select";
 import { SearchInput } from "@/components/origin/search-input";
-import { StatusBadge, type StatusBadgeTone } from "@/components/origin/status-badge";
-import { DataTable, type DataTableColumn } from "@/components/reui/data-table";
+import { Badge } from "@/components/origin/badge";
+import type { ComponentProps } from "react";
+
+type BadgeVariant = NonNullable<ComponentProps<typeof Badge>["variant"]>;
+import { DataTable, type DataTableColumn } from "@/components/ui/data-table";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -169,10 +172,10 @@ export default async function CouncilUsersPage({ searchParams }: CouncilUsersPag
     redirect(pageHref(totalPages, query, status, sort));
   }
 
-  const statusTones: Record<ProfileStatus, StatusBadgeTone> = {
+  const statusVariants: Record<ProfileStatus, BadgeVariant> = {
     active: "success",
     suspended: "warning",
-    banned: "danger",
+    banned: "error",
   };
   const columns: DataTableColumn<CouncilUserRow>[] = [
     {
@@ -183,7 +186,7 @@ export default async function CouncilUsersPage({ searchParams }: CouncilUsersPag
           <Avatar alt="" name={user.display_name} />
           <Link
             href={`/council/users/${user.id}`}
-            className="min-h-11 min-w-0 content-center break-words font-medium text-fg underline-offset-4 hover:text-brand hover:underline focus:outline-none focus:ring-2 focus:ring-border-focus"
+            className="text-fg hover:text-brand focus:ring-border-focus min-h-11 min-w-0 content-center font-medium wrap-break-word underline-offset-4 hover:underline focus:ring-2 focus:outline-hidden"
           >
             {user.display_name}
           </Link>
@@ -196,7 +199,7 @@ export default async function CouncilUsersPage({ searchParams }: CouncilUsersPag
       cellClassName: "max-w-56 text-fg-muted",
       cell: (user) => {
         return (
-          <span className="break-words">
+          <span className="wrap-break-word">
             {user.roleNames.length > 0 ? user.roleNames.join(", ") : "No assigned roles"}
           </span>
         );
@@ -206,12 +209,12 @@ export default async function CouncilUsersPage({ searchParams }: CouncilUsersPag
       id: "status",
       header: () => "Status",
       cell: (user) => (
-        <StatusBadge
+        <Badge
           className="capitalize"
-          tone={user.status === "unknown" ? "neutral" : statusTones[user.status]}
+          variant={user.status === "unknown" ? "outline" : statusVariants[user.status]}
         >
           {user.status}
-        </StatusBadge>
+        </Badge>
       ),
     },
     {
@@ -241,7 +244,7 @@ export default async function CouncilUsersPage({ searchParams }: CouncilUsersPag
           ? "Try a different name or account status."
           : "Registered members will appear here."
       }
-      icon={<UserRoundSearch aria-hidden="true" className="h-6 w-6" />}
+      icon={<UserFocusIcon aria-hidden="true" className="h-6 w-6" />}
       title={hasFilters ? "No members match these filters" : "No members are available"}
     />
   );
@@ -249,11 +252,11 @@ export default async function CouncilUsersPage({ searchParams }: CouncilUsersPag
   return (
     <div className="mx-auto w-full max-w-5xl">
       <div>
-        <h1 className="text-2xl font-semibold text-fg">Users</h1>
-        <p className="mt-1 text-sm text-fg-muted">Review member access and account status.</p>
+        <h1 className="text-fg text-2xl font-semibold">Users</h1>
+        <p className="text-fg-muted mt-1 text-sm">Review member access and account status.</p>
       </div>
 
-      <form className="mt-6 grid gap-4 border-y border-border py-4 sm:grid-cols-2 sm:items-end lg:grid-cols-[minmax(0,1fr)_10rem_12rem_auto]">
+      <form className="border-border mt-6 grid gap-4 border-y py-4 sm:grid-cols-2 sm:items-end lg:grid-cols-[minmax(0,1fr)_10rem_12rem_auto]">
         <SearchInput
           id="council-user-search"
           defaultValue={query}
@@ -287,12 +290,12 @@ export default async function CouncilUsersPage({ searchParams }: CouncilUsersPag
         </Button>
       </form>
 
-      <div className="mt-4 flex min-h-6 items-center justify-between gap-4 text-sm text-fg-muted">
+      <div className="text-fg-muted mt-4 flex min-h-6 items-center justify-between gap-4 text-sm">
         <p aria-live="polite">{total === 1 ? "1 member" : `${total} members`}</p>
         {hasFilters && (
           <Link
             href="/council/users"
-            className="inline-flex min-h-11 items-center text-fg-muted underline-offset-4 hover:text-fg hover:underline focus:outline-none focus:ring-2 focus:ring-border-focus"
+            className="text-fg-muted hover:text-fg focus:ring-border-focus inline-flex min-h-11 items-center underline-offset-4 hover:underline focus:ring-2 focus:outline-hidden"
           >
             Clear filters
           </Link>
@@ -307,13 +310,13 @@ export default async function CouncilUsersPage({ searchParams }: CouncilUsersPag
         emptyState={noUsers}
         rowKey={(user) => user.id}
         rows={profiles}
-        tableClassName="min-w-[40rem]"
+        tableClassName="min-w-160"
       />
 
       {totalPages > 1 && (
         <nav
           aria-label="User list pagination"
-          className="mt-6 flex items-center justify-between gap-4 border-t border-border pt-4"
+          className="border-border mt-6 flex items-center justify-between gap-4 border-t pt-4"
         >
           {page > 1 ? (
             <Button asChild variant="secondary">
@@ -322,7 +325,7 @@ export default async function CouncilUsersPage({ searchParams }: CouncilUsersPag
           ) : (
             <span />
           )}
-          <span className="text-sm tabular-nums text-fg-muted">
+          <span className="text-fg-muted text-sm tabular-nums">
             Page {page} of {totalPages}
           </span>
           {page < totalPages ? (

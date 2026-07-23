@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useFormState } from "react-dom";
-import { AlertCircle, Mail, User } from "lucide-react";
+import { WarningCircleIcon, EnvelopeIcon, UserIcon } from "@phosphor-icons/react/dist/ssr";
 import { AuthShell } from "@/app/auth/AuthShell";
 import { PasswordInput } from "@/components/origin/password-input";
 import { TextInput } from "@/components/origin/text-input";
@@ -16,8 +16,8 @@ export default function RegisterPage() {
 
   return (
     <AuthShell>
-      <h1 className="text-center text-2xl font-semibold text-fg">Create your account</h1>
-      <p className="mt-1 text-center text-sm text-fg-muted">Join the Mandaloria community.</p>
+      <h1 className="text-fg text-center text-2xl font-semibold">Create your account</h1>
+      <p className="text-fg-muted mt-1 text-center text-sm">Join the Mandaloria community.</p>
 
       <form action={formAction} className="mt-6 space-y-4">
         <TextInput
@@ -25,7 +25,7 @@ export default function RegisterPage() {
           name="displayName"
           type="text"
           label="Display name"
-          icon={User}
+          icon={UserIcon}
           autoComplete="nickname"
           required
           minLength={2}
@@ -39,7 +39,7 @@ export default function RegisterPage() {
           name="email"
           type="email"
           label="Email"
-          icon={Mail}
+          icon={EnvelopeIcon}
           autoComplete="email"
           required
           placeholder="you@example.com"
@@ -60,9 +60,9 @@ export default function RegisterPage() {
         {state.error && (
           <div
             role="alert"
-            className="flex items-start gap-2 rounded-md border border-error/30 px-3 py-2 text-sm text-error"
+            className="border-error/30 text-error flex items-start gap-2 rounded-md border px-3 py-2 text-sm"
           >
-            <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+            <WarningCircleIcon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
             {state.error}
           </div>
         )}
@@ -71,7 +71,7 @@ export default function RegisterPage() {
           Create account
         </SubmitButton>
 
-        <p className="text-center text-sm text-fg-muted">
+        <p className="text-fg-muted text-center text-sm">
           Already have an account?{" "}
           <Link href="/auth/login" className="text-brand underline-offset-4 hover:underline">
             Sign in

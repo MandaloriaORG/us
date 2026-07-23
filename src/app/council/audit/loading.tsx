@@ -21,10 +21,10 @@ export default function AuditLoading() {
 
       <div
         aria-hidden="true"
-        className="max-w-full overflow-x-auto rounded-md border border-border"
+        className="border-border max-w-full overflow-x-auto rounded-md border"
       >
-        <div className="min-w-[48rem]">
-          <div className="grid h-11 grid-cols-[9rem_1fr_10rem_1fr_12rem] items-center gap-4 border-b border-border bg-surface px-4">
+        <div className="min-w-3xl">
+          <div className="border-border bg-surface grid h-11 grid-cols-[9rem_1fr_10rem_1fr_12rem] items-center gap-4 border-b px-4">
             {Array.from({ length: 5 }).map((_, index) => (
               <Skeleton key={index} className="h-3 w-16" />
             ))}
@@ -33,7 +33,7 @@ export default function AuditLoading() {
           {Array.from({ length: AUDIT_ROW_SKELETONS }).map((_, index) => (
             <div
               key={index}
-              className="grid min-h-14 grid-cols-[9rem_1fr_10rem_1fr_12rem] items-center gap-4 border-b border-border px-4 py-3 last:border-b-0"
+              className="border-border grid min-h-14 grid-cols-[9rem_1fr_10rem_1fr_12rem] items-center gap-4 border-b px-4 py-3 last:border-b-0"
             >
               <Skeleton className="h-4 w-24" />
               <Skeleton className="h-4 w-full max-w-40" />

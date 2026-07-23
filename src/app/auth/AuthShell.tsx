@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Shield } from "lucide-react";
+import { ShieldIcon } from "@phosphor-icons/react/dist/ssr";
 
 interface AuthShellProps {
   children: React.ReactNode;
@@ -13,9 +13,9 @@ export function AuthShell({ children }: AuthShellProps) {
           <Link
             href="/"
             aria-label="Mandaloria home"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-brand/40 text-brand transition-colors duration-fast hover:bg-brand-muted/10 focus:outline-none focus:ring-2 focus:ring-border-focus focus:ring-offset-2 focus:ring-offset-bg"
+            className="border-brand/40 text-brand duration-fast hover:bg-brand-muted/10 focus:ring-border-focus focus:ring-offset-bg inline-flex h-11 w-11 items-center justify-center rounded-full border transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-hidden"
           >
-            <Shield aria-hidden="true" className="h-6 w-6" />
+            <ShieldIcon aria-hidden="true" className="h-6 w-6" />
           </Link>
         </div>
         {children}

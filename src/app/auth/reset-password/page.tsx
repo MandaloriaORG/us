@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useFormState } from "react-dom";
-import { AlertCircle } from "lucide-react";
+import { WarningCircleIcon } from "@phosphor-icons/react/dist/ssr";
 import { AuthShell } from "@/app/auth/AuthShell";
 import { PasswordInput } from "@/components/origin/password-input";
 import { SubmitButton } from "@/components/ui/submit-button";
@@ -15,8 +15,8 @@ export default function ResetPasswordPage() {
 
   return (
     <AuthShell>
-      <h1 className="text-center text-2xl font-semibold text-fg">Choose a new password</h1>
-      <p className="mt-1 text-center text-sm text-fg-muted">
+      <h1 className="text-fg text-center text-2xl font-semibold">Choose a new password</h1>
+      <p className="text-fg-muted mt-1 text-center text-sm">
         Use at least eight characters and confirm the new password.
       </p>
 
@@ -47,9 +47,9 @@ export default function ResetPasswordPage() {
         {state.error && (
           <div
             role="alert"
-            className="flex items-start gap-2 rounded-md border border-error/30 px-3 py-2 text-sm text-error"
+            className="border-error/30 text-error flex items-start gap-2 rounded-md border px-3 py-2 text-sm"
           >
-            <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+            <WarningCircleIcon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
             <span>
               {state.error}
               {state.errorCode === "session_expired" && (

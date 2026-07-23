@@ -45,7 +45,7 @@ function renderAuditFilters(
   return (
     <form
       action="/council/audit"
-      className="mt-6 grid gap-4 border-y border-border py-4 md:grid-cols-2 xl:grid-cols-[12rem_minmax(13rem,1fr)_minmax(13rem,1fr)_10rem_10rem_auto] xl:items-end"
+      className="border-border mt-6 grid gap-4 border-y py-4 md:grid-cols-2 xl:grid-cols-[12rem_minmax(13rem,1fr)_minmax(13rem,1fr)_10rem_10rem_auto] xl:items-end"
       method="get"
     >
       <NativeSelect
@@ -113,7 +113,7 @@ function renderAuditFilters(
       </Button>
 
       {errors.page ? (
-        <p className="text-xs text-error md:col-span-2 xl:col-span-full" role="alert">
+        <p className="text-error text-xs md:col-span-2 xl:col-span-full" role="alert">
           Page: {errors.page}
         </p>
       ) : null}
@@ -146,8 +146,8 @@ export default async function CouncilAuditPage({ searchParams }: CouncilAuditPag
     return (
       <div className="mx-auto w-full max-w-6xl">
         <div>
-          <h1 className="text-2xl font-semibold text-fg">Audit logs</h1>
-          <p className="mt-1 text-sm text-fg-muted">
+          <h1 className="text-fg text-2xl font-semibold">Audit logs</h1>
+          <p className="text-fg-muted mt-1 text-sm">
             Review administrative account and role changes.
           </p>
         </div>
@@ -155,10 +155,10 @@ export default async function CouncilAuditPage({ searchParams }: CouncilAuditPag
         {filterForm}
 
         <section aria-labelledby="audit-filter-errors-title" className="mt-6 max-w-xl">
-          <h2 id="audit-filter-errors-title" className="text-base font-semibold text-fg">
+          <h2 id="audit-filter-errors-title" className="text-fg text-base font-semibold">
             Check the audit filters
           </h2>
-          <p className="mt-1 text-sm text-fg-muted">
+          <p className="text-fg-muted mt-1 text-sm">
             Correct the fields marked above before loading audit events.
           </p>
           <Button asChild className="mt-4" variant="secondary">
@@ -202,8 +202,8 @@ export default async function CouncilAuditPage({ searchParams }: CouncilAuditPag
   return (
     <div className="mx-auto w-full max-w-6xl">
       <div>
-        <h1 className="text-2xl font-semibold text-fg">Audit logs</h1>
-        <p className="mt-1 text-sm text-fg-muted">
+        <h1 className="text-fg text-2xl font-semibold">Audit logs</h1>
+        <p className="text-fg-muted mt-1 text-sm">
           Review administrative account and role changes.
         </p>
       </div>
@@ -213,7 +213,7 @@ export default async function CouncilAuditPage({ searchParams }: CouncilAuditPag
       {hasFilters ? (
         <div className="mt-2 flex justify-end">
           <Link
-            className="inline-flex min-h-11 items-center text-sm text-fg-muted underline-offset-4 hover:text-fg hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
+            className="text-fg-muted hover:text-fg focus-visible:ring-border-focus inline-flex min-h-11 items-center text-sm underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:outline-hidden"
             href="/council/audit"
           >
             Clear filters
@@ -228,7 +228,7 @@ export default async function CouncilAuditPage({ searchParams }: CouncilAuditPag
       {totalPages > 1 ? (
         <nav
           aria-label="Audit log pagination"
-          className="mt-6 flex items-center justify-between gap-4 border-t border-border pt-4"
+          className="border-border mt-6 flex items-center justify-between gap-4 border-t pt-4"
         >
           {filters.page > 1 ? (
             <Button asChild variant="secondary">
@@ -238,7 +238,7 @@ export default async function CouncilAuditPage({ searchParams }: CouncilAuditPag
             <span />
           )}
 
-          <span className="text-sm tabular-nums text-fg-muted">
+          <span className="text-fg-muted text-sm tabular-nums">
             Page {filters.page} of {totalPages}
           </span>
 

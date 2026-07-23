@@ -11,11 +11,11 @@ export default function CouncilLoading() {
       <Skeleton aria-hidden="true" className="h-11 w-full max-w-sm" />
 
       <div aria-hidden="true">
-        <div className="rounded-md border border-border">
+        <div className="border-border rounded-md border">
           {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
-              className="flex min-h-16 items-center gap-4 border-b border-border px-4 py-3 last:border-b-0"
+              className="border-border flex min-h-16 items-center gap-4 border-b px-4 py-3 last:border-b-0"
             >
               <Skeleton variant="circular" className="h-10 w-10" />
               <div className="min-w-0 flex-1 space-y-2">

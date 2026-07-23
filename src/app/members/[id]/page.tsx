@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { Calendar, Globe, ArrowLeft } from "lucide-react";
+import { CalendarBlankIcon, GlobeIcon, ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
 import { safeExternalUrl } from "@/app/members/safe-external-url";
@@ -52,9 +52,9 @@ export default async function MemberProfilePage({ params }: Props) {
       {/* Back */}
       <Link
         href="/members"
-        className="mb-8 inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm text-fg-muted transition-colors duration-fast hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+        className="text-fg-muted duration-fast hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg mb-8 inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
       >
-        <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+        <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
         All members
       </Link>
 
@@ -68,7 +68,7 @@ export default async function MemberProfilePage({ params }: Props) {
         />
 
         <div className="min-w-0">
-          <h1 className="break-words text-2xl font-semibold text-fg">{profile.display_name}</h1>
+          <h1 className="text-fg text-2xl font-semibold wrap-break-word">{profile.display_name}</h1>
 
           {/* Staff badge */}
           {staffRoles.length > 0 && (
@@ -76,7 +76,7 @@ export default async function MemberProfilePage({ params }: Props) {
               {staffRoles.map((role) => (
                 <span
                   key={role}
-                  className="inline-flex items-center rounded-full border border-brand/40 bg-brand-muted/10 px-2.5 py-0.5 text-xs font-medium text-brand"
+                  className="border-brand/40 bg-brand-muted/10 text-brand inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
                 >
                   {role}
                 </span>
@@ -90,7 +90,7 @@ export default async function MemberProfilePage({ params }: Props) {
               {otherRoles.map((role) => (
                 <span
                   key={role}
-                  className="inline-flex items-center rounded-full border border-border px-2.5 py-0.5 text-xs text-fg-muted"
+                  className="border-border text-fg-muted inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs"
                 >
                   {role}
                 </span>
@@ -100,8 +100,8 @@ export default async function MemberProfilePage({ params }: Props) {
 
           {/* Join date */}
           {joinedLabel && (
-            <div className="mt-3 flex items-center gap-1.5 text-xs text-fg-muted">
-              <Calendar aria-hidden="true" className="h-3.5 w-3.5" />
+            <div className="text-fg-muted mt-3 flex items-center gap-1.5 text-xs">
+              <CalendarBlankIcon aria-hidden="true" className="h-3.5 w-3.5" />
               <span>
                 Joined <time dateTime={profile.created_at}>{joinedLabel}</time>
               </span>
@@ -112,8 +112,8 @@ export default async function MemberProfilePage({ params }: Props) {
 
       {/* Bio */}
       {profile.bio && (
-        <div className="mt-8 border-t border-border pt-8">
-          <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-fg-muted">
+        <div className="border-border mt-8 border-t pt-8">
+          <p className="text-fg-muted text-sm leading-relaxed wrap-break-word whitespace-pre-wrap">
             {profile.bio}
           </p>
         </div>
@@ -126,9 +126,9 @@ export default async function MemberProfilePage({ params }: Props) {
             href={website.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm text-brand hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+            className="text-brand focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
           >
-            <Globe aria-hidden="true" className="h-4 w-4" />
+            <GlobeIcon aria-hidden="true" className="h-4 w-4" />
             <span className="break-all">{website.label}</span>
           </a>
         </div>

@@ -16,9 +16,9 @@ export default function MembersError({ error, reset }: MembersErrorProps) {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
-      <div role="alert" className="rounded-md border border-error/30 bg-error/10 p-6">
-        <h1 className="text-xl font-semibold text-fg">Members temporarily unavailable</h1>
-        <p className="mt-2 text-sm text-fg-muted">
+      <div role="alert" className="border-error/30 bg-error/10 rounded-md border p-6">
+        <h1 className="text-fg text-xl font-semibold">Members temporarily unavailable</h1>
+        <p className="text-fg-muted mt-2 text-sm">
           We could not load this member content. Try again.
         </p>
         <Button className="mt-5" type="button" onClick={reset}>

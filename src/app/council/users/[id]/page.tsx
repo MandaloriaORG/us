@@ -1,8 +1,11 @@
-import { ArrowLeft, Calendar, Globe } from "lucide-react";
+import { ArrowLeftIcon, CalendarBlankIcon, GlobeIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCouncilUserAccess } from "@/app/council/access";
-import { StatusBadge, type StatusBadgeTone } from "@/components/origin/status-badge";
+import { Badge } from "@/components/origin/badge";
+import type { ComponentProps } from "react";
+
+type BadgeVariant = NonNullable<ComponentProps<typeof Badge>["variant"]>;
 import { Avatar } from "@/components/ui/avatar";
 import { getCurrentAuthorization } from "@/lib/permissions";
 import { createClient } from "@/lib/supabase/server";
@@ -32,17 +35,17 @@ interface CouncilUserDetail {
   website: string | null;
 }
 
-const statusTones = {
+const statusVariants = {
   active: "success",
   suspended: "warning",
-  banned: "danger",
-} satisfies Record<string, StatusBadgeTone>;
+  banned: "error",
+} satisfies Record<string, BadgeVariant>;
 
-function statusTone(status: ProfileStatus): StatusBadgeTone {
+function statusVariant(status: ProfileStatus): BadgeVariant {
   if (status === "active" || status === "suspended" || status === "banned") {
-    return statusTones[status];
+    return statusVariants[status];
   }
-  return "neutral";
+  return "outline";
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -170,9 +173,9 @@ export default async function CouncilUserDetailPage({ params }: CouncilUserDetai
     <div className="mx-auto w-full max-w-3xl">
       <Link
         href="/council/users"
-        className="mb-6 inline-flex min-h-11 items-center gap-2 text-sm text-fg-muted hover:text-fg focus:outline-none focus:ring-2 focus:ring-border-focus"
+        className="text-fg-muted hover:text-fg focus:ring-border-focus mb-6 inline-flex min-h-11 items-center gap-2 text-sm focus:ring-2 focus:outline-hidden"
       >
-        <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+        <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
         All users
       </Link>
 
@@ -181,14 +184,16 @@ export default async function CouncilUserDetailPage({ params }: CouncilUserDetai
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <h1 className="break-words text-2xl font-semibold text-fg">{profile.displayName}</h1>
-            <StatusBadge className="capitalize" tone={statusTone(profile.status)}>
+            <h1 className="text-fg text-2xl font-semibold wrap-break-word">
+              {profile.displayName}
+            </h1>
+            <Badge className="capitalize" variant={statusVariant(profile.status)}>
               {profile.status}
-            </StatusBadge>
+            </Badge>
           </div>
 
-          <div className="mt-2 flex items-center gap-1.5 text-xs text-fg-muted">
-            <Calendar aria-hidden="true" className="h-4 w-4" />
+          <div className="text-fg-muted mt-2 flex items-center gap-1.5 text-xs">
+            <CalendarBlankIcon aria-hidden="true" className="h-4 w-4" />
             <span>
               Joined{" "}
               {profile.createdAt ? (
@@ -210,9 +215,9 @@ export default async function CouncilUserDetailPage({ params }: CouncilUserDetai
               href={website.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 inline-flex min-h-11 max-w-full items-center gap-1.5 break-all text-xs text-brand underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-border-focus"
+              className="text-brand focus:ring-border-focus mt-2 inline-flex min-h-11 max-w-full items-center gap-1.5 text-xs break-all underline-offset-4 hover:underline focus:ring-2 focus:outline-hidden"
             >
-              <Globe aria-hidden="true" className="h-4 w-4 shrink-0" />
+              <GlobeIcon aria-hidden="true" className="h-4 w-4 shrink-0" />
               {website.hostname}
             </a>
           )}
@@ -220,42 +225,42 @@ export default async function CouncilUserDetailPage({ params }: CouncilUserDetai
       </div>
 
       {profile.bio && (
-        <section className="mt-8 border-t border-border pt-6" aria-label="Biography">
-          <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-fg-muted">
+        <section className="border-border mt-8 border-t pt-6" aria-label="Biography">
+          <p className="text-fg-muted text-sm leading-relaxed wrap-break-word whitespace-pre-wrap">
             {profile.bio}
           </p>
         </section>
       )}
 
       {!canManageRoles || !hasKnownStatus ? (
-        <section className="mt-8 border-t border-border pt-6">
-          <h2 className="text-lg font-semibold text-fg">Roles</h2>
+        <section className="border-border mt-8 border-t pt-6">
+          <h2 className="text-fg text-lg font-semibold">Roles</h2>
           {profile.roles.length > 0 ? (
-            <div className="mt-3 divide-y divide-border border-y border-border">
+            <div className="divide-border border-border mt-3 divide-y border-y">
               {profile.roles.map((role) => (
                 <div key={role.id} className="px-1 py-3 sm:px-3">
-                  <span className="text-sm font-medium text-fg">{role.name}</span>
+                  <span className="text-fg text-sm font-medium">{role.name}</span>
                   {role.description && (
-                    <p className="mt-1 text-xs text-fg-muted">{role.description}</p>
+                    <p className="text-fg-muted mt-1 text-xs">{role.description}</p>
                   )}
                 </div>
               ))}
             </div>
           ) : (
-            <p className="mt-3 text-sm text-fg-muted">This member has no assigned roles.</p>
+            <p className="text-fg-muted mt-3 text-sm">This member has no assigned roles.</p>
           )}
         </section>
       ) : null}
 
       {isSelf && profile.status !== "unknown" ? (
         <section
-          className="mt-8 border-t border-border pt-6"
+          className="border-border mt-8 border-t pt-6"
           aria-labelledby="self-management-title"
         >
-          <h2 id="self-management-title" className="text-lg font-semibold text-fg">
+          <h2 id="self-management-title" className="text-fg text-lg font-semibold">
             Manage user
           </h2>
-          <p className="mt-2 text-sm text-fg-muted">
+          <p className="text-fg-muted mt-2 text-sm">
             You cannot change your own account status or role assignments.
           </p>
         </section>

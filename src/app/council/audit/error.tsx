@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { AlertCircle } from "lucide-react";
+import { WarningCircleIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { Button } from "@/components/ui/button";
 
@@ -31,12 +31,12 @@ export default function AuditError({
       aria-describedby="audit-error-description"
       className="flex max-w-lg items-start gap-3 py-2"
     >
-      <AlertCircle aria-hidden="true" className="mt-0.5 h-6 w-6 shrink-0 text-error" />
+      <WarningCircleIcon aria-hidden="true" className="text-error mt-0.5 h-6 w-6 shrink-0" />
       <div>
-        <h1 id="audit-error-title" className="text-xl font-semibold text-fg">
+        <h1 id="audit-error-title" className="text-fg text-xl font-semibold">
           Audit log unavailable
         </h1>
-        <p id="audit-error-description" className="mt-2 text-sm text-fg-muted">
+        <p id="audit-error-description" className="text-fg-muted mt-2 text-sm">
           We could not load the audit log. Try again.
         </p>
         <Button ref={retryButtonRef} type="button" onClick={reset} className="mt-4">

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 
 const capabilities = [
   {
@@ -45,29 +45,29 @@ function CapabilityList() {
     <section aria-labelledby="capabilities-title">
       <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
         <div className="max-w-2xl">
-          <h2 id="capabilities-title" className="text-2xl font-semibold tracking-tight text-fg">
+          <h2 id="capabilities-title" className="text-fg text-2xl font-semibold tracking-tight">
             One network, four ways to participate
           </h2>
-          <p className="mt-3 text-base text-fg-muted">
+          <p className="text-fg-muted mt-3 text-base">
             Move between durable debate, live conversation, reviewed knowledge, and community
             responsibility without losing context.
           </p>
         </div>
 
-        <ul className="mt-8 border-b border-border">
+        <ul className="border-border mt-8 border-b">
           {capabilities.map((capability) => (
-            <li key={capability.href} className="border-t border-border">
+            <li key={capability.href} className="border-border border-t">
               <Link
                 href={capability.href}
-                className="group grid min-h-11 min-w-0 gap-2 py-4 transition-colors duration-fast hover:bg-surface focus-visible:bg-surface sm:grid-cols-[minmax(0,12rem)_minmax(0,1fr)_auto] sm:items-center sm:gap-6 sm:px-3"
+                className="group duration-fast hover:bg-surface focus-visible:bg-surface grid min-h-11 min-w-0 gap-2 py-4 transition-colors sm:grid-cols-[minmax(0,12rem)_minmax(0,1fr)_auto] sm:items-center sm:gap-6 sm:px-3"
               >
-                <span className="font-medium text-fg transition-colors duration-fast group-hover:text-brand">
+                <span className="text-fg duration-fast group-hover:text-brand font-medium transition-colors">
                   {capability.title}
                 </span>
-                <span className="min-w-0 text-sm text-fg-muted">{capability.description}</span>
-                <ArrowUpRight
+                <span className="text-fg-muted min-w-0 text-sm">{capability.description}</span>
+                <ArrowUpRightIcon
                   aria-hidden="true"
-                  className="h-4 w-4 text-fg-subtle transition-colors duration-fast group-hover:text-brand"
+                  className="text-fg-subtle duration-fast group-hover:text-brand h-4 w-4 transition-colors"
                 />
               </Link>
             </li>

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "@/components/ui/button";
 
 export interface PublicHeroProps {
@@ -26,16 +26,16 @@ export interface PublicHeroProps {
  */
 function PublicHero({ visual }: PublicHeroProps) {
   return (
-    <section aria-labelledby="public-hero-title" className="border-b border-border">
+    <section aria-labelledby="public-hero-title" className="border-border border-b">
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16 lg:px-8 lg:py-24">
         <div className="min-w-0">
           <h1
             id="public-hero-title"
-            className="max-w-2xl font-display text-4xl font-semibold tracking-tight text-fg sm:text-5xl"
+            className="font-display text-fg max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl"
           >
             Conversation that becomes shared knowledge.
           </h1>
-          <p className="mt-6 max-w-[65ch] text-base text-fg-muted sm:text-lg">
+          <p className="prose-width text-fg-muted mt-6 text-base sm:text-lg">
             Debate ideas in Plazas, review proposals with the community, and preserve what matters
             in Codex Libre with its sources and attribution intact.
           </p>
@@ -44,7 +44,7 @@ function PublicHero({ visual }: PublicHeroProps) {
             <Button asChild size="lg" className="w-full sm:w-auto">
               <Link href="/plazas">
                 Explore Plazas
-                <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                <ArrowRightIcon aria-hidden="true" className="h-4 w-4" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">

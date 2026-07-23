@@ -1,4 +1,4 @@
-import { Users } from "lucide-react";
+import { UsersIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -49,8 +49,8 @@ export default async function MembersPage({ searchParams }: MembersPageProps) {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="text-2xl font-semibold text-fg">Members</h1>
-      <p className="mt-1 text-sm text-fg-muted">
+      <h1 className="text-fg text-2xl font-semibold">Members</h1>
+      <p className="text-fg-muted mt-1 text-sm">
         The Mandalorian community — profiles, ranks, and clan affiliations.
       </p>
 
@@ -81,7 +81,7 @@ export default async function MembersPage({ searchParams }: MembersPageProps) {
       {result.status === "error" || result.status === "invalid" ? (
         <div role="alert">
           <EmptyState
-            icon={<Users className="h-8 w-8" />}
+            icon={<UsersIcon className="h-8 w-8" />}
             title="Members temporarily unavailable"
             description="We could not load the member directory. Try again."
             action={{ label: "Try again", href: pageHref(page, search) }}
@@ -90,26 +90,26 @@ export default async function MembersPage({ searchParams }: MembersPageProps) {
         </div>
       ) : result.profiles.length > 0 ? (
         <>
-          <p className="mt-6 text-sm text-fg-muted" role="status">
+          <p className="text-fg-muted mt-6 text-sm" role="status">
             {result.totalCount} {result.totalCount === 1 ? "member" : "members"}
           </p>
-          <div className="mt-3 divide-y divide-border rounded-md border border-border">
+          <div className="divide-border border-border mt-3 divide-y rounded-md border">
             {result.profiles.map((member) => (
               <Link
                 key={member.id}
                 href={`/members/${member.id}`}
-                className="flex min-h-16 items-center gap-4 px-4 py-3 transition-colors duration-fast hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-focus"
+                className="duration-fast hover:bg-surface focus-visible:ring-border-focus flex min-h-16 items-center gap-4 px-4 py-3 transition-colors focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-inset"
               >
                 <Avatar name={member.display_name} src={member.avatarUrl} />
                 <div className="min-w-0 flex-1">
-                  <span className="break-words text-sm font-medium text-fg">
+                  <span className="text-fg text-sm font-medium wrap-break-word">
                     {member.display_name}
                   </span>
                   {member.bio ? (
-                    <p className="truncate text-xs text-fg-muted">{member.bio}</p>
+                    <p className="text-fg-muted truncate text-xs">{member.bio}</p>
                   ) : null}
                   {member.roles.length > 0 ? (
-                    <p className="mt-1 truncate text-xs text-fg-subtle">
+                    <p className="text-fg-subtle mt-1 truncate text-xs">
                       {member.roles.join(", ")}
                     </p>
                   ) : null}
@@ -130,7 +130,7 @@ export default async function MembersPage({ searchParams }: MembersPageProps) {
               ) : (
                 <span />
               )}
-              <span className="text-sm text-fg-muted">
+              <span className="text-fg-muted text-sm">
                 Page {page} of {totalPages}
               </span>
               {page < totalPages ? (
@@ -145,7 +145,7 @@ export default async function MembersPage({ searchParams }: MembersPageProps) {
         </>
       ) : (
         <EmptyState
-          icon={<Users className="h-8 w-8" />}
+          icon={<UsersIcon className="h-8 w-8" />}
           title={search ? "No matching members" : "No members yet"}
           description={
             search

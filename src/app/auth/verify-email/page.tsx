@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useFormState } from "react-dom";
-import { AlertCircle, CheckCircle, Mail } from "lucide-react";
+import { WarningCircleIcon, CheckCircleIcon, EnvelopeIcon } from "@phosphor-icons/react/dist/ssr";
 import { AuthShell } from "@/app/auth/AuthShell";
 import { TextInput } from "@/components/origin/text-input";
 import { SubmitButton } from "@/components/ui/submit-button";
@@ -15,18 +15,18 @@ export default function VerifyEmailPage() {
 
   return (
     <AuthShell>
-      <Mail aria-hidden="true" className="mx-auto h-8 w-8 text-brand" />
-      <h1 className="mt-4 text-center text-2xl font-semibold text-fg">Check your email</h1>
-      <p className="mt-2 text-center text-sm text-fg-muted">
+      <EnvelopeIcon aria-hidden="true" className="text-brand mx-auto h-8 w-8" />
+      <h1 className="text-fg mt-4 text-center text-2xl font-semibold">Check your email</h1>
+      <p className="text-fg-muted mt-2 text-center text-sm">
         Open the verification link we sent to activate your account.
       </p>
 
       {state.success ? (
         <div
           role="status"
-          className="mt-6 flex items-start gap-2 rounded-md border border-success/30 px-3 py-2 text-sm text-success"
+          className="border-success/30 text-success mt-6 flex items-start gap-2 rounded-md border px-3 py-2 text-sm"
         >
-          <CheckCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+          <CheckCircleIcon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
           If that account is awaiting verification, a new link is on its way.
         </div>
       ) : (
@@ -36,7 +36,7 @@ export default function VerifyEmailPage() {
             name="email"
             type="email"
             label="Need another verification link?"
-            icon={Mail}
+            icon={EnvelopeIcon}
             autoComplete="email"
             required
             placeholder="you@example.com"
@@ -46,9 +46,9 @@ export default function VerifyEmailPage() {
           {state.error && (
             <div
               role="alert"
-              className="flex items-start gap-2 rounded-md border border-error/30 px-3 py-2 text-sm text-error"
+              className="border-error/30 text-error flex items-start gap-2 rounded-md border px-3 py-2 text-sm"
             >
-              <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+              <WarningCircleIcon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
               {state.error}
             </div>
           )}
@@ -61,7 +61,7 @@ export default function VerifyEmailPage() {
 
       <Link
         href="/auth/login"
-        className="mt-4 flex min-h-11 items-center justify-center text-sm text-fg-muted underline-offset-4 transition-colors duration-fast hover:text-fg hover:underline focus:outline-none focus:ring-2 focus:ring-border-focus"
+        className="text-fg-muted duration-fast hover:text-fg focus:ring-border-focus mt-4 flex min-h-11 items-center justify-center text-sm underline-offset-4 transition-colors hover:underline focus:ring-2 focus:outline-hidden"
       >
         Back to sign in
       </Link>

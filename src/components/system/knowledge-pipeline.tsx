@@ -1,11 +1,17 @@
-import { BookOpen, FileText, MessageSquare, ShieldCheck, type LucideIcon } from "lucide-react";
+import {
+  BookOpenIcon,
+  FileTextIcon,
+  ChatTextIcon,
+  ShieldCheckIcon,
+} from "@phosphor-icons/react/dist/ssr";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 import { cn } from "@/lib/cn";
 
 interface KnowledgeStage {
   name: string;
   description: string;
-  icon: LucideIcon;
+  icon: PhosphorIcon;
   destination?: boolean;
 }
 
@@ -13,22 +19,22 @@ const KNOWLEDGE_STAGES: readonly KnowledgeStage[] = [
   {
     name: "Conversation",
     description: "A useful question takes shape in the community.",
-    icon: MessageSquare,
+    icon: ChatTextIcon,
   },
   {
     name: "Proposal",
     description: "Allowed sources and contributors remain attached.",
-    icon: FileText,
+    icon: FileTextIcon,
   },
   {
     name: "Review",
     description: "Evidence, privacy, and attribution are verified.",
-    icon: ShieldCheck,
+    icon: ShieldCheckIcon,
   },
   {
     name: "Codex Libre",
     description: "A reviewed version becomes lasting free knowledge.",
-    icon: BookOpen,
+    icon: BookOpenIcon,
     destination: true,
   },
 ];
@@ -60,12 +66,12 @@ export function KnowledgePipeline({ className }: KnowledgePipelineProps) {
     <figure
       aria-describedby="knowledge-pipeline-description"
       aria-labelledby="knowledge-pipeline-title"
-      className={cn("border-y border-border py-4 text-left", className)}
+      className={cn("border-border border-y py-4 text-left", className)}
     >
-      <figcaption id="knowledge-pipeline-title" className="text-sm font-semibold text-fg">
+      <figcaption id="knowledge-pipeline-title" className="text-fg text-sm font-semibold">
         Knowledge lifecycle
       </figcaption>
-      <p id="knowledge-pipeline-description" className="mt-1 max-w-2xl text-sm text-fg-muted">
+      <p id="knowledge-pipeline-description" className="text-fg-muted mt-1 max-w-2xl text-sm">
         Community insight becomes reviewed, attributable knowledge without losing its source.
       </p>
 
@@ -80,22 +86,22 @@ export function KnowledgePipeline({ className }: KnowledgePipelineProps) {
             <li
               key={stage.name}
               className={cn(
-                "min-w-0 border-l pl-4 sm:border-l-0 sm:border-t sm:pl-0 sm:pt-4",
+                "min-w-0 border-l pl-4 sm:border-t sm:border-l-0 sm:pt-4 sm:pl-0",
                 stage.destination ? "border-brand" : "border-border",
               )}
             >
               <div className="flex min-w-0 items-center gap-2">
-                <span aria-hidden="true" className="text-xs tabular-nums text-fg-subtle">
+                <span aria-hidden="true" className="text-fg-subtle text-xs tabular-nums">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <Icon aria-hidden="true" className="h-5 w-5 shrink-0 text-fg-muted" />
-                <span className="min-w-0 text-sm font-medium text-fg">{stage.name}</span>
+                <Icon aria-hidden="true" className="text-fg-muted h-5 w-5 shrink-0" />
+                <span className="text-fg min-w-0 text-sm font-medium">{stage.name}</span>
               </div>
 
-              <p className="mt-2 max-w-64 text-xs leading-5 text-fg-muted">{stage.description}</p>
+              <p className="text-fg-muted mt-2 max-w-64 text-xs leading-5">{stage.description}</p>
 
               {stage.destination ? (
-                <span className="mt-2 inline-flex rounded-full border border-brand/40 px-2 py-0.5 text-xs font-medium text-brand">
+                <span className="border-brand/40 text-brand mt-2 inline-flex rounded-full border px-2 py-0.5 text-xs font-medium">
                   Destination
                 </span>
               ) : null}

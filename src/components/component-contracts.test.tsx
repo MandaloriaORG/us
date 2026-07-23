@@ -1,10 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
+import { Badge } from "@/components/origin/badge";
 import { NativeSelect } from "@/components/origin/native-select";
 import { PasswordInput } from "@/components/origin/password-input";
 import { SearchInput } from "@/components/origin/search-input";
-import { StatusBadge } from "@/components/origin/status-badge";
 import { TextInput } from "@/components/origin/text-input";
 import { Avatar, safeAvatarUrl } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -74,11 +74,11 @@ describe("shared component contracts", () => {
     expect(screen.queryByRole("img")).toBeNull();
   });
 
-  it("renders explicit status text and tone without creating a live region", () => {
-    render(<StatusBadge tone="warning">Suspended</StatusBadge>);
+  it("renders explicit status text without creating a live region", () => {
+    render(<Badge variant="warning">Suspended</Badge>);
 
     const badge = screen.getByText("Suspended");
-    expect(badge).toHaveAttribute("data-tone", "warning");
+    expect(badge).toHaveAttribute("data-slot", "badge");
     expect(badge).not.toHaveAttribute("role", "status");
   });
 

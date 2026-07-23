@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ScrollText, Users } from "lucide-react";
+import { ScrollIcon, UsersIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { cn } from "@/lib/cn";
 
@@ -18,13 +18,13 @@ const navigationItems = [
     href: "/council/users",
     label: "Users",
     permission: "canViewUsers",
-    Icon: Users,
+    Icon: UsersIcon,
   },
   {
     href: "/council/audit",
     label: "Audit logs",
     permission: "canViewAudit",
-    Icon: ScrollText,
+    Icon: ScrollIcon,
   },
 ] as const;
 
@@ -66,7 +66,7 @@ export function CouncilNavigation({
           <Link
             aria-current={isCurrent ? "page" : undefined}
             className={cn(
-              "inline-flex h-11 items-center gap-2 rounded-md px-3 text-sm font-medium text-fg-muted transition-colors duration-fast hover:bg-bg-raised hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
+              "text-fg-muted duration-fast hover:bg-bg-raised hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 items-center gap-2 rounded-md px-3 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden",
               variant === "horizontal" ? "shrink-0" : "w-full",
               isCurrent && "bg-bg-raised text-fg",
             )}

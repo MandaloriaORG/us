@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, ShieldAlert } from "lucide-react";
+import { ArrowLeftIcon, ShieldWarningIcon } from "@phosphor-icons/react/dist/ssr";
 import { getCouncilShellAccess } from "./access";
 import { CouncilNavigation } from "./council-navigation";
 
@@ -24,11 +24,11 @@ export default async function CouncilLayout({ children }: { children: React.Reac
     return (
       <main className="flex min-h-[calc(100vh-3rem)] items-center px-4 py-6 md:px-6">
         <div className="mx-auto w-full max-w-lg" role={verificationFailed ? "alert" : undefined}>
-          <ShieldAlert aria-hidden="true" className="h-5 w-5 text-warning" />
-          <h1 className="mt-4 text-xl font-semibold text-fg">
+          <ShieldWarningIcon aria-hidden="true" className="text-warning h-5 w-5" />
+          <h1 className="text-fg mt-4 text-xl font-semibold">
             {verificationFailed ? "Council is temporarily unavailable" : "Council access required"}
           </h1>
-          <p className="mt-2 text-sm leading-6 text-fg-muted">
+          <p className="text-fg-muted mt-2 text-sm leading-6">
             {verificationFailed
               ? "We could not verify your Council permissions. Try again in a moment."
               : "Your account does not have permission to open the Council workspace."}
@@ -38,14 +38,14 @@ export default async function CouncilLayout({ children }: { children: React.Reac
               <Link
                 href="/council"
                 prefetch={false}
-                className="inline-flex h-11 items-center justify-center rounded-md bg-brand px-4 text-sm font-medium text-brand-fg transition-colors duration-fast hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                className="bg-brand text-brand-fg duration-fast focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
               >
                 Try again
               </Link>
             )}
             <Link
               href="/"
-              className="inline-flex h-11 items-center justify-center rounded-md border border-border px-4 text-sm font-medium text-fg-muted transition-colors duration-fast hover:bg-surface hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+              className="border-border text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 items-center justify-center rounded-md border px-4 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
             >
               Go home
             </Link>
@@ -57,16 +57,16 @@ export default async function CouncilLayout({ children }: { children: React.Reac
 
   return (
     <div className="flex min-h-[calc(100vh-3rem)] flex-col md:flex-row">
-      <header className="border-b border-border bg-surface md:hidden">
+      <header className="border-border bg-surface border-b md:hidden">
         <div className="flex h-12 items-center gap-3 px-4">
           <Link
             href="/"
-            className="-ml-2 inline-flex h-11 w-11 items-center justify-center rounded-md text-fg-muted transition-colors duration-fast hover:bg-bg-raised hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
+            className="text-fg-muted duration-fast hover:bg-bg-raised hover:text-fg focus-visible:ring-border-focus -ml-2 inline-flex h-11 w-11 items-center justify-center rounded-md transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
             aria-label="Return to Mandaloria"
           >
-            <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+            <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
           </Link>
-          <span className="text-sm font-semibold text-fg">Council</span>
+          <span className="text-fg text-sm font-semibold">Council</span>
         </div>
         <div className="overflow-x-auto px-4 pb-2">
           <CouncilNavigation
@@ -78,18 +78,18 @@ export default async function CouncilLayout({ children }: { children: React.Reac
       </header>
 
       <aside
-        className="hidden w-56 shrink-0 border-r border-border bg-surface p-4 md:flex md:flex-col"
+        className="border-border bg-surface hidden w-56 shrink-0 border-r p-4 md:flex md:flex-col"
         aria-label="Council navigation"
       >
         <Link
           href="/"
-          className="-ml-3 inline-flex h-11 items-center gap-2 self-start rounded-md px-3 text-sm text-fg-muted transition-colors duration-fast hover:bg-bg-raised hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
+          className="text-fg-muted duration-fast hover:bg-bg-raised hover:text-fg focus-visible:ring-border-focus -ml-3 inline-flex h-11 items-center gap-2 self-start rounded-md px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
         >
-          <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+          <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
           Mandaloria
         </Link>
 
-        <p className="mb-2 mt-5 text-sm font-semibold text-fg">Council</p>
+        <p className="text-fg mt-5 mb-2 text-sm font-semibold">Council</p>
 
         <CouncilNavigation canViewAudit={access.canViewAudit} canViewUsers={access.canViewUsers} />
       </aside>

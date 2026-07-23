@@ -58,8 +58,8 @@ export default async function ProfileEditPage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
-      <h1 className="text-2xl font-semibold text-fg">Edit profile</h1>
-      <p className="mt-1 text-sm text-fg-muted">Update the information shown on your profile.</p>
+      <h1 className="text-fg text-2xl font-semibold">Edit profile</h1>
+      <p className="text-fg-muted mt-1 text-sm">Update the information shown on your profile.</p>
 
       <ProfileEditor
         displayName={profile.display_name}

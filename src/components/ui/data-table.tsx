@@ -58,17 +58,17 @@ export function DataTable<TRow>({
     <div
       aria-label={ariaLabel}
       className={cn(
-        "overflow-x-auto border-y border-border focus:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
+        "border-border focus-visible:ring-border-focus focus-visible:ring-offset-bg overflow-x-auto border-y focus:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2",
         className,
       )}
       role="region"
       tabIndex={0}
     >
       <table
-        className={cn("w-full min-w-max border-collapse text-left text-sm text-fg", tableClassName)}
+        className={cn("text-fg w-full min-w-max border-collapse text-left text-sm", tableClassName)}
       >
         <caption className="sr-only">{caption}</caption>
-        <thead className="border-b border-border bg-bg-raised text-xs font-medium text-fg-muted">
+        <thead className="border-border bg-bg-raised text-fg-muted border-b text-xs font-medium">
           <tr>
             {columns.map((column) => (
               <th
@@ -81,12 +81,12 @@ export function DataTable<TRow>({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-border">
+        <tbody className="divide-border divide-y">
           {rows.length > 0 ? (
             rows.map((row, rowIndex) => (
               <tr
                 key={rowKey(row, rowIndex)}
-                className="transition-colors focus-within:bg-surface hover:bg-surface"
+                className="focus-within:bg-surface hover:bg-surface transition-colors"
               >
                 {columns.map((column) => (
                   <td
@@ -102,7 +102,7 @@ export function DataTable<TRow>({
             <tr>
               <td
                 className={cn(
-                  "text-center text-sm text-fg-muted",
+                  "text-fg-muted text-center text-sm",
                   dense ? "px-3 py-6" : "px-3 py-8",
                 )}
                 colSpan={Math.max(columns.length, 1)}

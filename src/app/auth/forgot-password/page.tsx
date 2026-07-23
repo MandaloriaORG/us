@@ -2,7 +2,12 @@
 
 import Link from "next/link";
 import { useFormState } from "react-dom";
-import { AlertCircle, ArrowLeft, CheckCircle, Mail } from "lucide-react";
+import {
+  WarningCircleIcon,
+  ArrowLeftIcon,
+  CheckCircleIcon,
+  EnvelopeIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { AuthShell } from "@/app/auth/AuthShell";
 import { TextInput } from "@/components/origin/text-input";
 import { SubmitButton } from "@/components/ui/submit-button";
@@ -17,23 +22,23 @@ export default function ForgotPasswordPage() {
     <AuthShell>
       {state.success ? (
         <div className="text-center" role="status">
-          <CheckCircle aria-hidden="true" className="mx-auto h-8 w-8 text-success" />
-          <h1 className="mt-4 text-2xl font-semibold text-fg">Check your email</h1>
-          <p className="mt-2 text-sm text-fg-muted">
+          <CheckCircleIcon aria-hidden="true" className="text-success mx-auto h-8 w-8" />
+          <h1 className="text-fg mt-4 text-2xl font-semibold">Check your email</h1>
+          <p className="text-fg-muted mt-2 text-sm">
             If an account uses that address, a password reset link is on its way.
           </p>
           <Link
             href="/auth/login"
-            className="mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium text-fg transition-colors duration-fast hover:bg-surface focus:outline-none focus:ring-2 focus:ring-border-focus"
+            className="border-border text-fg duration-fast hover:bg-surface focus:ring-border-focus mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border px-4 text-sm font-medium transition-colors focus:ring-2 focus:outline-hidden"
           >
-            <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+            <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
             Back to sign in
           </Link>
         </div>
       ) : (
         <>
-          <h1 className="text-center text-2xl font-semibold text-fg">Reset your password</h1>
-          <p className="mt-1 text-center text-sm text-fg-muted">
+          <h1 className="text-fg text-center text-2xl font-semibold">Reset your password</h1>
+          <p className="text-fg-muted mt-1 text-center text-sm">
             Enter your account email to receive a reset link.
           </p>
 
@@ -43,7 +48,7 @@ export default function ForgotPasswordPage() {
               name="email"
               type="email"
               label="Email"
-              icon={Mail}
+              icon={EnvelopeIcon}
               autoComplete="email"
               required
               placeholder="you@example.com"
@@ -53,9 +58,9 @@ export default function ForgotPasswordPage() {
             {state.error && (
               <div
                 role="alert"
-                className="flex items-start gap-2 rounded-md border border-error/30 px-3 py-2 text-sm text-error"
+                className="border-error/30 text-error flex items-start gap-2 rounded-md border px-3 py-2 text-sm"
               >
-                <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+                <WarningCircleIcon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
                 {state.error}
               </div>
             )}
@@ -66,9 +71,9 @@ export default function ForgotPasswordPage() {
 
             <Link
               href="/auth/login"
-              className="flex min-h-11 items-center justify-center gap-2 text-sm text-fg-muted transition-colors duration-fast hover:text-fg focus:outline-none focus:ring-2 focus:ring-border-focus"
+              className="text-fg-muted duration-fast hover:text-fg focus:ring-border-focus flex min-h-11 items-center justify-center gap-2 text-sm transition-colors focus:ring-2 focus:outline-hidden"
             >
-              <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+              <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
               Back to sign in
             </Link>
           </form>

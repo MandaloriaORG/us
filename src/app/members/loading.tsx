@@ -5,7 +5,7 @@ export default function MembersLoading() {
     <main aria-busy="true" aria-label="Loading members" className="mx-auto max-w-3xl px-6 py-12">
       <Skeleton className="h-8 w-32" />
       <Skeleton className="mt-3 h-4 max-w-md" variant="text" />
-      <div className="mt-8 divide-y divide-border rounded-md border border-border">
+      <div className="divide-border border-border mt-8 divide-y rounded-md border">
         {Array.from({ length: 5 }, (_, index) => (
           <div key={index} className="flex items-center gap-4 px-4 py-3">
             <Skeleton className="h-10 w-10" variant="circular" />
