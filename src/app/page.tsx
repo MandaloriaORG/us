@@ -50,7 +50,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             <PostList
               posts={posts.items}
               showPlazaName
-              nextHref={posts.nextCursor ? `/?cursor=${encodeURIComponent(posts.nextCursor)}` : null}
+              nextHref={
+                posts.nextCursor ? `/?cursor=${encodeURIComponent(posts.nextCursor)}` : null
+              }
             />
           )}
         </div>

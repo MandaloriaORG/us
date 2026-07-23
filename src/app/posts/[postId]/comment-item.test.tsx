@@ -160,9 +160,7 @@ describe("CommentItem", () => {
   });
 
   it("carries a #comment-<id> anchor and offers a copy-link control", () => {
-    const { container } = render(
-      <CommentItem node={node()} postId={postId} reactionTypes={[]} />,
-    );
+    const { container } = render(<CommentItem node={node()} postId={postId} reactionTypes={[]} />);
 
     expect(container.querySelector(`#comment-${node().id}`)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Copy link" })).toBeInTheDocument();

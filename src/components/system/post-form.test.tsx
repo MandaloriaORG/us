@@ -182,9 +182,7 @@ describe("PostForm", () => {
     fireEvent.change(screen.getByLabelText(/Tags/), { target: { value: "not a slug!" } });
     fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
-    expect(
-      await screen.findByText("Use lowercase words separated by hyphens"),
-    ).toBeInTheDocument();
+    expect(await screen.findByText("Use lowercase words separated by hyphens")).toBeInTheDocument();
     expect(mocks.push).not.toHaveBeenCalled();
   });
 });
