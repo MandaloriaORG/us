@@ -168,6 +168,18 @@ Statuses:
 
 Chat message and clan/house targets are not implemented; they belong to Phases 5 and 6. Migration `0009` implements the post, comment and profile targets, and names the fourth status `dismissed` rather than `rejected` — a report is dismissed, the reporter is not.
 
+## Edit History
+
+Source of truth: `content_revisions`, defined in migration `0012`.
+
+An edit does not overwrite silently. `update_own_post` and `update_own_comment` snapshot what the content said **before** the change, inside the same transaction, so no caller can skip it. Without this a report is unanswerable: a member reports a post, its author rewrites it, and the moderator opens evidence that no longer says what was reported.
+
+- An edit that changes nothing writes no revision. A history of identical entries is noise, and it would let a member push real history past the bound by saving the same text repeatedly.
+- Each item keeps at most its 50 most recent revisions, trimmed as they are written rather than by a scheduled job. Edit history is context, not an archive.
+- Order comes from a sequence, never from the clock. Several edits in one transaction share the same `now()` and a v4 uuid carries no order, so ordering on `(created_at, id)` would shuffle them — and the trim would then drop whichever revisions happened to sort low.
+- Reading requires being the item's author or holding `moderation.hide`. Anyone else is told the content does not exist rather than that it is forbidden, so an id cannot be used to probe for edits.
+- A revision survives its author's account being removed, because it is evidence about the content. It does not survive the content itself being physically deleted.
+
 ## Deleted Content
 
 Important content should not be physically deleted at first.

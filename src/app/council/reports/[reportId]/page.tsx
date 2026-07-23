@@ -17,6 +17,8 @@ import {
 } from "@/lib/content/report-reasons";
 import { getReport } from "@/lib/content/reports";
 
+import { RevisionHistory } from "./revision-history";
+
 const STATUS_VARIANTS: Record<ReportStatus, "warning" | "info" | "success" | "outline"> = {
   open: "warning",
   under_review: "info",
@@ -130,6 +132,8 @@ export default async function CouncilReportPage({ params }: CouncilReportPagePro
             removed before evidence could render here.
           </p>
         )}
+
+        <RevisionHistory targetType={report.target_type} targetId={report.target_id} />
       </div>
 
       {report.target_status ? (

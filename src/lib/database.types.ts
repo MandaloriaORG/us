@@ -299,6 +299,61 @@ export type Database = {
           },
         ];
       };
+      content_revisions: {
+        Row: {
+          body: string;
+          comment_id: string | null;
+          created_at: string;
+          editor_id: string | null;
+          id: string;
+          post_id: string | null;
+          seq: number;
+          title: string | null;
+        };
+        Insert: {
+          body: string;
+          comment_id?: string | null;
+          created_at?: string;
+          editor_id?: string | null;
+          id?: string;
+          post_id?: string | null;
+          seq?: never;
+          title?: string | null;
+        };
+        Update: {
+          body?: string;
+          comment_id?: string | null;
+          created_at?: string;
+          editor_id?: string | null;
+          id?: string;
+          post_id?: string | null;
+          seq?: never;
+          title?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "content_revisions_comment_id_fkey";
+            columns: ["comment_id"];
+            isOneToOne: false;
+            referencedRelation: "comments";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "content_revisions_editor_id_fkey";
+            columns: ["editor_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "content_revisions_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       content_votes: {
         Row: {
           comment_id: string | null;
@@ -1068,6 +1123,17 @@ export type Database = {
           tag_slugs: string[];
           title: string;
           updated_at: string;
+        }[];
+      };
+      list_content_revisions: {
+        Args: { p_comment_id?: string; p_limit?: number; p_post_id?: string };
+        Returns: {
+          body: string;
+          created_at: string;
+          editor_display_name: string;
+          editor_id: string;
+          revision_id: string;
+          title: string;
         }[];
       };
       list_member_profiles: {
