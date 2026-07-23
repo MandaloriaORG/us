@@ -2,11 +2,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 
+import { PostList } from "@/components/system/post-list";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getPlaza, listPosts, parsePostOrder } from "@/lib/content/queries";
 import { cn } from "@/lib/cn";
-import { formatRelativeTime } from "@/lib/time";
 
 /**
  * Plaza detail: the Plaza's own information plus its post listing.
@@ -158,48 +158,11 @@ export default async function PlazaPage({ params, searchParams }: PlazaPageProps
           />
         )
       ) : (
-        <ol className="border-border mt-2 border-b">
-          {posts.items.map((post) => (
-            <li key={post.id} className="border-border border-t">
-              <Link
-                href={`/posts/${post.id}`}
-                className="group duration-fast hover:bg-surface focus-visible:bg-surface focus-visible:ring-border-focus grid min-h-11 min-w-0 gap-1 py-4 transition-colors focus-visible:ring-2 focus-visible:outline-hidden sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-4"
-              >
-                <span className="min-w-0">
-                  <span className="text-fg duration-fast group-hover:text-brand block font-medium transition-colors">
-                    {post.title}
-                  </span>
-                  {post.excerpt ? (
-                    <span className="text-fg-muted mt-0.5 line-clamp-2 block text-sm">
-                      {post.excerpt}
-                    </span>
-                  ) : null}
-                  <span className="text-fg-subtle mt-1 block text-xs">
-                    {post.author_display_name} · {formatRelativeTime(post.created_at)}
-                  </span>
-                </span>
-                <span className="text-fg-subtle flex shrink-0 items-center gap-3 text-sm sm:justify-end">
-                  <span className="tabular-nums">
-                    {post.comments_count} {post.comments_count === 1 ? "comment" : "comments"}
-                  </span>
-                  <span className="tabular-nums">
-                    {post.score} {post.score === 1 ? "point" : "points"}
-                  </span>
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ol>
+        <PostList
+          posts={posts.items}
+          nextHref={posts.nextCursor ? listingHref({ order, tag, cursor: posts.nextCursor }) : null}
+        />
       )}
-
-      {posts.nextCursor ? (
-        <Link
-          href={listingHref({ order, tag, cursor: posts.nextCursor })}
-          className="text-brand mt-4 inline-block text-sm underline-offset-4 hover:underline"
-        >
-          Next
-        </Link>
-      ) : null}
     </main>
   );
 }
