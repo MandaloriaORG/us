@@ -7,6 +7,30 @@ create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions, pgtap;
 select extensions.plan(160);
 
+-- This suite also runs against the hosted project, which already holds real
+-- accounts. Counting rows absolutely would then assert "the database is empty",
+-- which is not the contract. Baselines are captured before the fixtures land so
+-- every count below measures what this suite created.
+-- Read back through owner-privileged helpers: the assertions run as `anon` and
+-- `authenticated`, which cannot select a temp table or `public.profiles`.
+create temp table t_baseline as
+select
+  (select count(*) from public.profiles
+    where status = 'active' and profile_visibility = 'public') as anon_visible,
+  (select count(*) from public.profiles
+    where status = 'active' and profile_visibility in ('public', 'members')) as member_visible,
+  (select count(*) from public.profiles) as council_visible;
+
+create or replace function pg_temp.baseline(p_name text)
+returns bigint language plpgsql security definer as $baseline$
+declare
+  v_value bigint;
+begin
+  execute format('select %I from t_baseline', p_name) into v_value;
+  return v_value;
+end;
+$baseline$;
+
 -- Auth fixtures exercise the real signup triggers.
 insert into auth.users (
   instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
@@ -274,7 +298,7 @@ select ok(not exists (
 set local role anon;
 select is(pg_temp.capture_sqlstate('select * from public.profiles'), '42501', 'anon direct profile read is denied');
 select is(pg_temp.capture_sqlstate('select * from public.council_list_audit_logs()'), '42501', 'anon cannot list audit logs');
-select is((select total_count from public.list_member_profiles(null, 25, 0) limit 1), 5::bigint, 'anon sees only active public profiles');
+select is((select total_count from public.list_member_profiles(null, 25, 0) limit 1), (pg_temp.baseline('anon_visible') + 5), 'anon sees only active public profiles');
 select is((select count(*) from public.get_member_profile('10000000-0000-0000-0000-000000000008')), 0::bigint, 'anon cannot see members-only profile');
 select is((select count(*) from public.get_member_profile('10000000-0000-0000-0000-000000000009')), 0::bigint, 'anon cannot see private profile');
 select is((select count(*) from public.get_member_profile('10000000-0000-0000-0000-000000000006')), 0::bigint, 'anon cannot see inactive profile');
@@ -303,7 +327,7 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '10000000-0000-0000-0000-000000000001', true);
 select ok(exists(select 1 from public.current_user_permissions() where permission_name = 'profile.edit.own'), 'active member gets effective permissions');
 select is((select count(*) - count(distinct permission_name) from public.current_user_permissions()), 0::bigint, 'permission names are unique');
-select is((select total_count from public.list_member_profiles(null, 25, 0) limit 1), 6::bigint, 'active member sees public plus members-only profiles');
+select is((select total_count from public.list_member_profiles(null, 25, 0) limit 1), (pg_temp.baseline('member_visible') + 6), 'active member sees public plus members-only profiles');
 select is((select count(*) from public.get_member_profile('10000000-0000-0000-0000-000000000008')), 1::bigint, 'active member sees members-only detail');
 select is((select count(*) from public.get_member_profile('10000000-0000-0000-0000-000000000009')), 0::bigint, 'active member cannot see another private detail');
 select is((select profile_visibility from public.profiles where id = auth.uid()), 'public', 'owner can read own privacy value directly');
@@ -373,7 +397,7 @@ select is(pg_temp.capture_sqlstate($sql$select public.reset_profile_avatar(null)
 -- Council reads, transition-specific permissions and audit logging.
 select set_config('request.jwt.claim.sub', '10000000-0000-0000-0000-000000000002', true);
 select ok(exists(select 1 from public.current_user_permissions() where permission_name = 'admin.view_users'), 'Guardian gets admin.view_users');
-select is((select total_count from public.council_list_users(null, null, 'created_desc', 25, 0) limit 1), 9::bigint, 'Council list includes every account status/visibility');
+select is((select total_count from public.council_list_users(null, null, 'created_desc', 25, 0) limit 1), (pg_temp.baseline('council_visible') + 9), 'Council list includes every account status/visibility');
 select is((select avatar_path from public.council_get_user('10000000-0000-0000-0000-000000000005')), '10000000-0000-0000-0000-000000000005/50000000-0000-4000-8000-000000000005.webp', 'Council detail returns portable avatar path');
 select ok((select count(*) from public.council_get_user('10000000-0000-0000-0000-000000000005')) <= 1, 'Council detail runtime cardinality remains at most one row');
 select is(pg_temp.capture_sqlstate($sql$select public.council_set_user_status('10000000-0000-0000-0000-000000000003','active','suspended','Protected target test')$sql$), '42501', 'Guardian cannot suspend protected administrator');
@@ -563,6 +587,19 @@ select ok(not exists(
     and roles.name = 'Test Suspend Operator'
 ), 'rejected protected-target assignment does not mutate roles');
 select is((select count(*) from public.audit_logs where action = 'user.role_assigned' and actor_id = '10000000-0000-0000-0000-000000000001' and target_id = '10000000-0000-0000-0000-000000000003'), 0::bigint, 'rejected protected-target assignment writes no audit row');
+set local role authenticated;
+
+-- The last-Administrator guard counts every holder, so on a database that
+-- already has real administrators it can never be reached. Their assignments are
+-- dropped for the rest of this transaction, which is rolled back at the end;
+-- nothing here is committed.
+set local role postgres;
+delete from public.user_roles
+where role_id = (select id from public.roles where name = 'Administrator')
+  and user_id not in (
+    '10000000-0000-0000-0000-000000000003',
+    '10000000-0000-0000-0000-000000000004'
+  );
 set local role authenticated;
 
 select set_config('request.jwt.claim.sub', '10000000-0000-0000-0000-000000000008', true);
