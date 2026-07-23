@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 
+import { CopyLinkButton } from "@/components/system/copy-link-button";
 import { ReactionControl } from "@/components/system/reaction-control";
 import { ReportControl } from "@/components/system/report-control";
 import { VoteControl } from "@/components/system/vote-control";
@@ -66,6 +67,7 @@ export function CommentItem({
 
   return (
     <li
+      id={`comment-${node.id}`}
       style={indent > 0 ? { marginLeft: indent * 16 } : undefined}
       className={cn(node.depth > 0 && "border-border border-l pl-3")}
     >
@@ -121,6 +123,7 @@ export function CommentItem({
                 reactionTypes={reactionTypes}
                 onToggle={(key) => toggleCommentReaction(node.id, key)}
               />
+              <CopyLinkButton path={`/posts/${postId}#comment-${node.id}`} />
               {node.can_reply ? (
                 <Button
                   type="button"

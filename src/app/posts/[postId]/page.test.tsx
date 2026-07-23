@@ -166,4 +166,10 @@ describe("PostPage", () => {
     await renderPage();
     expect(screen.getByText("This post is closed to new comments.")).toBeInTheDocument();
   });
+
+  it("offers a copy-link control for the post's own canonical url", async () => {
+    mocks.getPost.mockResolvedValue(post());
+    await renderPage();
+    expect(screen.getByRole("button", { name: "Copy link" })).toBeInTheDocument();
+  });
 });

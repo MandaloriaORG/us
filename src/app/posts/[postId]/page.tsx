@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getCouncilReportAccess } from "@/app/council/access";
+import { CopyLinkButton } from "@/components/system/copy-link-button";
 import { ReportControl } from "@/components/system/report-control";
 import { renderMarkdown } from "@/lib/content/markdown";
 import {
@@ -134,6 +135,10 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
           initialBookmarked={post.caller_bookmarked}
           reactionTypes={reactionTypes}
         />
+      </div>
+
+      <div className="mt-3">
+        <CopyLinkButton path={`/posts/${post.id}`} />
       </div>
 
       {post.can_edit ? (

@@ -43,7 +43,13 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
         </Link>
       </p>
       <h1 className="text-fg mt-1 text-2xl font-semibold">Edit post</h1>
-      <PostForm mode="edit" postId={post.id} initialTitle={post.title} initialBody={post.body} />
+      <PostForm
+        mode="edit"
+        postId={post.id}
+        initialTitle={post.title}
+        initialBody={post.body}
+        initialTagSlugs={post.tag_slugs}
+      />
     </main>
   );
 }

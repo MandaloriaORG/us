@@ -4,7 +4,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({ getPost: vi.fn(), notFound: vi.fn() }));
 
 vi.mock("@/lib/content/queries", () => ({ getPost: mocks.getPost }));
-vi.mock("@/lib/actions/content", () => ({ createPost: vi.fn(), updatePost: vi.fn() }));
+vi.mock("@/lib/actions/content", () => ({
+  createPost: vi.fn(),
+  updatePost: vi.fn(),
+  setPostTags: vi.fn(),
+}));
 vi.mock("next/navigation", () => ({
   notFound: mocks.notFound,
   useRouter: () => ({ push: vi.fn(), back: vi.fn() }),
@@ -20,6 +24,7 @@ function post(overrides: Record<string, unknown> = {}) {
     title: "Hello world",
     body: "Some body",
     can_edit: true,
+    tag_slugs: [] as string[],
     ...overrides,
   };
 }
