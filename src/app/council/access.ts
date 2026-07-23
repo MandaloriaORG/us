@@ -5,6 +5,7 @@ const COUNCIL_AUDIT_PERMISSION = "admin.view_audit_logs";
 // The report queue is moderation work, not administration, so it is gated on
 // the same permission the queue RPCs re-check rather than on an admin one.
 const COUNCIL_REPORT_PERMISSION = "moderation.hide";
+const COUNCIL_PLAZA_PERMISSION = "admin.manage_plazas";
 
 export function getCouncilUserAccess() {
   return can(COUNCIL_USER_PERMISSION);
@@ -16,6 +17,10 @@ export function getCouncilAuditAccess() {
 
 export function getCouncilReportAccess() {
   return can(COUNCIL_REPORT_PERMISSION);
+}
+
+export function getCouncilPlazaAccess() {
+  return can(COUNCIL_PLAZA_PERMISSION);
 }
 
 /**
@@ -51,15 +56,17 @@ export async function getCouncilShellAccess() {
   const canViewUsers = permissionNames.has(COUNCIL_USER_PERMISSION);
   const canViewAudit = permissionNames.has(COUNCIL_AUDIT_PERMISSION);
   const canViewReports = permissionNames.has(COUNCIL_REPORT_PERMISSION);
+  const canManagePlazas = permissionNames.has(COUNCIL_PLAZA_PERMISSION);
 
   // A moderator who can only work the queue still belongs in the Council shell;
   // the shell opens when any destination inside it is reachable.
-  if (!canViewUsers && !canViewAudit && !canViewReports) {
+  if (!canViewUsers && !canViewAudit && !canViewReports && !canManagePlazas) {
     return { allowed: false, reason: "missing_permission" } as const;
   }
 
   return {
     allowed: true,
+    canManagePlazas,
     canViewAudit,
     canViewReports,
     canViewUsers,

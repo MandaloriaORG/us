@@ -12,6 +12,7 @@ vi.mock("@/lib/permissions", () => ({
 
 import {
   getCouncilAuditAccess,
+  getCouncilPlazaAccess,
   getCouncilReportAccess,
   getCouncilShellAccess,
   getCouncilUserAccess,
@@ -50,21 +51,52 @@ describe("getCouncilUserAccess", () => {
     expect(mocks.can).toHaveBeenCalledWith("moderation.hide");
   });
 
+  it("requires the exact Council plaza-management permission", async () => {
+    const denial = { allowed: false, reason: "missing_permission" } as const;
+    mocks.can.mockResolvedValue(denial);
+
+    await expect(getCouncilPlazaAccess()).resolves.toBe(denial);
+    expect(mocks.can).toHaveBeenCalledOnce();
+    expect(mocks.can).toHaveBeenCalledWith("admin.manage_plazas");
+  });
+
   it("resolves every visible destination from one authorization snapshot", async () => {
     mocks.getAuthorizationSnapshot.mockResolvedValue({
       allowed: true,
-      permissionNames: ["admin.view_audit_logs", "admin.view_users", "moderation.hide"],
+      permissionNames: [
+        "admin.manage_plazas",
+        "admin.view_audit_logs",
+        "admin.view_users",
+        "moderation.hide",
+      ],
       userId: "user-1",
     });
 
     await expect(getCouncilShellAccess()).resolves.toEqual({
       allowed: true,
+      canManagePlazas: true,
       canViewAudit: true,
       canViewReports: true,
       canViewUsers: true,
       userId: "user-1",
     });
     expect(mocks.getAuthorizationSnapshot).toHaveBeenCalledOnce();
+  });
+
+  it("opens the shell for an administrator whose only destination is Plazas", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: true,
+      permissionNames: ["admin.manage_plazas"],
+      userId: "user-1",
+    });
+
+    await expect(getCouncilShellAccess()).resolves.toMatchObject({
+      allowed: true,
+      canManagePlazas: true,
+      canViewAudit: false,
+      canViewReports: false,
+      canViewUsers: false,
+    });
   });
 
   it("allows an audit-only shell without granting user-list access", async () => {

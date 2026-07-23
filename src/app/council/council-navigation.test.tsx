@@ -16,13 +16,25 @@ beforeEach(() => {
 describe("CouncilNavigation", () => {
   it("shows only destinations allowed by the resolved permissions", () => {
     const { rerender } = render(
-      <CouncilNavigation canViewAudit={false} canViewReports={false} canViewUsers />,
+      <CouncilNavigation
+        canManagePlazas={false}
+        canViewAudit={false}
+        canViewReports={false}
+        canViewUsers
+      />,
     );
 
     expect(screen.getByRole("link", { name: "Users" })).toHaveAttribute("href", "/council/users");
     expect(screen.queryByRole("link", { name: "Audit logs" })).not.toBeInTheDocument();
 
-    rerender(<CouncilNavigation canViewAudit canViewReports={false} canViewUsers={false} />);
+    rerender(
+      <CouncilNavigation
+        canManagePlazas={false}
+        canViewAudit
+        canViewReports={false}
+        canViewUsers={false}
+      />,
+    );
 
     expect(screen.queryByRole("link", { name: "Users" })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Audit logs" })).toHaveAttribute(
@@ -32,7 +44,14 @@ describe("CouncilNavigation", () => {
   });
 
   it("shows the report queue to a moderator who has nothing else in the Council", () => {
-    render(<CouncilNavigation canViewAudit={false} canViewReports canViewUsers={false} />);
+    render(
+      <CouncilNavigation
+        canManagePlazas={false}
+        canViewAudit={false}
+        canViewReports
+        canViewUsers={false}
+      />,
+    );
 
     expect(screen.getByRole("link", { name: "Reports" })).toHaveAttribute(
       "href",
@@ -41,8 +60,32 @@ describe("CouncilNavigation", () => {
     expect(screen.getAllByRole("link")).toHaveLength(1);
   });
 
+  it("shows Plazas to an administrator who has nothing else in the Council", () => {
+    render(
+      <CouncilNavigation
+        canManagePlazas
+        canViewAudit={false}
+        canViewReports={false}
+        canViewUsers={false}
+      />,
+    );
+
+    expect(screen.getByRole("link", { name: "Plazas" })).toHaveAttribute(
+      "href",
+      "/council/plazas",
+    );
+    expect(screen.getAllByRole("link")).toHaveLength(1);
+  });
+
   it("renders no empty navigation landmark when no destination is allowed", () => {
-    render(<CouncilNavigation canViewAudit={false} canViewReports={false} canViewUsers={false} />);
+    render(
+      <CouncilNavigation
+        canManagePlazas={false}
+        canViewAudit={false}
+        canViewReports={false}
+        canViewUsers={false}
+      />,
+    );
 
     expect(
       screen.queryByRole("navigation", { name: "Council navigation" }),
@@ -51,7 +94,12 @@ describe("CouncilNavigation", () => {
 
   it("marks exact and nested routes by segment with a single aria-current", () => {
     const { container, rerender } = render(
-      <CouncilNavigation canViewAudit canViewReports={false} canViewUsers />,
+      <CouncilNavigation
+        canManagePlazas={false}
+        canViewAudit
+        canViewReports={false}
+        canViewUsers
+      />,
     );
     const users = screen.getByRole("link", { name: "Users" });
     const audit = screen.getByRole("link", { name: "Audit logs" });
@@ -61,14 +109,28 @@ describe("CouncilNavigation", () => {
     expect(container.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
 
     mocks.pathname = "/council/audit/0195f3a0";
-    rerender(<CouncilNavigation canViewAudit canViewReports={false} canViewUsers />);
+    rerender(
+      <CouncilNavigation
+        canManagePlazas={false}
+        canViewAudit
+        canViewReports={false}
+        canViewUsers
+      />,
+    );
 
     expect(users).not.toHaveAttribute("aria-current");
     expect(audit).toHaveAttribute("aria-current", "page");
     expect(container.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
 
     mocks.pathname = "/council/users-archive";
-    rerender(<CouncilNavigation canViewAudit canViewReports={false} canViewUsers />);
+    rerender(
+      <CouncilNavigation
+        canManagePlazas={false}
+        canViewAudit
+        canViewReports={false}
+        canViewUsers
+      />,
+    );
 
     expect(container.querySelectorAll('[aria-current="page"]')).toHaveLength(0);
   });
@@ -76,6 +138,7 @@ describe("CouncilNavigation", () => {
   it("provides 44px link targets in horizontal and vertical layouts", () => {
     const { rerender } = render(
       <CouncilNavigation
+        canManagePlazas={false}
         canViewAudit
         canViewReports={false}
         canViewUsers
@@ -95,7 +158,13 @@ describe("CouncilNavigation", () => {
     }
 
     rerender(
-      <CouncilNavigation canViewAudit canViewReports={false} canViewUsers variant="vertical" />,
+      <CouncilNavigation
+        canManagePlazas={false}
+        canViewAudit
+        canViewReports={false}
+        canViewUsers
+        variant="vertical"
+      />,
     );
 
     expect(screen.getByRole("navigation", { name: "Council navigation" })).toHaveClass("flex-col");
