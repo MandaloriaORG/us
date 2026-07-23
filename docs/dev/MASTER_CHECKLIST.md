@@ -254,8 +254,8 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [x] Hiding and quarantine are reversible.
 - [x] Restore recovers the last allowed state.
 - [ ] Permanent deletion requires higher permission, reason and confirmation.
-- [ ] Moderation evidence has limited access and retention. — edit history has both; reports and audit rows have no retention policy yet.
-- [ ] Appeal can be linked to the original action.
+- [x] Moderation evidence has limited access and retention. — bounded edit history, plus a nightly purge of closed reports and decided appeals after 180 days.
+- [x] Appeal can be linked to the original action. — an appeal references the audit row for the action it argues with.
 
 ## 11. Admin / Council
 

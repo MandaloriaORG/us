@@ -44,8 +44,8 @@ Make Mandaloria manageable and moderatable.
 - [x] Quarantine removes content from feed, search, previews and public storage. — removed from every list/read RPC for non-moderators (0007/0010); there is no search feature or post attachment storage yet for the rest of the claim to apply to.
 - [x] Restore preserves traceability. — the restore transition is audited like every other one.
 - [ ] Permanent deletion requires superior permission, reason and confirmation. — there is no permanent/physical deletion in this system by design (rule 1 of migration 0010: hiding and deleting are both state changes, not erasure); this item does not apply until such an action is deliberately added.
-- [ ] Appeal is linked to the original action. — no appeals feature exists.
-- [ ] Evidence has limited access and retention. — edit history has both since `0012`: readable only by the author or `moderation.hide`, and bounded to the 50 most recent revisions per item. Reports and audit rows still have no retention policy.
+- [x] Appeal is linked to the original action. — migration `0013`: an appeal references the `audit_logs` row for the action it argues with, one per action, filed from the member's own profile and decided in `council/appeals`. Granting records the judgement; undoing the action stays a separate audited call.
+- [x] Evidence has limited access and retention. — edit history is bounded to 50 revisions per item (`0012`); closed reports and decided appeals are purged 180 days after they close by `private.purge_expired_moderation_evidence()`, scheduled nightly through `pg_cron` (`0013`, `0014`). Audit rows are deliberately never purged: they are the record that an action happened.
 
 ## Users
 

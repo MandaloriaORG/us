@@ -17,9 +17,9 @@ Every one of these must pass before a change is considered done. Run them in thi
 | 1   | Types                    | `pnpm typecheck`                                                      | pass                |
 | 2   | Lint                     | `pnpm lint`                                                           | pass                |
 | 3   | Format                   | `pnpm format:check`                                                   | pass                |
-| 4   | Unit / component tests   | `pnpm test`                                                           | 747 pass / 66 files |
+| 4   | Unit / component tests   | `pnpm test`                                                           | 791 pass / 71 files |
 | 5   | Production build         | `pnpm build`                                                          | pass                |
-| 6   | Database contract        | `supabase test db --linked`                                           | 506/506 pass        |
+| 6   | Database contract        | `supabase test db --linked`                                           | 558/558 pass        |
 | 7   | Types match the database | `pnpm db:types` then `git diff --exit-code src/lib/database.types.ts` | clean               |
 
 Checks 6 and 7 run against the hosted project (`rvostprtlwksknuarnlk`). There is no local stack; its ports are held by another project.
@@ -162,6 +162,33 @@ Before this, an edit overwrote the body and the previous wording was gone, which
 | A caller cannot ask for more than the bound                            | same suite                                            | verified |
 | Physically deleting the content removes its revisions                  | same suite                                            | verified |
 
+### 2.2f Database — appeals and retention (migrations `0013`, `0014`)
+
+An appeal is a member's argument against one recorded action, linked to its
+`audit_logs` row. Retention bounds the working material: a moderation system that
+cannot be argued with and never forgets is not reversible, only permanent.
+
+| Must be checked                                                                  | Evidence                                                                               | Status   |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------- |
+| Table unreachable from the Data API, for members as well as anon                 | `appeals_contract.test.sql` (52 assertions)                                            | verified |
+| The retention job is not callable by a member                                    | same suite                                                                             | verified |
+| A member sees only the appealable actions taken against them                     | same suite                                                                             | verified |
+| Someone else's sanction is refused as missing, not as forbidden                  | same suite                                                                             | verified |
+| An appeal shorter than 20 characters is refused                                  | same suite                                                                             | verified |
+| One live appeal per action, and no second appeal after a decision                | partial unique index + same suite                                                      | verified |
+| The appellant cannot read the queue or the table                                 | same suite                                                                             | verified |
+| Anon can neither file nor read moderation actions                                | same suite                                                                             | verified |
+| Only `moderation.hide` reads the queue, opens an appeal or decides one           | same suite                                                                             | verified |
+| Claiming and deciding are compare-and-swap                                       | same suite                                                                             | verified |
+| Only an open appeal can be claimed; a decided one cannot be decided again        | same suite                                                                             | verified |
+| A decision needs a reason and is audited                                         | same suite                                                                             | verified |
+| The moderator who took the action cannot decide the appeal against it            | same suite                                                                             | verified |
+| The appeal shows who took the action and the reason they gave                    | same suite                                                                             | verified |
+| A banned member can still file an appeal                                         | same suite                                                                             | verified |
+| Closed reports and decided appeals past the window are purged; live ones are not | same suite                                                                             | verified |
+| Audit rows are never purged                                                      | same suite                                                                             | verified |
+| The nightly purge is actually scheduled on the hosted project                    | `cron.job` row `purge-expired-moderation-evidence`, checked against the linked project | reviewed |
+
 ### 2.3 Content library (`src/lib/content/`)
 
 | Module        | Must be checked                                          | Evidence                                          | Status   |
@@ -188,6 +215,8 @@ Before this, an edit overwrote the body and the previous wording was gone, which
 | `plazas.ts`             | A committed mutation survives a cache failure                                                                                                          | same                                    | verified |
 | `moderation.ts`         | Compare-and-swap sent as displayed; reason required; `draft`/`pending_review`/`deleted_by_author` refused as destinations before reaching the database | `moderation.test.ts`                    | verified |
 | `moderation.ts`         | Null flag means "leave alone"; database codes map correctly; cache failure never turns a committed mutation into a reported failure                    | same                                    | verified |
+| `appeals.ts`            | Validation before any database call; an argument under 20 characters never reaches the RPC; a decision must be `granted` or `denied` with a reason     | `appeals.test.ts`, 13 tests             | verified |
+| `appeals.ts`            | Rate limit, already-appealed and original-actor refusals map to distinct client codes, and no database message reaches the caller                      | same                                    | verified |
 
 ### 2.5 Application boundary
 
@@ -204,6 +233,8 @@ Before this, an edit overwrote the body and the previous wording was gone, which
 Every route that loads data owns a `loading.tsx` and an `error.tsx`. Present for: `members`, `council`, `council/audit`, `council/reports`, `profile/edit`, `plazas`, `plazas/[slug]`, `posts/[postId]`. `src/app/error.tsx` is the last boundary for every other segment, and `src/app/not-found.tsx` handles a missing route; neither logs anything but the digest.
 
 `plazas`, `plazas/[slug]`, `posts/[postId]`, `council/reports`, `council/reports/[reportId]`, `council/plazas` and `council/plazas/[plazaId]` are now rendered, not stubs: Plaza listing/detail, post detail with its comment thread, compose (`plazas/[slug]/new`) and edit (`posts/[postId]/edit`), vote/reaction/bookmark, report filing on a post/comment/profile (`system/report-control`), the report queue (filter, claim, `DataTable`), the report detail page (evidence, resolve/dismiss, and hide/quarantine/delete/restore on the reported post or comment), and Plaza administration (create/edit/archive, CAS) are all wired to the Server Actions and RPCs verified in §2.3/§2.4. Moderation beyond removal is now surfaced too: `PostModerationPanel` on the post page (pin, highlight, lock editing, lock/reopen the thread, move to another Plaza), `CommentModerationControl` on each comment (pin, lock replies), `RevisionHistory` under the evidence on a report (`list_content_revisions`), `UserModerationPanel` on the Council user page (warn, Council notes, and a link to that member's audit history), and `OwnWarnings` on a member's own profile, where they acknowledge a warning themselves. All of these are gated on `moderation.hide` or `moderation.warn` at the call site and re-checked by the RPC. What is still owed: the cross-Plaza main feed, and the per-plaza permission (`required_post_permission`) field - the latter needs a migration first, since neither Plaza admin RPC accepts it as a parameter yet.
+
+`council/appeals` and `council/appeals/[appealId]` are rendered too, with their own `loading.tsx` and `error.tsx`: the queue (status filter, claim, `DataTable`) and the decision page (the action under appeal, the member's argument, grant/deny). A member reads and files their own appeals on their profile (`OwnAppeals`).
 
 The Council shell now opens for `moderation.hide` alone, so a moderator whose only destination is the queue can reach it (`council/access.test.ts`, `council-navigation.test.tsx`).
 
@@ -244,15 +275,15 @@ These require a person and must be walked before closing a phase.
 
 ## 4. Open items
 
-| Item                                                                                                         | Owner                 | Note                                                                                                                       |
-| ------------------------------------------------------------------------------------------------------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Phase 3 reversibility items not yet built: appeals, evidence retention                                       | content lane          | `docs/dev/phases/03-moderation-admin.md`, "Reversibility"                                                                  |
-| ADR for the Base UI + Tailwind 4 adoption                                                                    | whoever made the call | Recorded in `.agent/COORDINATION.md`                                                                                       |
-| Phase 2: cross-Plaza main feed                                                                              | UI lane               | Tag editor, share link and copy-link-to-comment landed this session                                                       |
-| Phase 2: per-plaza permission (`required_post_permission`) has no RPC parameter to set it                   | Supabase/migrations owner | Not a UI gap - `admin_create_plaza`/`admin_update_plaza` need a new parameter first                                    |
-| `.agent/HANDOFF_UI_LIBS.md` fails `pnpm format:check`                                                        | UI lane               | Another lane's file; left untouched so the gate reports it rather than hiding it                                           |
-| No `global-error.tsx`                                                                                        | app lane              | `src/app/error.tsx` covers every route segment; only a crash inside the root layout itself still falls to the Next default |
-| Phase 1 remaining: rank, badges, clan display                                                                | Phase 5               | Depends on identity systems not yet built                                                                                  |
+| Item                                                                                      | Owner                     | Note                                                                                                                       |
+| ----------------------------------------------------------------------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| ADR for the Base UI + Tailwind 4 adoption                                                 | whoever made the call     | Recorded in `.agent/COORDINATION.md`                                                                                       |
+| Phase 2: cross-Plaza main feed                                                            | UI lane                   | Tag editor, share link and copy-link-to-comment landed this session                                                        |
+| Phase 2: per-plaza permission (`required_post_permission`) has no RPC parameter to set it | Supabase/migrations owner | Not a UI gap - `admin_create_plaza`/`admin_update_plaza` need a new parameter first                                        |
+| `.agent/HANDOFF_UI_LIBS.md` fails `pnpm format:check`                                     | UI lane                   | Another lane's file; left untouched so the gate reports it rather than hiding it                                           |
+| Retention runs but has never fired in production                                          | content lane              | `pg_cron` job scheduled for 03:30 daily; the function itself is proven by `appeals_contract.test.sql`                      |
+| No `global-error.tsx`                                                                     | app lane                  | `src/app/error.tsx` covers every route segment; only a crash inside the root layout itself still falls to the Next default |
+| Phase 1 remaining: rank, badges, clan display                                             | Phase 5                   | Depends on identity systems not yet built                                                                                  |
 
 ---
 
@@ -262,9 +293,9 @@ These require a person and must be walked before closing a phase.
 
 Phase 0 was reconciled against reality and closed: 35/35, each item verified against the artefact named in section 2.
 
-Phase 2 and Phase 3 both moved this session, once Plaza/post/comment UI and the report queue/decision/target-moderation UI landed on top of already-verified server logic. Phase 3 then closed everything that was only missing a control: content flags, move, lock/reopen, comment pin/lock, edit history, warnings, Council notes and moderation history. What remains in Phase 3 is not UI work at all — appeals do not exist, reports and audit rows have no retention policy, and permanent deletion is deliberately absent from the design.
+Phase 2 and Phase 3 both moved this session, once Plaza/post/comment UI and the report queue/decision/target-moderation UI landed on top of already-verified server logic. Phase 3 then closed everything that was only missing a control: content flags, move, lock/reopen, comment pin/lock, edit history, warnings, Council notes and moderation history. Appeals and retention then closed the rest: migration `0013` gives a member one argument per recorded action and a Council queue to answer it, and `0013`/`0014` purge closed reports and decided appeals after 180 days on a `pg_cron` schedule that lives in the repository rather than in the Dashboard.
 
-Current phase state: 0 -> 35/35 - 1 -> 37/40 (remainder depends on Phase 5 identity) - 2 -> 42/44 (per-plaza permission UI and the cross-Plaza main feed remain) - 3 -> 47/50 (appeals, evidence retention and the deliberately absent permanent deletion remain).
+Current phase state: 0 -> 35/35 - 1 -> 37/40 (remainder depends on Phase 5 identity) - 2 -> 42/44 (per-plaza permission UI and the cross-Plaza main feed remain) - 3 -> 49/50. The single open Phase 3 item is "permanent deletion requires superior permission, reason and confirmation", which does not apply: this system has no physical deletion by design.
 
 **Running the database contract.** The four suites need pgTAP. Against a local stack: `pnpm db:reset:local` then `supabase test db`.
 
