@@ -206,12 +206,12 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 
 ## 9. Reports
 
-- [ ] Report post.
-- [ ] Report comment.
-- [ ] Report chat message.
-- [ ] Report profile.
-- [ ] Choose report reason.
-- [ ] Write description.
+- [x] Report post.
+- [x] Report comment.
+- [ ] Report chat message. — no Holochat yet (Phase 6).
+- [x] Report profile.
+- [x] Choose report reason.
+- [x] Write description.
 - [ ] Prevent report spam.
 - [ ] Group duplicate reports.
 - [ ] Report queue.

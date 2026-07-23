@@ -17,9 +17,9 @@ Every one of these must pass before a change is considered done. Run them in thi
 | 1   | Types                    | `pnpm typecheck`                                                      | pass                |
 | 2   | Lint                     | `pnpm lint`                                                           | pass                |
 | 3   | Format                   | `pnpm format:check`                                                   | pass                |
-| 4   | Unit / component tests   | `pnpm test`                                                           | 663 pass / 54 files |
+| 4   | Unit / component tests   | `pnpm test`                                                           | 563 pass / 50 files |
 | 5   | Production build         | `pnpm build`                                                          | pass                |
-| 6   | Database contract        | `supabase test db --linked`                                           | 465/465 pass        |
+| 6   | Database contract        | `supabase test db --linked`                                           | 506/506 pass        |
 | 7   | Types match the database | `pnpm db:types` then `git diff --exit-code src/lib/database.types.ts` | clean               |
 
 Checks 6 and 7 run against the hosted project (`rvostprtlwksknuarnlk`). There is no local stack; its ports are held by another project.
@@ -66,8 +66,8 @@ The tables `plazas`, `posts`, `comments`, `content_votes`, `reactions`, `content
 | Plaza administration is CAS + audited                        | same suite                                                | verified |
 | `status` / `published_at` cannot disagree                    | table constraint + suite                                  | verified |
 | Polymorphic targets are exactly one of post/comment          | table constraint                                          | verified |
-| Every migration applies from an empty database               | replayed 0000-0011 on a clean PostgreSQL 16               | verified |
-| Migrations applied to the hosted project                     | `supabase migration list --linked` shows 0000-0011 remote | verified |
+| Every migration applies from an empty database               | replayed 0000-0012 on a clean PostgreSQL 16               | verified |
+| Migrations applied to the hosted project                     | `supabase migration list --linked` shows 0000-0012 remote | verified |
 
 ### 2.2b Database — reports (migration `0009`)
 
@@ -139,6 +139,29 @@ Two records that are opposites: a **warning** is addressed to the member and the
 | Warning, adding a note and removing a note are all audited                                   | same suite                                          | verified |
 | The moderation history is `council_list_audit_logs` filtered by target, with no second store | same suite                                          | verified |
 
+### 2.2e Database — edit history (migration `0012`)
+
+Before this, an edit overwrote the body and the previous wording was gone, which made a report unanswerable: the author could rewrite the content between the report and the review.
+
+| Must be checked                                                        | Evidence                                              | Status   |
+| ---------------------------------------------------------------------- | ----------------------------------------------------- | -------- |
+| Table unreachable from the Data API                                    | `content_revisions_contract.test.sql` (41 assertions) | verified |
+| An edit snapshots the previous wording, inside the same transaction    | same suite                                            | verified |
+| Creating content writes no revision                                    | same suite                                            | verified |
+| An edit that changes nothing writes no revision                        | same suite                                            | verified |
+| A post revision keeps the previous title; a comment revision has none  | table constraint + same suite                         | verified |
+| History is newest first, ordered by a sequence and not by the clock    | same suite                                            | verified |
+| Post and comment histories do not mix                                  | same suite                                            | verified |
+| Exactly one target; naming none or two is refused                      | same suite                                            | verified |
+| A member who is neither author nor moderator is told it does not exist | same suite                                            | verified |
+| Anon cannot read any edit history                                      | same suite                                            | verified |
+| A moderator reads the history of content they did not write            | same suite                                            | verified |
+| History survives the content being hidden                              | same suite                                            | verified |
+| An edit loop cannot grow the table past 50 revisions per item          | same suite                                            | verified |
+| Trimming one item leaves another item's history alone                  | same suite                                            | verified |
+| A caller cannot ask for more than the bound                            | same suite                                            | verified |
+| Physically deleting the content removes its revisions                  | same suite                                            | verified |
+
 ### 2.3 Content library (`src/lib/content/`)
 
 | Module        | Must be checked                                          | Evidence                                          | Status   |
@@ -180,7 +203,7 @@ Two records that are opposites: a **warning** is addressed to the member and the
 
 Every route that loads data owns a `loading.tsx` and an `error.tsx`. Present for: `members`, `council`, `council/audit`, `council/reports`, `profile/edit`, `plazas`, `plazas/[slug]`, `posts/[postId]`. `src/app/error.tsx` is the last boundary for every other segment, and `src/app/not-found.tsx` handles a missing route; neither logs anything but the digest.
 
-`plazas`, `plazas/[slug]`, `posts/[postId]`, `council/reports` and `council/reports/[reportId]` are now rendered, not stubs: Plaza listing/detail, post detail with its comment thread, compose (`plazas/[slug]/new`) and edit (`posts/[postId]/edit`), vote/reaction/bookmark, the report queue (filter, claim, `DataTable`), and the report detail page (evidence, resolve/dismiss, and hide/quarantine/delete/restore on the reported post or comment) are all wired to the Server Actions and RPCs verified in §2.3/§2.4. What is still owed to a UI pass: the report-filing form itself (no route calls `createReport` yet), a Council Plaza-administration screen (create/edit/archive), and pin/highlight/edit-lock/move controls (the actions exist and are tested; no control surfaces them).
+`plazas`, `plazas/[slug]`, `posts/[postId]`, `council/reports`, `council/reports/[reportId]`, `council/plazas` and `council/plazas/[plazaId]` are now rendered, not stubs: Plaza listing/detail, post detail with its comment thread, compose (`plazas/[slug]/new`) and edit (`posts/[postId]/edit`), vote/reaction/bookmark, report filing on a post/comment/profile (`system/report-control`), the report queue (filter, claim, `DataTable`), the report detail page (evidence, resolve/dismiss, and hide/quarantine/delete/restore on the reported post or comment), and Plaza administration (create/edit/archive, CAS) are all wired to the Server Actions and RPCs verified in §2.3/§2.4. What is still owed to a UI pass: pin/highlight/edit-lock/move controls (the actions exist and are tested; no control surfaces them), and the per-plaza permission (`required_post_permission`) field.
 
 The Council shell now opens for `moderation.hide` alone, so a moderator whose only destination is the queue can reach it (`council/access.test.ts`, `council-navigation.test.tsx`).
 
@@ -212,18 +235,16 @@ These require a person and must be walked before closing a phase.
 
 ## 4. Open items
 
-| Item                                                                                                         | Owner                 | Note                                                                                                                          |
-| ------------------------------------------------------------------------------------------------------------ | --------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Phase 3 report filing: no route calls `createReport`                                                         | UI lane               | Reason/choose-reason/description all exist server-side; the queue, claim, decision and target-moderation panel already landed |
-| Phase 3 user moderation: warn, internal note, moderation history                                             | content lane          | Suspend/ban/unban already landed with Phase 1                                                                                 |
-| Phase 3 content flags/move UI: pin, highlight, lock editing, lock replies, move post                         | UI lane               | `setPostFlags`/`setCommentFlags`/`movePost` exist and are tested; no control surfaces them                                    |
-| Phase 3 reversibility items not yet built: appeals, evidence retention                                       | content lane          | `docs/dev/phases/03-moderation-admin.md`, "Reversibility"                                                                     |
-| ADR for the Base UI + Tailwind 4 adoption                                                                    | whoever made the call | Recorded in `.agent/COORDINATION.md`                                                                                          |
-| Phase 2 Plaza administration UI: create/edit/archive from Council                                            | UI lane               | `createPlaza`/`updatePlaza`/`setPlazaStatus` exist and are tested; no Council screen                                          |
-| Phase 2: tag editor on compose/edit, "share link" and "copy link to comment" controls, cross-Plaza main feed | UI lane               | Everything else in Phase 2 landed this session                                                                                |
-| `.agent/HANDOFF_UI_LIBS.md` fails `pnpm format:check`                                                        | UI lane               | Another lane's file; left untouched so the gate reports it rather than hiding it                                              |
-| No `global-error.tsx`                                                                                        | app lane              | `src/app/error.tsx` covers every route segment; only a crash inside the root layout itself still falls to the Next default    |
-| Phase 1 remaining: rank, badges, clan display                                                                | Phase 5               | Depends on identity systems not yet built                                                                                     |
+| Item                                                                                                         | Owner                 | Note                                                                                                                       |
+| ------------------------------------------------------------------------------------------------------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Phase 3 user moderation: warn, internal note, moderation history                                             | content lane          | Suspend/ban/unban already landed with Phase 1                                                                              |
+| Phase 3 content flags/move UI: pin, highlight, lock editing, lock replies, move post                         | UI lane               | `setPostFlags`/`setCommentFlags`/`movePost` exist and are tested; no control surfaces them                                 |
+| Phase 3 reversibility items not yet built: appeals, evidence retention                                       | content lane          | `docs/dev/phases/03-moderation-admin.md`, "Reversibility"                                                                  |
+| ADR for the Base UI + Tailwind 4 adoption                                                                    | whoever made the call | Recorded in `.agent/COORDINATION.md`                                                                                       |
+| Phase 2: tag editor on compose/edit, "share link" and "copy link to comment" controls, cross-Plaza main feed | UI lane               | Everything else in Phase 2 landed this session                                                                             |
+| `.agent/HANDOFF_UI_LIBS.md` fails `pnpm format:check`                                                        | UI lane               | Another lane's file; left untouched so the gate reports it rather than hiding it                                           |
+| No `global-error.tsx`                                                                                        | app lane              | `src/app/error.tsx` covers every route segment; only a crash inside the root layout itself still falls to the Next default |
+| Phase 1 remaining: rank, badges, clan display                                                                | Phase 5               | Depends on identity systems not yet built                                                                                  |
 
 ---
 
@@ -235,7 +256,7 @@ Phase 0 was reconciled against reality and closed: 35/35, each item verified aga
 
 Phase 2 and Phase 3 both moved this session, once Plaza/post/comment UI and the report queue/decision/target-moderation UI landed on top of already-verified server logic. Remaining items in both are genuine gaps (an admin Plaza screen, a report-filing form, content flags/move controls, tags on compose, warn/notes/appeals), not unclaimed UI work sitting on a finished backend.
 
-Current phase state: 0 -> 35/35 - 1 -> 37/40 (remainder depends on Phase 5 identity) - 2 -> 35/44 (Plaza admin, tags-on-compose, share/copy-link and main feed remain) - 3 -> 29/50 (report filing, content flags/move controls, warn/notes/history, and reversibility extras remain).
+Current phase state: 0 -> 35/35 - 1 -> 37/40 (remainder depends on Phase 5 identity) - 2 -> 39/44 (tags-on-compose, share/copy-link and main feed remain) - 3 -> 35/50 (content flags/move controls, warn/notes/history, and reversibility extras remain).
 
 **Running the database contract.** The four suites need pgTAP. Against a local stack: `pnpm db:reset:local` then `supabase test db`.
 
