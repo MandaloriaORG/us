@@ -124,14 +124,14 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] Creative Forge.
 - [ ] Council Announcements.
 - [ ] Tavern.
-- [ ] Create plaza from admin.
-- [ ] Edit plaza from admin.
-- [ ] Change slug.
-- [ ] Change description.
-- [ ] Change visibility.
-- [ ] Reorder plazas.
-- [ ] Archive plaza.
-- [ ] Configure plaza rules.
+- [x] Create plaza from admin.
+- [x] Edit plaza from admin.
+- [x] Change slug.
+- [x] Change description.
+- [x] Change visibility.
+- [x] Reorder plazas. — sort order is an editable field per Plaza; no dedicated drag-and-drop.
+- [x] Archive plaza.
+- [x] Configure plaza rules.
 - [ ] Configure permissions per plaza.
 - [ ] Archived plaza does not accept new posts.
 - [ ] Council Announcements only allows posting by authorized roles.

@@ -8,10 +8,10 @@ Implement the Reddit-like core of Mandaloria.
 
 - [x] List plazas.
 - [x] View plaza detail.
-- [ ] Create plaza from admin. — `admin_create_plaza`/`createPlaza` exist and are tested; no Council UI.
-- [ ] Edit plaza from admin. — same, `admin_update_plaza`/`updatePlaza`.
-- [ ] Archive plaza from admin. — same, `admin_set_plaza_status`/`setPlazaStatus`.
-- [ ] Configure visibility. — part of the same missing admin UI.
+- [x] Create plaza from admin. — `/council/plazas/new`, wired to `createPlaza`.
+- [x] Edit plaza from admin. — `/council/plazas/[plazaId]`, wired to `updatePlaza`.
+- [x] Archive plaza from admin. — same screen, CAS archive/reactivate wired to `setPlazaStatus`.
+- [x] Configure visibility. — part of the same create/edit form.
 - [ ] Configure per-plaza permissions. — `required_post_permission` has no UI to set it.
 
 ## Posts
