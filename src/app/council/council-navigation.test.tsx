@@ -57,7 +57,13 @@ describe("CouncilNavigation", () => {
       "href",
       "/council/reports",
     );
-    expect(screen.getAllByRole("link")).toHaveLength(1);
+    // Appeals ride on the same permission: a moderator who can work the queue
+    // can read the arguments against its decisions.
+    expect(screen.getByRole("link", { name: "Appeals" })).toHaveAttribute(
+      "href",
+      "/council/appeals",
+    );
+    expect(screen.getAllByRole("link")).toHaveLength(2);
   });
 
   it("shows Plazas to an administrator who has nothing else in the Council", () => {

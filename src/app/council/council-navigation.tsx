@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BuildingsIcon, FlagIcon, ScrollIcon, UsersIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  BuildingsIcon,
+  FlagIcon,
+  GavelIcon,
+  ScrollIcon,
+  UsersIcon,
+} from "@phosphor-icons/react/dist/ssr";
 
 import { cn } from "@/lib/cn";
 
@@ -27,6 +33,14 @@ const navigationItems = [
     label: "Reports",
     permission: "canViewReports",
     Icon: FlagIcon,
+  },
+  {
+    // Appeals are read by whoever works the queue: the same permission the
+    // appeal RPCs re-check.
+    href: "/council/appeals",
+    label: "Appeals",
+    permission: "canViewReports",
+    Icon: GavelIcon,
   },
   {
     href: "/council/plazas",

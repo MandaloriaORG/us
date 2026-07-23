@@ -7,9 +7,12 @@ import { ReportControl } from "@/components/system/report-control";
 import { Avatar } from "@/components/ui/avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getProfileById } from "@/lib/actions/profile";
+import { APPEAL_STATUS_LABELS, appealActionLabel } from "@/lib/content/appeal-labels";
+import { listOwnAppeals, listOwnModerationActions } from "@/lib/content/appeals";
 import { listOwnWarnings } from "@/lib/content/user-moderation";
 import { getAuthorizationSnapshot } from "@/lib/permissions";
 
+import { OwnAppeals } from "./own-appeals";
 import { OwnWarnings } from "./own-warnings";
 
 interface Props {
@@ -43,7 +46,15 @@ export default async function MemberProfilePage({ params }: Props) {
   // `list_own_warnings` resolves the member from the session, so this is only
   // ever the reader's own history — never the profile they happen to be viewing.
   const isSelf = authorization.allowed && authorization.userId === params.id;
-  const ownWarnings = isSelf ? await listOwnWarnings() : [];
+  const [ownWarnings, ownActions, ownAppeals] = isSelf
+    ? await Promise.all([listOwnWarnings(), listOwnModerationActions(), listOwnAppeals()])
+    : [[], [], []];
+
+  // The action list carries the appeal's id and status; its wording lives on the
+  // appeal itself, so the decision is read from there rather than duplicated.
+  const decisionsByAppeal = new Map(
+    ownAppeals.map((appeal) => [appeal.appeal_id, appeal.decision]),
+  );
   const website = safeExternalUrl(profile.website);
   const joinedAt = new Date(profile.created_at);
   const joinedLabel = Number.isNaN(joinedAt.valueOf())
@@ -145,6 +156,26 @@ export default async function MemberProfilePage({ params }: Props) {
           </a>
         </div>
       )}
+
+      {isSelf ? (
+        <OwnAppeals
+          actions={ownActions.map((action) => ({
+            auditLogId: action.audit_log_id,
+            action: action.action,
+            actionLabel: appealActionLabel(action.action),
+            reason: action.reason,
+            createdAt: action.created_at,
+            appealId: action.appeal_id,
+            appealStatus: action.appeal_status,
+            appealStatusLabel: action.appeal_status
+              ? APPEAL_STATUS_LABELS[action.appeal_status]
+              : null,
+            appealDecision: action.appeal_id
+              ? (decisionsByAppeal.get(action.appeal_id) ?? null)
+              : null,
+          }))}
+        />
+      ) : null}
 
       {isSelf ? (
         <OwnWarnings

@@ -9,6 +9,8 @@ const mocks = vi.hoisted(() => ({
   getAuthorizationSnapshot: vi.fn(),
   createReport: vi.fn(),
   listOwnWarnings: vi.fn(),
+  listOwnModerationActions: vi.fn(),
+  listOwnAppeals: vi.fn(),
 }));
 
 vi.mock("@/lib/actions/profile", () => ({
@@ -25,6 +27,11 @@ vi.mock("@/lib/permissions", () => ({
 }));
 vi.mock("@/lib/actions/reports", () => ({ createReport: mocks.createReport }));
 vi.mock("@/lib/content/user-moderation", () => ({ listOwnWarnings: mocks.listOwnWarnings }));
+vi.mock("@/lib/content/appeals", () => ({
+  listOwnModerationActions: mocks.listOwnModerationActions,
+  listOwnAppeals: mocks.listOwnAppeals,
+}));
+vi.mock("@/lib/actions/appeals", () => ({ createAppeal: vi.fn() }));
 vi.mock("@/lib/actions/user-moderation", () => ({ acknowledgeWarning: vi.fn() }));
 
 import MemberProfilePage from "@/app/members/[id]/page";
@@ -56,6 +63,8 @@ function publicProfile(overrides: Record<string, unknown> = {}) {
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.listOwnWarnings.mockResolvedValue([]);
+  mocks.listOwnModerationActions.mockResolvedValue([]);
+  mocks.listOwnAppeals.mockResolvedValue([]);
   mocks.listMemberProfiles.mockResolvedValue({
     status: "ok",
     profiles: [],

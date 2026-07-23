@@ -406,6 +406,67 @@ export type Database = {
           },
         ];
       };
+      moderation_appeals: {
+        Row: {
+          appellant_id: string;
+          audit_log_id: string;
+          body: string;
+          created_at: string;
+          decided_at: string | null;
+          decided_by: string | null;
+          decision: string | null;
+          id: string;
+          status: Database["public"]["Enums"]["appeal_status"];
+          updated_at: string;
+        };
+        Insert: {
+          appellant_id: string;
+          audit_log_id: string;
+          body: string;
+          created_at?: string;
+          decided_at?: string | null;
+          decided_by?: string | null;
+          decision?: string | null;
+          id?: string;
+          status?: Database["public"]["Enums"]["appeal_status"];
+          updated_at?: string;
+        };
+        Update: {
+          appellant_id?: string;
+          audit_log_id?: string;
+          body?: string;
+          created_at?: string;
+          decided_at?: string | null;
+          decided_by?: string | null;
+          decision?: string | null;
+          id?: string;
+          status?: Database["public"]["Enums"]["appeal_status"];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "moderation_appeals_appellant_id_fkey";
+            columns: ["appellant_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "moderation_appeals_audit_log_id_fkey";
+            columns: ["audit_log_id"];
+            isOneToOne: false;
+            referencedRelation: "audit_logs";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "moderation_appeals_decided_by_fkey";
+            columns: ["decided_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       moderator_notes: {
         Row: {
           actor_id: string | null;
@@ -1024,6 +1085,12 @@ export type Database = {
         };
         Returns: string;
       };
+      create_appeal: {
+        Args: { p_audit_log_id: string; p_body: string };
+        Returns: {
+          appeal_id: string;
+        }[];
+      };
       create_comment: {
         Args: { p_body: string; p_parent_id?: string; p_post_id: string };
         Returns: {
@@ -1149,6 +1216,19 @@ export type Database = {
           website: string;
         }[];
       };
+      list_own_appeals: {
+        Args: never;
+        Returns: {
+          action: string;
+          appeal_id: string;
+          audit_log_id: string;
+          body: string;
+          created_at: string;
+          decided_at: string;
+          decision: string;
+          status: Database["public"]["Enums"]["appeal_status"];
+        }[];
+      };
       list_own_bookmarks: {
         Args: {
           p_cursor_created_at?: string;
@@ -1162,6 +1242,17 @@ export type Database = {
           plaza_slug: string;
           post_id: string;
           title: string;
+        }[];
+      };
+      list_own_moderation_actions: {
+        Args: { p_limit?: number };
+        Returns: {
+          action: string;
+          appeal_id: string;
+          appeal_status: Database["public"]["Enums"]["appeal_status"];
+          audit_log_id: string;
+          created_at: string;
+          reason: string;
         }[];
       };
       list_own_warnings: {
@@ -1253,6 +1344,35 @@ export type Database = {
           sort_order: number;
         }[];
       };
+      moderation_claim_appeal: {
+        Args: {
+          p_appeal_id: string;
+          p_expected_status: Database["public"]["Enums"]["appeal_status"];
+        };
+        Returns: {
+          appeal_id: string;
+        }[];
+      };
+      moderation_get_appeal: {
+        Args: { p_appeal_id: string };
+        Returns: {
+          action: string;
+          action_actor_display_name: string;
+          action_actor_id: string;
+          action_created_at: string;
+          action_reason: string;
+          appeal_id: string;
+          appellant_display_name: string;
+          appellant_id: string;
+          audit_log_id: string;
+          body: string;
+          created_at: string;
+          decided_at: string;
+          decided_by: string;
+          decision: string;
+          status: Database["public"]["Enums"]["appeal_status"];
+        }[];
+      };
       moderation_get_report: {
         Args: { p_report_id: string };
         Returns: {
@@ -1272,6 +1392,23 @@ export type Database = {
           target_id: string;
           target_status: string;
           target_type: string;
+        }[];
+      };
+      moderation_list_appeals: {
+        Args: {
+          p_cursor_created_at?: string;
+          p_cursor_id?: string;
+          p_limit?: number;
+          p_status?: Database["public"]["Enums"]["appeal_status"];
+        };
+        Returns: {
+          action: string;
+          appeal_id: string;
+          appellant_display_name: string;
+          appellant_id: string;
+          audit_log_id: string;
+          created_at: string;
+          status: Database["public"]["Enums"]["appeal_status"];
         }[];
       };
       moderation_list_reports: {
@@ -1304,6 +1441,17 @@ export type Database = {
         Args: { p_plaza_id: string; p_post_id: string; p_reason: string };
         Returns: {
           post_id: string;
+        }[];
+      };
+      moderation_resolve_appeal: {
+        Args: {
+          p_appeal_id: string;
+          p_decision: string;
+          p_expected_status: Database["public"]["Enums"]["appeal_status"];
+          p_status: Database["public"]["Enums"]["appeal_status"];
+        };
+        Returns: {
+          appeal_id: string;
         }[];
       };
       moderation_set_comment_flags: {
@@ -1435,6 +1583,7 @@ export type Database = {
       };
     };
     Enums: {
+      appeal_status: "open" | "under_review" | "granted" | "denied";
       comment_status:
         "published" | "hidden" | "quarantined" | "deleted_by_author" | "deleted_by_moderator";
       plaza_status: "active" | "archived";
@@ -1581,6 +1730,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      appeal_status: ["open", "under_review", "granted", "denied"],
       comment_status: [
         "published",
         "hidden",
