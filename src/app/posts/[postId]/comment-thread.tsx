@@ -15,6 +15,8 @@ export interface CommentThreadProps {
   reactionTypes: ReactionType[];
   acceptsComments: boolean;
   nextCursor: string | null;
+  /** `moderation.hide`, resolved server-side; the RPCs re-check it anyway. */
+  canModerate?: boolean;
 }
 
 /**
@@ -29,6 +31,7 @@ export function CommentThread({
   reactionTypes,
   acceptsComments,
   nextCursor,
+  canModerate = false,
 }: CommentThreadProps) {
   const router = useRouter();
 
@@ -52,7 +55,13 @@ export function CommentThread({
       ) : (
         <ol className="flex flex-col gap-4">
           {thread.map((node) => (
-            <CommentItem key={node.id} node={node} postId={postId} reactionTypes={reactionTypes} />
+            <CommentItem
+              key={node.id}
+              node={node}
+              postId={postId}
+              reactionTypes={reactionTypes}
+              canModerate={canModerate}
+            />
           ))}
         </ol>
       )}

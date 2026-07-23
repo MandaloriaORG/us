@@ -21,11 +21,14 @@ import type { CommentNode, ReactionType } from "@/lib/content/queries";
 import { formatRelativeTime } from "@/lib/time";
 
 import { CommentComposer } from "./comment-composer";
+import { CommentModerationControl } from "./comment-moderation-control";
 
 interface CommentItemProps {
   node: CommentNode;
   postId: string;
   reactionTypes: ReactionType[];
+  /** `moderation.hide`, resolved server-side; the flag RPCs re-check it anyway. */
+  canModerate?: boolean;
 }
 
 /**
@@ -34,7 +37,12 @@ interface CommentItemProps {
  * narrow viewport, so it is capped visually and a left rail carries the rest
  * of the nesting cue instead of ever-shrinking margin.
  */
-export function CommentItem({ node, postId, reactionTypes }: CommentItemProps) {
+export function CommentItem({
+  node,
+  postId,
+  reactionTypes,
+  canModerate = false,
+}: CommentItemProps) {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
@@ -141,6 +149,13 @@ export function CommentItem({ node, postId, reactionTypes }: CommentItemProps) {
                 </Button>
               ) : null}
               {!node.can_edit ? <ReportControl targetType="comment" targetId={node.id} /> : null}
+              {canModerate ? (
+                <CommentModerationControl
+                  commentId={node.id}
+                  isPinned={node.is_pinned}
+                  repliesLocked={node.replies_locked}
+                />
+              ) : null}
             </div>
           ) : null}
 
@@ -201,6 +216,7 @@ export function CommentItem({ node, postId, reactionTypes }: CommentItemProps) {
               node={reply}
               postId={postId}
               reactionTypes={reactionTypes}
+              canModerate={canModerate}
             />
           ))}
         </ol>

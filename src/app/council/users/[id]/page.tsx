@@ -8,8 +8,10 @@ import type { ComponentProps } from "react";
 type BadgeVariant = NonNullable<ComponentProps<typeof Badge>["variant"]>;
 import { Avatar } from "@/components/ui/avatar";
 import { getCurrentAuthorization } from "@/lib/permissions";
+import { listUserNotes } from "@/lib/content/user-moderation";
 import { createClient } from "@/lib/supabase/server";
 import { UserManagementPanel, type CouncilRoleOption } from "./user-management-panel";
+import { UserModerationPanel } from "./user-moderation-panel";
 
 interface CouncilUserDetailPageProps {
   params: { id: string };
@@ -166,6 +168,12 @@ export default async function CouncilUserDetailPage({ params }: CouncilUserDetai
     isProtected: role.is_protected,
     name: role.name,
   }));
+  // A member's moderation history is the audit log filtered by target: warnings
+  // and every status change are already there, and a second reader would be a
+  // second truth (see `src/lib/content/user-moderation.ts`).
+  const canViewHistory = permissionNames.has("admin.view_audit_logs");
+  const notes = await listUserNotes(profile.id);
+
   const website = safeWebsite(profile.website);
   const hasKnownStatus = profile.status !== "unknown";
 
@@ -275,6 +283,34 @@ export default async function CouncilUserDetailPage({ params }: CouncilUserDetai
           canManageRoles={canManageRoles}
           canManageProtectedRoles={permissionNames.has("admin.manage_protected_roles")}
         />
+      ) : null}
+
+      <UserModerationPanel
+        targetUserId={profile.id}
+        canWarn={!isSelf && permissionNames.has("moderation.warn")}
+        notes={notes.items.map((note) => ({
+          noteId: note.note_id,
+          body: note.body,
+          createdAt: note.created_at,
+          actorId: note.actor_id,
+          actorDisplayName: note.actor_display_name,
+        }))}
+        viewerId={authorization?.userId ?? null}
+      />
+
+      {canViewHistory ? (
+        <section className="border-border mt-8 border-t pt-6">
+          <h2 className="text-fg text-lg font-semibold">Moderation history</h2>
+          <p className="text-fg-muted mt-1 text-sm">
+            Every warning, status change and role change recorded against this member.
+          </p>
+          <Link
+            href={`/council/audit?target=${profile.id}`}
+            className="text-brand focus:ring-border-focus mt-2 inline-flex min-h-11 items-center text-sm underline-offset-4 hover:underline focus:ring-2 focus:outline-hidden"
+          >
+            Open this member&apos;s audit history
+          </Link>
+        </section>
       ) : null}
     </div>
   );

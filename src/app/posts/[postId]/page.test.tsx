@@ -5,6 +5,8 @@ const mocks = vi.hoisted(() => ({
   getPost: vi.fn(),
   listPostComments: vi.fn(),
   listReactionTypes: vi.fn(),
+  listPlazas: vi.fn(),
+  getCouncilReportAccess: vi.fn(),
   notFound: vi.fn(),
 }));
 
@@ -12,6 +14,7 @@ vi.mock("@/lib/content/queries", () => ({
   getPost: mocks.getPost,
   listPostComments: mocks.listPostComments,
   listReactionTypes: mocks.listReactionTypes,
+  listPlazas: mocks.listPlazas,
   // Same tree-building rule as the real module, duplicated here so this test
   // does not import `queries.ts` itself, which is guarded by `server-only`.
   buildCommentTree: (comments: { id: string; parent_id: string | null }[]) => {
@@ -40,6 +43,17 @@ vi.mock("@/lib/actions/content", () => ({
 }));
 
 vi.mock("@/lib/actions/reports", () => ({ createReport: vi.fn() }));
+
+vi.mock("@/lib/actions/moderation", () => ({
+  movePost: vi.fn(),
+  setCommentFlags: vi.fn(),
+  setPostFlags: vi.fn(),
+  setPostStatus: vi.fn(),
+}));
+
+vi.mock("@/app/council/access", () => ({
+  getCouncilReportAccess: mocks.getCouncilReportAccess,
+}));
 
 vi.mock("next/navigation", () => ({
   notFound: mocks.notFound,
@@ -85,6 +99,8 @@ beforeEach(() => {
   });
   mocks.listReactionTypes.mockResolvedValue([]);
   mocks.listPostComments.mockResolvedValue({ items: [], nextCursor: null });
+  mocks.listPlazas.mockResolvedValue([]);
+  mocks.getCouncilReportAccess.mockResolvedValue({ allowed: false, reason: "missing_permission" });
 });
 
 async function renderPage(cursor?: string) {

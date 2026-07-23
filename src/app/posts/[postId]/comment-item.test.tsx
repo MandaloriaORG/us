@@ -20,6 +20,8 @@ vi.mock("@/lib/actions/content", () => ({
 
 vi.mock("@/lib/actions/reports", () => ({ createReport: vi.fn() }));
 
+vi.mock("@/lib/actions/moderation", () => ({ setCommentFlags: vi.fn() }));
+
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ refresh: mocks.refresh }),
 }));

@@ -14,6 +14,7 @@ const mocks = vi.hoisted(() => ({
   rpc: vi.fn(),
   rolesOrder: vi.fn(),
   rolesSelect: vi.fn(),
+  listUserNotes: vi.fn(),
 }));
 
 vi.mock("@/app/council/access", () => ({
@@ -25,6 +26,7 @@ vi.mock("next/navigation", () => ({
   notFound: mocks.notFound,
   redirect: mocks.redirect,
   usePathname: () => "/council/users",
+  useRouter: () => ({ refresh: vi.fn() }),
 }));
 
 vi.mock("@/lib/supabase/admin", () => ({
@@ -37,6 +39,14 @@ vi.mock("@/lib/permissions", () => ({
 
 vi.mock("@/lib/supabase/server", () => ({
   createClient: mocks.createClient,
+}));
+
+vi.mock("@/lib/content/user-moderation", () => ({ listUserNotes: mocks.listUserNotes }));
+
+vi.mock("@/lib/actions/user-moderation", () => ({
+  addUserNote: vi.fn(),
+  deleteUserNote: vi.fn(),
+  warnUser: vi.fn(),
 }));
 
 import CouncilError from "./error";
@@ -90,6 +100,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   rpcResults.clear();
   rpcOperations.length = 0;
+  mocks.listUserNotes.mockResolvedValue({ items: [], nextCursor: null });
 
   mocks.getCouncilUserAccess.mockResolvedValue(allowed);
   mocks.getCouncilShellAccess.mockResolvedValue(allowed);

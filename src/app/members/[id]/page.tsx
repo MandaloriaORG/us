@@ -7,7 +7,10 @@ import { ReportControl } from "@/components/system/report-control";
 import { Avatar } from "@/components/ui/avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getProfileById } from "@/lib/actions/profile";
+import { listOwnWarnings } from "@/lib/content/user-moderation";
 import { getAuthorizationSnapshot } from "@/lib/permissions";
+
+import { OwnWarnings } from "./own-warnings";
 
 interface Props {
   params: { id: string };
@@ -37,6 +40,10 @@ export default async function MemberProfilePage({ params }: Props) {
   }
 
   const { profile } = result;
+  // `list_own_warnings` resolves the member from the session, so this is only
+  // ever the reader's own history — never the profile they happen to be viewing.
+  const isSelf = authorization.allowed && authorization.userId === params.id;
+  const ownWarnings = isSelf ? await listOwnWarnings() : [];
   const website = safeExternalUrl(profile.website);
   const joinedAt = new Date(profile.created_at);
   const joinedLabel = Number.isNaN(joinedAt.valueOf())
@@ -139,8 +146,19 @@ export default async function MemberProfilePage({ params }: Props) {
         </div>
       )}
 
+      {isSelf ? (
+        <OwnWarnings
+          warnings={ownWarnings.map((warning) => ({
+            warningId: warning.warning_id,
+            reason: warning.reason,
+            createdAt: warning.created_at,
+            acknowledgedAt: warning.acknowledged_at,
+          }))}
+        />
+      ) : null}
+
       {/* Report — never offered on the viewer's own profile */}
-      {authorization.allowed && authorization.userId === params.id ? null : (
+      {isSelf ? null : (
         <div className="border-border mt-8 border-t pt-4">
           <ReportControl targetType="profile" targetId={params.id} />
         </div>

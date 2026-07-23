@@ -8,6 +8,7 @@ const mocks = vi.hoisted(() => ({
   redirect: vi.fn(),
   getAuthorizationSnapshot: vi.fn(),
   createReport: vi.fn(),
+  listOwnWarnings: vi.fn(),
 }));
 
 vi.mock("@/lib/actions/profile", () => ({
@@ -17,11 +18,14 @@ vi.mock("@/lib/actions/profile", () => ({
 vi.mock("next/navigation", () => ({
   notFound: mocks.notFound,
   redirect: mocks.redirect,
+  useRouter: () => ({ refresh: vi.fn() }),
 }));
 vi.mock("@/lib/permissions", () => ({
   getAuthorizationSnapshot: mocks.getAuthorizationSnapshot,
 }));
 vi.mock("@/lib/actions/reports", () => ({ createReport: mocks.createReport }));
+vi.mock("@/lib/content/user-moderation", () => ({ listOwnWarnings: mocks.listOwnWarnings }));
+vi.mock("@/lib/actions/user-moderation", () => ({ acknowledgeWarning: vi.fn() }));
 
 import MemberProfilePage from "@/app/members/[id]/page";
 import MembersError from "@/app/members/error";
@@ -51,6 +55,7 @@ function publicProfile(overrides: Record<string, unknown> = {}) {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  mocks.listOwnWarnings.mockResolvedValue([]);
   mocks.listMemberProfiles.mockResolvedValue({
     status: "ok",
     profiles: [],

@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { getCouncilReportAccess } from "@/app/council/access";
 import { ReportControl } from "@/components/system/report-control";
 import { renderMarkdown } from "@/lib/content/markdown";
 import {
   buildCommentTree,
   getPost,
+  listPlazas,
   listPostComments,
   listReactionTypes,
 } from "@/lib/content/queries";
@@ -13,6 +15,7 @@ import { formatRelativeTime } from "@/lib/time";
 
 import { CommentThread } from "./comment-thread";
 import { PostEngagement } from "./post-engagement";
+import { PostModerationPanel } from "./post-moderation-panel";
 import { PostOwnerActions } from "./post-owner-actions";
 
 /**
@@ -64,10 +67,16 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
   const post = await getPost(postId);
   if (!post) notFound();
 
-  const [comments, reactionTypes] = await Promise.all([
+  // `moderation.hide` is what every flag, move and lock RPC re-checks, so it is
+  // also what decides whether the controls are worth rendering at all.
+  const [comments, reactionTypes, moderationAccess] = await Promise.all([
     listPostComments(postId, { cursor: cursor ?? null }),
     listReactionTypes(),
+    getCouncilReportAccess(),
   ]);
+
+  const canModerate = moderationAccess.allowed;
+  const plazas = canModerate ? await listPlazas() : [];
 
   const thread = buildCommentTree(comments.items);
   const removed = post.body === null;
@@ -137,6 +146,18 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
         </div>
       )}
 
+      {canModerate ? (
+        <PostModerationPanel
+          postId={post.id}
+          plazaId={post.plaza_id}
+          status={post.status}
+          isPinned={post.is_pinned}
+          isHighlighted={post.is_highlighted}
+          editLocked={post.edit_locked}
+          plazas={plazas.map((plaza) => ({ id: plaza.id, name: plaza.name }))}
+        />
+      ) : null}
+
       <div className="border-border mt-8 border-t pt-6">
         <h2 className="text-fg text-lg font-semibold">Comments ({post.comments_count})</h2>
 
@@ -146,6 +167,7 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
           reactionTypes={reactionTypes}
           acceptsComments={post.accepts_comments}
           nextCursor={comments.nextCursor}
+          canModerate={canModerate}
         />
       </div>
     </main>
