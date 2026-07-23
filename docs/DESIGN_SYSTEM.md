@@ -511,9 +511,10 @@ Do not assign a shadow automatically because a component uses `bg-raised`. Choos
 
 ## Iconography
 
-- Use Lucide Icons consistently.
-- Standard sizes: 16px inline, 20px in UI controls, and 24px standalone.
-- Use a 1.5-2 stroke width depending on size.
+- Use Phosphor Icons consistently, imported from `@phosphor-icons/react/dist/ssr` so icons stay renderable in Server Components.
+- Import the non-deprecated `NameIcon` exports, not the bare `Name` aliases.
+- Standard sizes: 16px inline, 20px in UI controls, and 24px standalone. Size with `h-*`/`w-*`, since Phosphor defaults to `1em`.
+- Use the `regular` weight for product UI. `bold` is allowed only where an icon must survive at 16px on a busy surface; `duotone` and `fill` are reserved for identity surfaces, never for controls.
 - Icons inherit their parent's color; interactive icons move from `--color-fg-muted` to `--color-fg` on hover.
 - Do not place every icon in a rounded tile. Add a container only when it communicates selection, status, or a hit area.
 

@@ -34,9 +34,10 @@ Mandatory for UI work. Source: `docs/DESIGN_SYSTEM.md`; gate: `docs/dev/DESIGN_V
 ## Components & Code
 
 - Sources: Tailark=marketing; Origin=controls; ReUI=data; shadcn=a11y; Custom=brand/domain. Restyle imports; never mix raw aesthetics/install a library for one control.
+- **No hand-written clones of registry components.** Install with `pnpm dlx shadcn add @coss/<x>` / `@reui/<x>` / `@tailark/<x>` (or shadcn base). Then compose or restyle via `className`/tokens. Never reimplement Field/Input/Select/Badge/DataGrid/Hero/etc. from scratch to "match the style"; the registry install _is_ how the style is enforced. Allowed: thin composition wrappers (label+field+error), Mandaloria-only components (brand/domain), server-safe adapters where the registry primitive is client-only.
 - Shared components define purpose, use/non-use, density, responsive/a11y/async contracts, content limits, and applicable interaction/data states.
 - Same concept=same component/interaction. New token/variant needs semantic reuse, not one screenshot. Evaluate extraction after 3 stable uses; avoid premature abstraction.
-- CSS-variable colors only; no hardcoded palettes. Inter UI; Cinzel logo/marketing hero/Casa names only. Lucide 16/20/24px.
+- CSS-variable colors only; no hardcoded palettes. Inter UI; Cinzel logo/marketing hero/Casa names only. Phosphor `*Icon` exports from `@phosphor-icons/react/dist/ssr`, regular weight, 16/20/24px.
 - One component/file; named exports; `cn()` from `@/lib/cn`; approved component folders only.
 
 ## Before Done / Routing

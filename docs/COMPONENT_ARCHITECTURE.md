@@ -53,11 +53,15 @@
 **Purpose**: a copy-paste toolkit of refined, reusable controls with solid mechanics.
 
 **Operational source note (2026-07)**: Origin UI now resolves to coss UI. Its
-registry is configured as `@coss` in `components.json`. The current upstream uses
-Base UI and Tailwind CSS 4 patterns, while Mandaloria remains on React 18, Radix,
-and Tailwind CSS 3. Inspect registry source with `shadcn view`, then port only the
-needed mechanics into `src/components/origin/**`; do not install or paste the
-upstream stack wholesale without an explicit architecture decision.
+registry is configured as `@coss` in `components.json`. Mandaloria adopted the
+upstream stack rather than porting away from it: Tailwind CSS 4 configured
+CSS-first, with Base UI backing `src/components/origin/**` while Radix continues to
+back `src/components/ui/**`. Install coss components with `shadcn add` instead of
+hand-writing an equivalent, then restyle through tokens and `className`.
+
+The one place the primitive is not used as shipped is `Field.Error`: it renders
+only when Base UI owns the field's validity, and Mandaloria's validity comes from
+the server. `origin/field` exports a replacement.
 
 **Use for**:
 

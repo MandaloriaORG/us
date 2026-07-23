@@ -11,7 +11,7 @@ Rule: a feature is not complete until it passes its applicable phase checklist a
 ### Phase 0 — Foundation
 
 - [ ] Tailwind configuration uses CSS variables and no hardcoded palette colors.
-- [ ] `tokens.css` defines every design-system variable.
+- [ ] `globals.css` defines every design-system variable (Tailwind 4 is configured CSS-first; there is no `tokens.css` or `tailwind.config.ts`).
 - [ ] `globals.css` imports Tailwind directives and tokens.
 - [ ] Dark mode works through tokens rather than Tailwind `dark:` variants.
 - [ ] Base shadcn/ui components are restyled with project tokens.

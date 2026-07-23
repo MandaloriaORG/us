@@ -8,23 +8,24 @@ Mandaloria uses the Next.js 14+ App Router with TypeScript, Supabase as its back
 
 ## Stack
 
-| Layer           | Technology                                  | Rationale                                                 |
-| --------------- | ------------------------------------------- | --------------------------------------------------------- |
-| Framework       | Next.js 14+ App Router                      | SSR, RSC, streaming, protected routes, API routes         |
-| Language        | TypeScript in strict mode                   | Type safety and maintainability                           |
-| Styling         | Tailwind CSS v3 + CSS variables             | Semantic tokens, dark mode, no hardcoded component colors |
-| UI primitives   | shadcn/ui with Radix                        | Accessibility, focus management, keyboard navigation      |
-| Data components | ReUI                                        | Dashboards, tables, filters, kanban, calendars, charts    |
-| Form components | Origin UI                                   | Inputs, selects, toggles, date pickers, small controls    |
-| Public blocks   | Tailark                                     | Hero, features, stats, testimonials, pricing, footer      |
-| Animation       | Motion / Framer Motion                      | Modal, tab, and purposeful interaction transitions        |
-| Validation      | Zod + react-hook-form                       | Shared client/server schemas                              |
-| Authentication  | Supabase Auth: email/password, future OAuth | Native RLS integration                                    |
-| Database        | Supabase Postgres                           | RLS, versioned migrations, backups                        |
-| Storage         | Supabase Storage                            | Avatars, attachments, public/private buckets              |
-| Testing         | Vitest + Playwright                         | Unit and end-to-end tests                                 |
-| Linting         | ESLint + Prettier                           | Code consistency                                          |
-| Package manager | pnpm                                        | Efficiency and strict resolution                          |
+| Layer           | Technology                                             | Rationale                                                 |
+| --------------- | ------------------------------------------------------ | --------------------------------------------------------- |
+| Framework       | Next.js 14+ App Router                                 | SSR, RSC, streaming, protected routes, API routes         |
+| Language        | TypeScript in strict mode                              | Type safety and maintainability                           |
+| Styling         | Tailwind CSS v4 (CSS-first) + CSS variables            | Semantic tokens, dark mode, no hardcoded component colors |
+| UI primitives   | shadcn/ui with Radix; Base UI for coss/Origin controls | Accessibility, focus management, keyboard navigation      |
+| Data components | ReUI                                                   | Dashboards, tables, filters, kanban, calendars, charts    |
+| Form components | Origin UI                                              | Inputs, selects, toggles, date pickers, small controls    |
+| Public blocks   | Tailark                                                | Hero, features, stats, testimonials, pricing, footer      |
+| Icons           | Phosphor Icons (see ADR 0003)                          | One weighted icon set, RSC-safe via the `/dist/ssr` entry |
+| Animation       | Motion / Framer Motion                                 | Modal, tab, and purposeful interaction transitions        |
+| Validation      | Zod + react-hook-form                                  | Shared client/server schemas                              |
+| Authentication  | Supabase Auth: email/password, future OAuth            | Native RLS integration                                    |
+| Database        | Supabase Postgres                                      | RLS, versioned migrations, backups                        |
+| Storage         | Supabase Storage                                       | Avatars, attachments, public/private buckets              |
+| Testing         | Vitest + Playwright                                    | Unit and end-to-end tests                                 |
+| Linting         | ESLint + Prettier                                      | Code consistency                                          |
+| Package manager | pnpm                                                   | Efficiency and strict resolution                          |
 
 ## Design principles
 
@@ -115,8 +116,7 @@ src/
     utils.ts
     cn.ts
   styles/
-    tokens.css      → Semantic CSS variables
-    globals.css     → Tailwind directives and resets
+    globals.css     → Tailwind 4 CSS-first config, semantic CSS variables, resets
 ```
 
 ## Target component proportion
