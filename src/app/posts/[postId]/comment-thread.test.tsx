@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({ createComment: vi.fn(), refresh: vi.fn() }));
 
 vi.mock("@/lib/actions/content", () => ({ createComment: mocks.createComment }));
+vi.mock("@/lib/actions/reports", () => ({ createReport: vi.fn() }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: mocks.refresh }) }));
 
 import { CommentThread } from "./comment-thread";

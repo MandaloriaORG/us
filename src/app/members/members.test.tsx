@@ -6,6 +6,8 @@ const mocks = vi.hoisted(() => ({
   listMemberProfiles: vi.fn(),
   notFound: vi.fn(),
   redirect: vi.fn(),
+  getAuthorizationSnapshot: vi.fn(),
+  createReport: vi.fn(),
 }));
 
 vi.mock("@/lib/actions/profile", () => ({
@@ -16,6 +18,10 @@ vi.mock("next/navigation", () => ({
   notFound: mocks.notFound,
   redirect: mocks.redirect,
 }));
+vi.mock("@/lib/permissions", () => ({
+  getAuthorizationSnapshot: mocks.getAuthorizationSnapshot,
+}));
+vi.mock("@/lib/actions/reports", () => ({ createReport: mocks.createReport }));
 
 import MemberProfilePage from "@/app/members/[id]/page";
 import MembersError from "@/app/members/error";
@@ -54,6 +60,7 @@ beforeEach(() => {
     search: "",
   });
   mocks.getProfileById.mockResolvedValue(publicProfile());
+  mocks.getAuthorizationSnapshot.mockResolvedValue({ allowed: false, reason: "not_authenticated" });
   mocks.notFound.mockImplementation(() => {
     throw new Error("NEXT_NOT_FOUND");
   });
@@ -235,6 +242,38 @@ describe("member profile", () => {
     mocks.getProfileById.mockResolvedValue({ status: "not_found" });
 
     await expect(MemberProfilePage({ params: { id: memberId } })).rejects.toThrow("NEXT_NOT_FOUND");
+  });
+
+  it("offers Report to an anonymous visitor", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: false,
+      reason: "not_authenticated",
+    });
+
+    render(await MemberProfilePage({ params: { id: memberId } }));
+    expect(screen.getByRole("button", { name: "Report" })).toBeInTheDocument();
+  });
+
+  it("offers Report to a signed-in member viewing someone else's profile", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: true,
+      permissionNames: [],
+      userId: "50000000-0000-4000-8000-000000000009",
+    });
+
+    render(await MemberProfilePage({ params: { id: memberId } }));
+    expect(screen.getByRole("button", { name: "Report" })).toBeInTheDocument();
+  });
+
+  it("hides Report on the viewer's own profile", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: true,
+      permissionNames: [],
+      userId: memberId,
+    });
+
+    render(await MemberProfilePage({ params: { id: memberId } }));
+    expect(screen.queryByRole("button", { name: "Report" })).not.toBeInTheDocument();
   });
 });
 

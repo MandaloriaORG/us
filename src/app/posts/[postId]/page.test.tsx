@@ -39,6 +39,8 @@ vi.mock("@/lib/actions/content", () => ({
   updateComment: vi.fn(),
 }));
 
+vi.mock("@/lib/actions/reports", () => ({ createReport: vi.fn() }));
+
 vi.mock("next/navigation", () => ({
   notFound: mocks.notFound,
   useRouter: () => ({ push: vi.fn(), back: vi.fn(), refresh: vi.fn() }),
@@ -127,10 +129,12 @@ describe("PostPage", () => {
     expect(screen.getByText("body", { selector: "strong" })).toBeInTheDocument();
   });
 
-  it("only renders owner actions when can_edit is true", async () => {
+  it("only renders owner actions when can_edit is true, and offers Report only to a non-author", async () => {
     mocks.getPost.mockResolvedValue(post({ can_edit: false }));
-    await renderPage();
+    const first = await renderPage();
     expect(screen.queryByRole("link", { name: "Edit" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Report" })).toBeInTheDocument();
+    first.unmount();
 
     mocks.getPost.mockResolvedValue(post({ can_edit: true }));
     await renderPage();
@@ -138,6 +142,7 @@ describe("PostPage", () => {
       "href",
       `/posts/${postId}/edit`,
     );
+    expect(screen.queryByRole("button", { name: "Report" })).not.toBeInTheDocument();
   });
 
   it("shows the closed message when the post no longer accepts comments", async () => {

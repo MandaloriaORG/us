@@ -49,6 +49,7 @@ and destination are known.
 | `system/vote-control`                                                           | Mandaloria, built on `ui/button`              | Like/dislike for a post or comment; optimistic, non-colour-only pressed state (`aria-pressed` + filled icon).        |
 | `system/reaction-control`                                                       | Mandaloria, built on `ui/button`              | Renders the administrator-configured reaction catalog (`listReactionTypes()`), never a fixed set; optimistic toggle. |
 | `system/post-form`                                                              | Mandaloria composition on `origin/text-input` | Shared compose/edit form for a post; not optimistic, awaits the server result before navigating.                     |
+| `system/report-control`                                                        | Mandaloria composition on `origin/native-select` | Inline report form for a post, comment, or profile; not optimistic. Terminal confirmation after success, no re-file in the same render. |
 
 ## Iconography
 

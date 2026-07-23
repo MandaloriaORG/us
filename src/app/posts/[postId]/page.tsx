@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { ReportControl } from "@/components/system/report-control";
 import { renderMarkdown } from "@/lib/content/markdown";
 import {
   buildCommentTree,
@@ -130,7 +131,11 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
         <div className="mt-4">
           <PostOwnerActions postId={post.id} plazaSlug={post.plaza_slug} />
         </div>
-      ) : null}
+      ) : (
+        <div className="mt-4">
+          <ReportControl targetType="post" targetId={post.id} />
+        </div>
+      )}
 
       <div className="border-border mt-8 border-t pt-6">
         <h2 className="text-fg text-lg font-semibold">Comments ({post.comments_count})</h2>

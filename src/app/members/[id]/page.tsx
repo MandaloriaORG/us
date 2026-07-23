@@ -3,16 +3,21 @@ import { CalendarBlankIcon, GlobeIcon, ArrowLeftIcon } from "@phosphor-icons/rea
 import Link from "next/link";
 
 import { safeExternalUrl } from "@/app/members/safe-external-url";
+import { ReportControl } from "@/components/system/report-control";
 import { Avatar } from "@/components/ui/avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getProfileById } from "@/lib/actions/profile";
+import { getAuthorizationSnapshot } from "@/lib/permissions";
 
 interface Props {
   params: { id: string };
 }
 
 export default async function MemberProfilePage({ params }: Props) {
-  const result = await getProfileById(params.id);
+  const [result, authorization] = await Promise.all([
+    getProfileById(params.id),
+    getAuthorizationSnapshot(),
+  ]);
 
   if (result.status === "not_found") notFound();
 
@@ -131,6 +136,13 @@ export default async function MemberProfilePage({ params }: Props) {
             <GlobeIcon aria-hidden="true" className="h-4 w-4" />
             <span className="break-all">{website.label}</span>
           </a>
+        </div>
+      )}
+
+      {/* Report — never offered on the viewer's own profile */}
+      {authorization.allowed && authorization.userId === params.id ? null : (
+        <div className="border-border mt-8 border-t pt-4">
+          <ReportControl targetType="profile" targetId={params.id} />
         </div>
       )}
     </main>

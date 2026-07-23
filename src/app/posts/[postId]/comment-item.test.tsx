@@ -18,6 +18,8 @@ vi.mock("@/lib/actions/content", () => ({
   updateComment: mocks.updateComment,
 }));
 
+vi.mock("@/lib/actions/reports", () => ({ createReport: vi.fn() }));
+
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ refresh: mocks.refresh }),
 }));
@@ -83,6 +85,28 @@ describe("CommentItem", () => {
     expect(screen.queryByRole("button", { name: "Edit" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Delete" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Reply" })).not.toBeInTheDocument();
+  });
+
+  it("offers Report only when the viewer is not the comment's author", () => {
+    const { unmount } = render(
+      <CommentItem node={node({ can_edit: false })} postId={postId} reactionTypes={[]} />,
+    );
+    expect(screen.getByRole("button", { name: "Report" })).toBeInTheDocument();
+    unmount();
+
+    render(<CommentItem node={node({ can_edit: true })} postId={postId} reactionTypes={[]} />);
+    expect(screen.queryByRole("button", { name: "Report" })).not.toBeInTheDocument();
+  });
+
+  it("never offers Report on a removed comment", () => {
+    render(
+      <CommentItem
+        node={node({ is_removed: true, body: null, author_display_name: "" })}
+        postId={postId}
+        reactionTypes={[]}
+      />,
+    );
+    expect(screen.queryByRole("button", { name: "Report" })).not.toBeInTheDocument();
   });
 
   it("edits a comment inline and refreshes the route on success", async () => {

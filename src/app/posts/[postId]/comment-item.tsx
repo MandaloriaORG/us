@@ -5,6 +5,7 @@ import { useState, useTransition } from "react";
 import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { ReactionControl } from "@/components/system/reaction-control";
+import { ReportControl } from "@/components/system/report-control";
 import { VoteControl } from "@/components/system/vote-control";
 import { Button } from "@/components/ui/button";
 import {
@@ -139,6 +140,7 @@ export function CommentItem({ node, postId, reactionTypes }: CommentItemProps) {
                   Delete
                 </Button>
               ) : null}
+              {!node.can_edit ? <ReportControl targetType="comment" targetId={node.id} /> : null}
             </div>
           ) : null}
 
