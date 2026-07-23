@@ -21,7 +21,7 @@ Implement the Reddit-like core of Mandaloria.
 - [x] Edit own post.
 - [x] Delete own post with soft delete.
 - [x] List posts by plaza.
-- [ ] Main feed. — the home route (`/`) is still the public marketing page; no cross-Plaza feed exists.
+- [x] Main feed. — a "Recent posts" section on `/`, per `docs/INFORMATION_ARCHITECTURE.md`'s description of Home.
 - [x] Pagination.
 - [x] Tags. — a Tags field on compose/edit calls `setPostTags`.
 - [x] Save/bookmark.

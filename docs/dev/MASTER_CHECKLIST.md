@@ -143,7 +143,7 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] Edit own post.
 - [ ] Delete own post with soft delete.
 - [ ] List posts by plaza.
-- [ ] Main post feed.
+- [x] Main post feed.
 - [ ] Post pagination.
 - [ ] Recent order.
 - [ ] Popular order.
