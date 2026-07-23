@@ -6,62 +6,62 @@ Implement the Reddit-like core of Mandaloria.
 
 ## Plazas
 
-- [ ] List plazas.
-- [ ] View plaza detail.
-- [ ] Create plaza from admin.
-- [ ] Edit plaza from admin.
-- [ ] Archive plaza from admin.
-- [ ] Configure visibility.
-- [ ] Configure per-plaza permissions.
+- [x] List plazas.
+- [x] View plaza detail.
+- [ ] Create plaza from admin. — `admin_create_plaza`/`createPlaza` exist and are tested; no Council UI.
+- [ ] Edit plaza from admin. — same, `admin_update_plaza`/`updatePlaza`.
+- [ ] Archive plaza from admin. — same, `admin_set_plaza_status`/`setPlazaStatus`.
+- [ ] Configure visibility. — part of the same missing admin UI.
+- [ ] Configure per-plaza permissions. — `required_post_permission` has no UI to set it.
 
 ## Posts
 
-- [ ] Create post.
-- [ ] View post.
-- [ ] Edit own post.
-- [ ] Delete own post with soft delete.
-- [ ] List posts by plaza.
-- [ ] Main feed.
-- [ ] Pagination.
-- [ ] Tags.
-- [ ] Save/bookmark.
-- [ ] Share link.
+- [x] Create post.
+- [x] View post.
+- [x] Edit own post.
+- [x] Delete own post with soft delete.
+- [x] List posts by plaza.
+- [ ] Main feed. — the home route (`/`) is still the public marketing page; no cross-Plaza feed exists.
+- [x] Pagination.
+- [ ] Tags. — filtering an existing listing by tag works; there is no tag editor on compose/edit, so a member cannot assign a tag to their own post yet (`setPostTags` is unused).
+- [x] Save/bookmark.
+- [ ] Share link. — the post has a stable, canonical URL; there is no dedicated "copy link" control.
 
 ## Comments and replies
 
-- [ ] Create comment.
-- [ ] Reply to comment.
-- [ ] Edit own comment.
-- [ ] Delete own comment with soft delete.
-- [ ] Show replies.
-- [ ] Comment pagination.
+- [x] Create comment.
+- [x] Reply to comment.
+- [x] Edit own comment.
+- [x] Delete own comment with soft delete.
+- [x] Show replies.
+- [x] Comment pagination.
 - [ ] Copy direct link to comment.
 
 ## Likes, dislikes and reactions
 
-- [ ] Like on post.
-- [ ] Dislike on post.
-- [ ] Remove vote.
-- [ ] Change vote.
-- [ ] Emoji reaction / configured reaction on post.
-- [ ] Reaction on comment.
-- [ ] Prevent duplicate votes.
-- [ ] Update counters.
+- [x] Like on post.
+- [x] Dislike on post.
+- [x] Remove vote.
+- [x] Change vote.
+- [x] Emoji reaction / configured reaction on post.
+- [x] Reaction on comment.
+- [x] Prevent duplicate votes.
+- [x] Update counters.
 
 ## Security
 
-- [ ] RLS for posts.
-- [ ] RLS for comments.
-- [ ] RLS for reactions.
-- [ ] Rate limit on creating post.
-- [ ] Rate limit on commenting.
-- [ ] Rate limit on reacting.
-- [ ] Sanitize Markdown or content.
+- [x] RLS for posts.
+- [x] RLS for comments.
+- [x] RLS for reactions.
+- [x] Rate limit on creating post.
+- [x] Rate limit on commenting.
+- [x] Rate limit on reacting.
+- [x] Sanitize Markdown or content.
 
 ## Done when
 
-- [ ] A user can post and comment.
-- [ ] A user can reply.
-- [ ] A user can react/vote.
-- [ ] A user only edits/deletes their own content.
-- [ ] Visitors only see public content.
+- [x] A user can post and comment.
+- [x] A user can reply.
+- [x] A user can react/vote.
+- [x] A user only edits/deletes their own content.
+- [x] Visitors only see public content.

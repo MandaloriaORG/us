@@ -24,6 +24,10 @@ Work rule:
 7. [Phase 6 - Holochat and notifications](./phases/06-holochat-notifications.md)
 8. [Phase 7 - Customization, search and hardening](./phases/07-customization-search-hardening.md)
 
+## Verification
+
+- [Verification Registry](./VERIFICATION_REGISTRY.md) — every system built, what proves it, and what is still owed. Read it before ticking a phase item.
+
 ## Supporting documents
 
 - [Domain Language](../../CONTEXT.md)

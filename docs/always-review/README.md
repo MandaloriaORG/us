@@ -35,6 +35,10 @@ If the feature touches Plazas, Holochat, Codex, Casas or attribution, also read 
 - [Phase 6 - Holochat and notifications](../dev/phases/06-holochat-notifications.md)
 - [Phase 7 - Customization, search and hardening](../dev/phases/07-customization-search-hardening.md)
 
+## Always read before marking anything done
+
+- [Verification Registry](../dev/VERIFICATION_REGISTRY.md) — the gate commands, what each built system's proof is, and the open items.
+
 ## Rule
 
 Before marking a feature as done, review:
