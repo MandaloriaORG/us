@@ -19,12 +19,12 @@ Make Mandaloria manageable and moderatable.
 - [x] Hide post.
 - [x] Restore post.
 - [x] Delete post as moderator/admin.
-- [ ] Lock post. — `moderation_set_post_status` accepts `closed` and the action layer allows it; not surfaced in the Council UI, which only offers hide/quarantine/delete/restore from the report queue.
-- [ ] Reopen post. — same RPC, same gap.
-- [ ] Pin post. — `moderation_set_post_flags`/`setPostFlags` implemented and tested; no UI control.
-- [ ] Highlight post. — same.
-- [ ] Move post. — `moderation_move_post`/`movePost` implemented and tested; no UI control.
-- [ ] Lock editing. — `edit_locked` flag, same gap as pin/highlight.
+- [x] Lock post. — `PostModerationPanel` on the post page, for `moderation.hide`.
+- [x] Reopen post. — same panel; the button names the reverse of the current state.
+- [x] Pin post. — flags section of the same panel; only changed flags are sent.
+- [x] Highlight post. — same.
+- [x] Move post. — same panel; the Plaza the post is already in is not offered.
+- [x] Lock editing. — `edit_locked` in the same flags section.
 - [x] Put in quarantine during investigation.
 - [x] Remove from quarantine and restore allowed state.
 
@@ -33,9 +33,9 @@ Make Mandaloria manageable and moderatable.
 - [x] Hide comment.
 - [x] Restore comment.
 - [x] Delete comment as moderator/admin.
-- [ ] Pin comment. — `moderation_set_comment_flags`/`setCommentFlags` implemented and tested; no UI control.
-- [ ] Lock replies. — same.
-- [ ] View edit history if it exists. — migration `0012` records it: `update_own_post`/`update_own_comment` snapshot the previous wording, `list_content_revisions` reads it back for the author or a moderator. No UI surfaces it yet.
+- [x] Pin comment. — `CommentModerationControl` on each comment, for `moderation.hide`.
+- [x] Lock replies. — same control.
+- [x] View edit history if it exists. — migration `0012` records it and `RevisionHistory` shows the earlier wordings under the evidence on the report detail page.
 - [x] Put comment and related attachments in quarantine. — quarantine works; the app has no attachment feature to carry along.
 
 ## Reversibility
@@ -49,12 +49,12 @@ Make Mandaloria manageable and moderatable.
 
 ## Users
 
-- [ ] Warn user.
+- [x] Warn user. — `UserModerationPanel` on the Council user page; the member reads and acknowledges it on their own profile (`OwnWarnings`).
 - [x] Suspend user.
 - [x] Ban user.
 - [x] Unban user.
-- [ ] View user moderation history.
-- [ ] Add internal note.
+- [x] View user moderation history. — the Council user page links to the audit log filtered by that member; there is deliberately no second store.
+- [x] Add internal note. — Council notes on the same panel; only the note's author may remove it, and the subject never sees them.
 
 ## Logs
 

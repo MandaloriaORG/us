@@ -212,49 +212,49 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [x] Report profile.
 - [x] Choose report reason.
 - [x] Write description.
-- [ ] Prevent report spam.
-- [ ] Group duplicate reports.
-- [ ] Report queue.
-- [ ] Moderator can assign report to self.
-- [ ] Moderator can resolve report.
-- [ ] Moderator can reject report.
-- [ ] Moderator can take action from report.
-- [ ] Admin can view all reports.
+- [x] Prevent report spam. — per-actor rate limit plus one live report per reporter per target.
+- [x] Group duplicate reports. — the queue shows how many other live reports name the same target.
+- [x] Report queue.
+- [x] Moderator can assign report to self. — claiming is compare-and-swap.
+- [x] Moderator can resolve report.
+- [x] Moderator can reject report. — dismissal, with a required reason.
+- [x] Moderator can take action from report. — hide/quarantine/delete/restore on the report detail page.
+- [x] Admin can view all reports. — the queue is gated on `moderation.hide`, which an administrator holds.
 - [ ] Admin can configure reasons.
-- [ ] Decision is recorded.
+- [x] Decision is recorded. — who closed it, when, why; audited.
 
 ## 10. Moderation
 
-- [ ] Moderator can hide post.
-- [ ] Moderator can restore post.
-- [ ] Authorized moderator can quarantine post.
-- [ ] Authorized moderator can remove post from quarantine.
-- [ ] Moderator can delete post.
-- [ ] Moderator can close post.
-- [ ] Moderator can reopen post.
-- [ ] Moderator can pin post.
-- [ ] Moderator can highlight post.
-- [ ] Moderator can move post.
-- [ ] Moderator can lock post editing.
-- [ ] Moderator can hide comment.
-- [ ] Moderator can restore comment.
-- [ ] Authorized moderator can quarantine comment/attachments.
-- [ ] Moderator can delete comment.
-- [ ] Moderator can pin comment.
-- [ ] Moderator can lock replies.
-- [ ] Moderator can warn user.
+- [x] Moderator can hide post.
+- [x] Moderator can restore post.
+- [x] Authorized moderator can quarantine post.
+- [x] Authorized moderator can remove post from quarantine.
+- [x] Moderator can delete post.
+- [x] Moderator can close post.
+- [x] Moderator can reopen post.
+- [x] Moderator can pin post.
+- [x] Moderator can highlight post.
+- [x] Moderator can move post.
+- [x] Moderator can lock post editing.
+- [x] Moderator can hide comment.
+- [x] Moderator can restore comment.
+- [x] Authorized moderator can quarantine comment/attachments. — quarantine works; there is no attachment feature to carry along.
+- [x] Moderator can delete comment.
+- [x] Moderator can pin comment.
+- [x] Moderator can lock replies.
+- [x] Moderator can warn user.
 - [x] Moderator can suspend user if they have permission.
 - [x] Moderator can ban user if they have permission.
-- [ ] Moderator can add internal note.
-- [ ] Moderator sees user history.
+- [x] Moderator can add internal note.
+- [x] Moderator sees user history. — the audit log filtered by that member; no second store.
 - [x] Moderator only acts within their scope.
 - [x] Moderator cannot moderate admins.
-- [ ] Sensitive actions are logged in moderator_actions.
+- [ ] Sensitive actions are logged in moderator_actions. — there is no such table by design; `audit_logs` is the single record.
 - [x] Sensitive actions are logged in audit_logs.
-- [ ] Hiding and quarantine are reversible.
-- [ ] Restore recovers the last allowed state.
+- [x] Hiding and quarantine are reversible.
+- [x] Restore recovers the last allowed state.
 - [ ] Permanent deletion requires higher permission, reason and confirmation.
-- [ ] Moderation evidence has limited access and retention.
+- [ ] Moderation evidence has limited access and retention. — edit history has both; reports and audit rows have no retention policy yet.
 - [ ] Appeal can be linked to the original action.
 
 ## 11. Admin / Council
