@@ -23,9 +23,9 @@ Implement the Reddit-like core of Mandaloria.
 - [x] List posts by plaza.
 - [ ] Main feed. — the home route (`/`) is still the public marketing page; no cross-Plaza feed exists.
 - [x] Pagination.
-- [ ] Tags. — filtering an existing listing by tag works; there is no tag editor on compose/edit, so a member cannot assign a tag to their own post yet (`setPostTags` is unused).
+- [x] Tags. — a Tags field on compose/edit calls `setPostTags`.
 - [x] Save/bookmark.
-- [ ] Share link. — the post has a stable, canonical URL; there is no dedicated "copy link" control.
+- [x] Share link. — `CopyLinkButton` on the post page.
 
 ## Comments and replies
 
@@ -35,7 +35,7 @@ Implement the Reddit-like core of Mandaloria.
 - [x] Delete own comment with soft delete.
 - [x] Show replies.
 - [x] Comment pagination.
-- [ ] Copy direct link to comment.
+- [x] Copy direct link to comment. — `CopyLinkButton` per comment, pointing at its `#comment-{id}` anchor.
 
 ## Likes, dislikes and reactions
 

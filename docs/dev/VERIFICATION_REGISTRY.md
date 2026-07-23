@@ -248,7 +248,7 @@ These require a person and must be walked before closing a phase.
 | ------------------------------------------------------------------------------------------------------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | Phase 3 reversibility items not yet built: appeals, evidence retention                                       | content lane          | `docs/dev/phases/03-moderation-admin.md`, "Reversibility"                                                                  |
 | ADR for the Base UI + Tailwind 4 adoption                                                                    | whoever made the call | Recorded in `.agent/COORDINATION.md`                                                                                       |
-| Phase 2: tag editor on compose/edit, "share link" and "copy link to comment" controls, cross-Plaza main feed | UI lane               | Everything else in Phase 2 landed this session                                                                             |
+| Phase 2: cross-Plaza main feed, per-plaza permission (`required_post_permission`) UI                        | UI lane               | Tag editor, share link and copy-link-to-comment landed this session                                                       |
 | `.agent/HANDOFF_UI_LIBS.md` fails `pnpm format:check`                                                        | UI lane               | Another lane's file; left untouched so the gate reports it rather than hiding it                                           |
 | No `global-error.tsx`                                                                                        | app lane              | `src/app/error.tsx` covers every route segment; only a crash inside the root layout itself still falls to the Next default |
 | Phase 1 remaining: rank, badges, clan display                                                                | Phase 5               | Depends on identity systems not yet built                                                                                  |
@@ -263,7 +263,7 @@ Phase 0 was reconciled against reality and closed: 35/35, each item verified aga
 
 Phase 2 and Phase 3 both moved this session, once Plaza/post/comment UI and the report queue/decision/target-moderation UI landed on top of already-verified server logic. Phase 3 then closed everything that was only missing a control: content flags, move, lock/reopen, comment pin/lock, edit history, warnings, Council notes and moderation history. What remains in Phase 3 is not UI work at all — appeals do not exist, reports and audit rows have no retention policy, and permanent deletion is deliberately absent from the design.
 
-Current phase state: 0 -> 35/35 - 1 -> 37/40 (remainder depends on Phase 5 identity) - 2 -> 39/44 (tags-on-compose, share/copy-link and main feed remain) - 3 -> 47/50 (appeals, evidence retention and the deliberately absent permanent deletion remain).
+Current phase state: 0 -> 35/35 - 1 -> 37/40 (remainder depends on Phase 5 identity) - 2 -> 42/44 (per-plaza permission UI and the cross-Plaza main feed remain) - 3 -> 47/50 (appeals, evidence retention and the deliberately absent permanent deletion remain).
 
 **Running the database contract.** The four suites need pgTAP. Against a local stack: `pnpm db:reset:local` then `supabase test db`.
 

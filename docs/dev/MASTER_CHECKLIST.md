@@ -148,10 +148,10 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] Recent order.
 - [ ] Popular order.
 - [ ] Highlighted order.
-- [ ] Tags in posts.
+- [x] Tags in posts.
 - [ ] Save/bookmark post.
 - [ ] Remove bookmark.
-- [ ] Share link.
+- [x] Share link.
 - [ ] Draft status.
 - [ ] Published status.
 - [ ] Pending review status.
@@ -175,7 +175,7 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] Show replies.
 - [ ] Edit own comment.
 - [ ] Delete own comment with soft delete.
-- [ ] Copy direct link to comment.
+- [x] Copy direct link to comment.
 - [ ] Comment pagination.
 - [ ] Order by date.
 - [ ] Order by relevance if implemented.
