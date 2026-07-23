@@ -28,14 +28,14 @@ export function EmptyState({
   return (
     <div className={cn("flex flex-col items-center justify-center py-10 text-center", className)}>
       {icon && (
-        <div aria-hidden="true" className="mb-4 text-fg-subtle">
+        <div aria-hidden="true" className="text-fg-subtle mb-4">
           {icon}
         </div>
       )}
 
-      <h3 className="text-base font-semibold text-fg">{title}</h3>
+      <h3 className="text-fg text-base font-semibold">{title}</h3>
 
-      {description && <p className="mt-2 max-w-md text-sm text-fg-muted">{description}</p>}
+      {description && <p className="text-fg-muted mt-2 max-w-md text-sm">{description}</p>}
 
       <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
         {action &&

@@ -1,5 +1,5 @@
 import { forwardRef, type SelectHTMLAttributes } from "react";
-import { ChevronDown } from "lucide-react";
+import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { cn } from "@/lib/cn";
 
@@ -47,7 +47,7 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
 
     return (
       <div className={cn("flex w-full flex-col gap-2", fieldClassName)}>
-        <label className="text-sm font-medium text-fg" htmlFor={id}>
+        <label className="text-fg text-sm font-medium" htmlFor={id}>
           {label}
         </label>
         <div className="relative">
@@ -56,9 +56,9 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
             aria-describedby={describedBy || undefined}
             aria-invalid={error ? true : ariaInvalid}
             className={cn(
-              "h-11 w-full appearance-none rounded-md border border-border bg-bg px-3 pr-10 text-sm text-fg outline-none transition-colors duration-fast",
-              "hover:border-border-raised focus-visible:border-border-focus focus-visible:ring-2 focus-visible:ring-border-focus/30",
-              "disabled:cursor-not-allowed disabled:bg-surface disabled:text-fg-subtle disabled:opacity-60",
+              "border-border bg-bg text-fg duration-fast h-11 w-full appearance-none rounded-md border px-3 pr-10 text-sm outline-hidden transition-colors",
+              "hover:border-border-raised focus-visible:border-border-focus focus-visible:ring-border-focus/30 focus-visible:ring-2",
+              "disabled:bg-surface disabled:text-fg-subtle disabled:cursor-not-allowed disabled:opacity-60",
               error && "border-error focus-visible:border-error focus-visible:ring-error/30",
               className,
             )}
@@ -67,18 +67,18 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
           >
             {children}
           </select>
-          <ChevronDown
+          <CaretDownIcon
             aria-hidden="true"
-            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-fg-subtle"
+            className="text-fg-subtle pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2"
           />
         </div>
         {description ? (
-          <p className="text-xs text-fg-muted" id={descriptionId}>
+          <p className="text-fg-muted text-xs" id={descriptionId}>
             {description}
           </p>
         ) : null}
         {error ? (
-          <p className="text-xs text-error" id={errorId} role="alert">
+          <p className="text-error text-xs" id={errorId} role="alert">
             {error}
           </p>
         ) : null}

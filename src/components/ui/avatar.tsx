@@ -57,7 +57,7 @@ export function Avatar({ name, src, alt = "", className }: AvatarProps) {
     <AvatarPrimitive.Root
       aria-label={alt || undefined}
       className={cn(
-        "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-bg-raised",
+        "border-border bg-bg-raised relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border",
         className,
       )}
       role={alt ? "img" : undefined}
@@ -67,7 +67,7 @@ export function Avatar({ name, src, alt = "", className }: AvatarProps) {
       ) : null}
       <AvatarPrimitive.Fallback
         aria-hidden={alt ? undefined : true}
-        className="flex h-full w-full items-center justify-center text-xs font-medium text-fg-muted"
+        className="text-fg-muted flex h-full w-full items-center justify-center text-xs font-medium"
         delayMs={safeSrc ? 200 : 0}
       >
         {initials(name)}

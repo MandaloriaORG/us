@@ -1,12 +1,13 @@
-import { forwardRef, type InputHTMLAttributes } from "react";
-import { Search } from "lucide-react";
+"use client";
 
+import { forwardRef } from "react";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
+
+import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/origin/field";
+import { Input, type InputProps } from "@/components/origin/input";
 import { cn } from "@/lib/cn";
 
-export interface SearchInputProps extends Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  "id" | "size" | "type"
-> {
+export interface SearchInputProps extends Omit<InputProps, "id" | "size" | "type"> {
   id: string;
   label: string;
   description?: string;
@@ -15,76 +16,44 @@ export interface SearchInputProps extends Omit<
 }
 
 /**
- * Origin/coss adaptation of Input + Input Group + Field for text filtering.
- *
- * Use for ordinary search/filter fields with a visible label. Do not use for
- * command palettes, autocomplete, or async suggestions. The consumer controls
- * responsive width; this component provides a compact 44px control, native
- * disabled state, and linked description/error feedback. Supply `error` only
- * after validation or submission so untouched fields stay quiet.
- *
- * @see https://coss.com/ui/docs/components/input
- * @see https://coss.com/ui/docs/components/input-group
- * @see https://coss.com/ui/docs/components/field
+ * Search field composed on top of coss Field + Input, `type="search"` + leading
+ * magnifier. Use for ordinary search/filter inputs with a visible label. Not
+ * for command palettes, autocomplete, or async suggestions.
  */
-export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
-  (
-    {
-      id,
-      label,
-      description,
-      error,
-      fieldClassName,
-      className,
-      "aria-describedby": ariaDescribedBy,
-      "aria-invalid": ariaInvalid,
-      ...props
-    },
-    ref,
-  ) => {
-    const descriptionId = description ? `${id}-description` : undefined;
-    const errorId = error ? `${id}-error` : undefined;
-    const describedBy = [ariaDescribedBy, descriptionId, errorId].filter(Boolean).join(" ");
+export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(function SearchInput(
+  { id, label, description, error, fieldClassName, className, ...props },
+  ref,
+) {
+  const descriptionId = description ? `${id}-description` : undefined;
+  const errorId = error ? `${id}-error` : undefined;
+  const describedBy =
+    [props["aria-describedby"], descriptionId, errorId].filter(Boolean).join(" ") || undefined;
 
-    return (
-      <div className={cn("flex w-full flex-col gap-2", fieldClassName)}>
-        <label className="text-sm font-medium text-fg" htmlFor={id}>
-          {label}
-        </label>
-        <div className="relative">
-          <input
-            {...props}
-            aria-describedby={describedBy || undefined}
-            aria-invalid={error ? true : ariaInvalid}
-            className={cn(
-              "h-11 w-full rounded-md border border-border bg-bg px-3 pl-10 text-sm text-fg outline-none transition-colors duration-fast placeholder:text-fg-subtle",
-              "hover:border-border-raised focus-visible:border-border-focus focus-visible:ring-2 focus-visible:ring-border-focus/30",
-              "disabled:cursor-not-allowed disabled:bg-surface disabled:text-fg-subtle disabled:opacity-60",
-              error && "border-error focus-visible:border-error focus-visible:ring-error/30",
-              className,
-            )}
-            id={id}
-            ref={ref}
-            type="search"
-          />
-          <Search
-            aria-hidden="true"
-            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-fg-subtle"
-          />
-        </div>
-        {description ? (
-          <p className="text-xs text-fg-muted" id={descriptionId}>
-            {description}
-          </p>
-        ) : null}
-        {error ? (
-          <p className="text-xs text-error" id={errorId} role="alert">
-            {error}
-          </p>
-        ) : null}
+  return (
+    <Field className={cn("w-full gap-1.5", fieldClassName)}>
+      <FieldLabel htmlFor={id}>{label}</FieldLabel>
+      <div className="relative w-full">
+        <Input
+          ref={ref}
+          id={id}
+          type="search"
+          aria-invalid={error ? true : props["aria-invalid"]}
+          aria-describedby={describedBy}
+          className={cn("[&_input]:ps-10", className)}
+          {...props}
+        />
+        <MagnifyingGlassIcon
+          aria-hidden="true"
+          className="text-fg-subtle pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2"
+        />
       </div>
-    );
-  },
-);
-
+      {description ? <FieldDescription id={descriptionId}>{description}</FieldDescription> : null}
+      {error ? (
+        <FieldError id={errorId} role="alert">
+          {error}
+        </FieldError>
+      ) : null}
+    </Field>
+  );
+});
 SearchInput.displayName = "SearchInput";

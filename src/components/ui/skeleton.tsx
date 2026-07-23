@@ -8,7 +8,7 @@ export function Skeleton({ className, variant = "rectangular", ...props }: Skele
   return (
     <div
       className={cn(
-        "animate-pulse rounded-md bg-surface-raised",
+        "bg-surface-raised animate-pulse rounded-md",
         {
           "h-4 w-full": variant === "text",
           "rounded-full": variant === "circular",
