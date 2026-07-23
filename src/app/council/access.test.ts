@@ -10,7 +10,13 @@ vi.mock("@/lib/permissions", () => ({
   getAuthorizationSnapshot: mocks.getAuthorizationSnapshot,
 }));
 
-import { getCouncilAuditAccess, getCouncilShellAccess, getCouncilUserAccess } from "./access";
+import {
+  getCouncilAuditAccess,
+  getCouncilReportAccess,
+  getCouncilShellAccess,
+  getCouncilUserAccess,
+  getReportTargetModerationAccess,
+} from "./access";
 
 describe("getCouncilUserAccess", () => {
   beforeEach(() => {
@@ -35,16 +41,26 @@ describe("getCouncilUserAccess", () => {
     expect(mocks.can).toHaveBeenCalledWith("admin.view_audit_logs");
   });
 
-  it("resolves both visible destinations from one authorization snapshot", async () => {
+  it("requires the moderation permission the queue RPCs re-check", async () => {
+    const denial = { allowed: false, reason: "missing_permission" } as const;
+    mocks.can.mockResolvedValue(denial);
+
+    await expect(getCouncilReportAccess()).resolves.toBe(denial);
+    expect(mocks.can).toHaveBeenCalledOnce();
+    expect(mocks.can).toHaveBeenCalledWith("moderation.hide");
+  });
+
+  it("resolves every visible destination from one authorization snapshot", async () => {
     mocks.getAuthorizationSnapshot.mockResolvedValue({
       allowed: true,
-      permissionNames: ["admin.view_audit_logs", "admin.view_users"],
+      permissionNames: ["admin.view_audit_logs", "admin.view_users", "moderation.hide"],
       userId: "user-1",
     });
 
     await expect(getCouncilShellAccess()).resolves.toEqual({
       allowed: true,
       canViewAudit: true,
+      canViewReports: true,
       canViewUsers: true,
       userId: "user-1",
     });
@@ -61,6 +77,21 @@ describe("getCouncilUserAccess", () => {
     await expect(getCouncilShellAccess()).resolves.toMatchObject({
       allowed: true,
       canViewAudit: true,
+      canViewUsers: false,
+    });
+  });
+
+  it("opens the shell for a moderator whose only destination is the queue", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: true,
+      permissionNames: ["moderation.hide"],
+      userId: "user-1",
+    });
+
+    await expect(getCouncilShellAccess()).resolves.toMatchObject({
+      allowed: true,
+      canViewAudit: false,
+      canViewReports: true,
       canViewUsers: false,
     });
   });
@@ -83,5 +114,60 @@ describe("getCouncilUserAccess", () => {
     mocks.getAuthorizationSnapshot.mockResolvedValue(failure);
 
     await expect(getCouncilShellAccess()).resolves.toBe(failure);
+  });
+});
+
+describe("getReportTargetModerationAccess", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("gives a plain Moderator hide and restore but not quarantine or delete", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: true,
+      permissionNames: ["moderation.hide", "moderation.restore", "moderation.warn"],
+      userId: "user-1",
+    });
+
+    await expect(getReportTargetModerationAccess()).resolves.toEqual({
+      canHide: true,
+      canQuarantine: false,
+      canDelete: false,
+      canRestore: true,
+    });
+  });
+
+  it("gives a Guardian every target action", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: true,
+      permissionNames: [
+        "moderation.hide",
+        "moderation.restore",
+        "moderation.quarantine",
+        "moderation.delete",
+      ],
+      userId: "user-1",
+    });
+
+    await expect(getReportTargetModerationAccess()).resolves.toEqual({
+      canHide: true,
+      canQuarantine: true,
+      canDelete: true,
+      canRestore: true,
+    });
+  });
+
+  it("denies every action when authorization fails closed", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: false,
+      reason: "verification_failed",
+    });
+
+    await expect(getReportTargetModerationAccess()).resolves.toEqual({
+      canHide: false,
+      canQuarantine: false,
+      canDelete: false,
+      canRestore: false,
+    });
   });
 });

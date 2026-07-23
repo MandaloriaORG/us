@@ -71,6 +71,7 @@ export default async function CouncilLayout({ children }: { children: React.Reac
         <div className="overflow-x-auto px-4 pb-2">
           <CouncilNavigation
             canViewAudit={access.canViewAudit}
+            canViewReports={access.canViewReports}
             canViewUsers={access.canViewUsers}
             variant="horizontal"
           />
@@ -91,7 +92,11 @@ export default async function CouncilLayout({ children }: { children: React.Reac
 
         <p className="text-fg mt-5 mb-2 text-sm font-semibold">Council</p>
 
-        <CouncilNavigation canViewAudit={access.canViewAudit} canViewUsers={access.canViewUsers} />
+        <CouncilNavigation
+          canViewAudit={access.canViewAudit}
+          canViewReports={access.canViewReports}
+          canViewUsers={access.canViewUsers}
+        />
       </aside>
 
       <main className="min-w-0 flex-1 px-4 py-6 md:px-6">{children}</main>

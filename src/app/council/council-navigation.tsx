@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ScrollIcon, UsersIcon } from "@phosphor-icons/react/dist/ssr";
+import { FlagIcon, ScrollIcon, UsersIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { cn } from "@/lib/cn";
 
 export interface CouncilNavigationProps {
   canViewAudit: boolean;
+  canViewReports: boolean;
   canViewUsers: boolean;
   className?: string;
   variant?: "horizontal" | "vertical";
@@ -19,6 +20,12 @@ const navigationItems = [
     label: "Users",
     permission: "canViewUsers",
     Icon: UsersIcon,
+  },
+  {
+    href: "/council/reports",
+    label: "Reports",
+    permission: "canViewReports",
+    Icon: FlagIcon,
   },
   {
     href: "/council/audit",
@@ -39,12 +46,13 @@ function isCurrentRoute(pathname: string, href: string) {
  */
 export function CouncilNavigation({
   canViewAudit,
+  canViewReports,
   canViewUsers,
   className,
   variant = "vertical",
 }: CouncilNavigationProps) {
   const pathname = usePathname();
-  const permissions = { canViewAudit, canViewUsers };
+  const permissions = { canViewAudit, canViewReports, canViewUsers };
   const visibleItems = navigationItems.filter((item) => permissions[item.permission]);
 
   if (visibleItems.length === 0) {
