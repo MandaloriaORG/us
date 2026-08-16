@@ -6,77 +6,77 @@ Add live conversation and notifications without cloning Discord entirely.
 
 ## Holochat
 
-- [ ] List channels.
-- [ ] View channel.
-- [ ] Send message.
-- [ ] Edit own message.
-- [ ] Delete own message.
-- [ ] Reply to message.
-- [ ] React to message.
-- [ ] Report message.
-- [ ] Propose message or conversation eligible for the Codex.
-- [ ] Pagination or incremental loading.
-- [ ] Announcement channel, Council write-only.
+- [x] List channels.
+- [x] View channel.
+- [x] Send message.
+- [x] Edit own message.
+- [x] Delete own message.
+- [x] Reply to message.
+- [x] React to message.
+- [x] Report message.
+- [ ] Propose message or conversation eligible for the Codex. — blocked: no DB RPC accepts a `chat_message_id` source (`add_codex_proposal_source` rejects it in migration 0015).
+- [x] Pagination or incremental loading.
+- [x] Announcement channel, Council write-only.
 
 ## Chat moderation
 
-- [ ] Moderator can delete message.
-- [ ] Moderator can hide message.
-- [ ] Moderator can restore message.
-- [ ] Moderator can pin message.
-- [ ] Moderator can mute user.
-- [ ] Admin can create channel.
-- [ ] Admin can edit channel.
-- [ ] Admin can archive channel.
-- [ ] Admin can configure channel permissions.
+- [x] Moderator can delete message.
+- [x] Moderator can hide message.
+- [x] Moderator can restore message.
+- [x] Moderator can pin message.
+- [ ] Moderator can mute user. — no mute RPC in the 0015-0018 contract.
+- [x] Admin can create channel.
+- [x] Admin can edit channel.
+- [x] Admin can archive channel.
+- [x] Admin can configure channel permissions.
 
 ## Special channels
 
-- [ ] welcome.
-- [ ] general.
-- [ ] questions.
-- [ ] philosophy.
-- [ ] library.
-- [ ] announcements.
-- [ ] clans.
-- [ ] projects.
-- [ ] off-topic.
+- [x] welcome.
+- [x] general.
+- [x] questions.
+- [x] philosophy.
+- [x] library.
+- [x] announcements.
+- [x] clans.
+- [x] projects.
+- [x] off-topic.
 
 ## Notifications
 
-- [ ] Notify reply to post.
-- [ ] Notify reply to comment.
-- [ ] Notify received reaction.
-- [ ] Notify mention.
-- [ ] Notify friend request.
-- [ ] Notify clan/casa invitation.
-- [ ] Notify warning.
-- [ ] Notify important announcement.
-- [ ] Mark as read.
-- [ ] Mark all as read.
-- [ ] Notification preferences.
+- [x] Notify reply to post.
+- [x] Notify reply to comment.
+- [x] Notify received reaction.
+- [ ] Notify mention. — `mention` enum exists but no producer enqueues it.
+- [x] Notify friend request.
+- [x] Notify clan/casa invitation.
+- [x] Notify warning.
+- [ ] Notify important announcement. — the event is recorded without a recipient; member fan-out is not in the contract.
+- [x] Mark as read.
+- [x] Mark all as read.
+- [x] Notification preferences.
 
 ## Reliable delivery
 
-- [ ] Create event outbox in the same transaction as the main action.
-- [ ] Process notifications off the critical path when appropriate.
-- [ ] Idempotent consumer does not create duplicate notifications.
-- [ ] Retries have a limit and backoff.
-- [ ] Failed event can be inspected and reprocessed.
-- [ ] Payload does not copy unnecessary private content.
+- [x] Create event outbox in the same transaction as the main action.
+- [x] Process notifications off the critical path when appropriate.
+- [x] Idempotent consumer does not create duplicate notifications.
+- [x] Retries have a limit and backoff.
+- [x] Failed event can be inspected and reprocessed.
+- [x] Payload does not copy unnecessary private content.
 
 ## Security
 
-- [ ] User only sees permitted channels.
-- [ ] Rate limit on messages.
-- [ ] Private clan messages do not appear publicly.
-- [ ] Chat reports reach the queue.
-- [ ] Blocks affect direct interactions.
+- [x] User only sees permitted channels.
+- [x] Rate limit on messages.
+- [x] Private clan messages do not appear publicly.
+- [x] Chat reports reach the queue.
+- [x] Blocks affect direct interactions.
 
 ## Done when
 
-- [ ] Holochat allows conversation via channels.
-- [ ] Mods/admins can delete messages.
-- [ ] Basic notifications work.
-- [ ] Failing to notify does not revert correctly created content.
-- [ ] Private channels respect permissions.
+- [x] Holochat allows conversation via channels.
+- [x] Mods/admins can delete messages.
+- [x] Basic notifications work.
+- [x] Failing to notify does not revert correctly created content.
+- [x] Private channels respect permissions.

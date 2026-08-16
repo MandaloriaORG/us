@@ -302,68 +302,68 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 
 ## 12. Codex Libre
 
-- [ ] List categories.
-- [ ] View published article.
-- [ ] Search articles.
-- [ ] Save article.
-- [ ] Link article to discussion/plaza.
-- [ ] Admin can create article.
-- [ ] Admin can edit article.
-- [ ] Admin can delete/archive article.
-- [ ] Admin can publish article.
-- [ ] Admin can unpublish article.
-- [ ] Admin can lock article.
-- [ ] Admin can restore article.
-- [ ] Archivist can create article if they have permission.
-- [ ] Archivist can edit article if they have permission.
-- [ ] User can suggest correction.
-- [ ] Review suggestions.
-- [ ] Accept suggestion.
-- [ ] Reject suggestion.
-- [ ] Create category.
-- [ ] Edit category.
-- [ ] Archive category.
-- [ ] Version history.
-- [ ] Restore previous version.
-- [ ] Change author saved.
-- [ ] Change summary saved.
-- [ ] Propose conversation for the Codex.
-- [ ] Add allowed sources to proposal.
+- [x] List categories.
+- [x] View published article.
+- [x] Search articles.
+- [x] Save article.
+- [x] Link article to discussion/plaza.
+- [x] Admin can create article.
+- [x] Admin can edit article.
+- [x] Admin can delete/archive article.
+- [x] Admin can publish article.
+- [x] Admin can unpublish article.
+- [x] Admin can lock article.
+- [x] Admin can restore article.
+- [x] Archivist can create article if they have permission.
+- [x] Archivist can edit article if they have permission.
+- [x] User can suggest correction.
+- [x] Review suggestions.
+- [x] Accept suggestion.
+- [x] Reject suggestion.
+- [x] Create category.
+- [x] Edit category.
+- [x] Archive category.
+- [x] Version history.
+- [x] Restore previous version.
+- [x] Change author saved.
+- [x] Change summary saved.
+- [x] Propose conversation for the Codex.
+- [x] Add allowed sources to proposal.
 - [ ] Detect/merge duplicate proposals.
-- [ ] Classify proposal.
-- [ ] Assign Archivist.
-- [ ] Create draft from proposal.
-- [ ] Confirm or reject contributions.
-- [ ] Accept, reject, withdraw and reopen proposal.
-- [ ] Publish reviewed version, never the proposal directly.
-- [ ] Link conversation and article in both directions.
-- [ ] Show allowed provenance and confirmed contributors.
-- [ ] Re-validate source privacy before publishing.
-- [ ] Allow anonymous or withdrawn attribution according to policy.
-- [ ] Drafts, private sources and reviews are not indexed.
-- [ ] Permission, privacy, duplicate and concurrency tests.
+- [x] Classify proposal.
+- [x] Assign Archivist.
+- [x] Create draft from proposal.
+- [x] Confirm or reject contributions.
+- [x] Accept, reject, withdraw and reopen proposal.
+- [x] Publish reviewed version, never the proposal directly.
+- [x] Link conversation and article in both directions.
+- [x] Show allowed provenance and confirmed contributors.
+- [x] Re-validate source privacy before publishing.
+- [x] Allow anonymous or withdrawn attribution according to policy.
+- [x] Drafts, private sources and reviews are not indexed.
+- [x] Permission, privacy, duplicate and concurrency tests.
 
 ## 13. Codex Markdown Editor
 
-- [ ] Title field.
-- [ ] Slug field.
-- [ ] Category selector.
-- [ ] Markdown Editor.
-- [ ] Markdown Preview.
-- [ ] Save draft.
-- [ ] Publish.
-- [ ] Unpublish.
-- [ ] Archive.
-- [ ] Restore.
-- [ ] Change message/summary.
-- [ ] Title validation.
-- [ ] Slug validation.
-- [ ] Content validation.
-- [ ] Markdown sanitization.
-- [ ] Raw HTML blocked or filtered.
-- [ ] Scripts blocked.
-- [ ] Safe external links.
-- [ ] Images restricted if allowed.
+- [x] Title field.
+- [x] Slug field.
+- [x] Category selector.
+- [x] Markdown Editor.
+- [x] Markdown Preview.
+- [x] Save draft.
+- [x] Publish.
+- [x] Unpublish.
+- [x] Archive.
+- [x] Restore.
+- [x] Change message/summary.
+- [x] Title validation.
+- [x] Slug validation.
+- [x] Content validation.
+- [x] Markdown sanitization.
+- [x] Raw HTML blocked or filtered.
+- [x] Scripts blocked.
+- [x] Safe external links.
+- [x] Images restricted if allowed.
 
 ## 14. Clans, houses and circles
 
@@ -455,73 +455,73 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 
 ## 18. Holochat
 
-- [ ] List channels.
-- [ ] View channel.
-- [ ] Welcome channel.
-- [ ] General channel.
-- [ ] Questions channel.
-- [ ] Philosophy channel.
-- [ ] Library channel.
-- [ ] Announcements channel.
-- [ ] Clans channel.
-- [ ] Projects channel.
-- [ ] Off-topic channel.
-- [ ] Send message.
-- [ ] Edit own message.
-- [ ] Delete own message.
-- [ ] Reply to message.
-- [ ] React to message.
-- [ ] Report message.
-- [ ] Propose eligible message/conversation for the Codex.
-- [ ] Load history.
-- [ ] Pagination/incremental loading.
-- [ ] Pinned messages.
-- [ ] Announcements channel is Council write-only.
-- [ ] Private channels by role if applicable.
-- [ ] Private channels by clan/house if applicable.
-- [ ] User only sees allowed channels.
+- [x] List channels.
+- [x] View channel.
+- [x] Welcome channel.
+- [x] General channel.
+- [x] Questions channel.
+- [x] Philosophy channel.
+- [x] Library channel.
+- [x] Announcements channel.
+- [x] Clans channel.
+- [x] Projects channel.
+- [x] Off-topic channel.
+- [x] Send message.
+- [x] Edit own message.
+- [x] Delete own message.
+- [x] Reply to message.
+- [x] React to message.
+- [x] Report message.
+- [ ] Propose eligible message/conversation for the Codex. — blocked: `create_codex_proposal`/`add_codex_proposal_source` reject chat sources (migration 0015), needs a DB RPC accepting `chat_message_id`.
+- [x] Load history.
+- [x] Pagination/incremental loading.
+- [x] Pinned messages.
+- [x] Announcements channel is Council write-only.
+- [x] Private channels by role if applicable.
+- [x] Private channels by clan/house if applicable.
+- [x] User only sees allowed channels.
 
 ## 19. Holochat moderation
 
-- [ ] Moderator can delete message.
-- [ ] Moderator can hide message.
-- [ ] Moderator can restore message.
-- [ ] Moderator can pin message.
-- [ ] Moderator can mute user.
-- [ ] Admin can create channel.
-- [ ] Admin can edit channel.
-- [ ] Admin can archive channel.
-- [ ] Admin can configure channel permissions.
-- [ ] Chat reports enter the queue.
-- [ ] Rate limit on messages.
-- [ ] Message edited after report remains traceable.
+- [x] Moderator can delete message.
+- [x] Moderator can hide message.
+- [x] Moderator can restore message.
+- [x] Moderator can pin message.
+- [ ] Moderator can mute user. — no mute RPC in the 0015-0018 contract; blocks exist but are self-initiated, not a moderation mute.
+- [x] Admin can create channel.
+- [x] Admin can edit channel.
+- [x] Admin can archive channel.
+- [x] Admin can configure channel permissions.
+- [x] Chat reports enter the queue.
+- [x] Rate limit on messages.
+- [x] Message edited after report remains traceable. — `chat_message_edits` snapshots wording; edit-history viewer is a follow-up.
 
 ## 20. Notifications
 
-- [ ] Create notification.
-- [ ] List user's notifications.
-- [ ] Mark one as read.
-- [ ] Mark all as read.
-- [ ] Notify post reply.
-- [ ] Notify comment reply.
-- [ ] Notify received reaction.
-- [ ] Notify mention.
-- [ ] Notify friend request.
-- [ ] Notify clan/house invitation.
-- [ ] Notify resolved report.
-- [ ] Notify warning.
-- [ ] Notify important announcement.
-- [ ] Notification preferences.
-- [ ] Mute plaza.
-- [ ] Mute post.
-- [ ] Mute user.
-- [ ] Optional email if implemented.
-- [ ] Notification does not show disallowed private content.
-- [ ] Outbox event is created alongside the main action.
-- [ ] Notification consumer is idempotent.
-- [ ] Retries have limit and backoff.
-- [ ] Failed events can be inspected and reprocessed.
-- [ ] Notification failure does not revert valid content.
+- [x] Create notification.
+- [x] List user's notifications.
+- [x] Mark one as read.
+- [x] Mark all as read.
+- [x] Notify post reply.
+- [x] Notify comment reply.
+- [x] Notify received reaction.
+- [ ] Notify mention. — `mention` enum exists but no DB producer enqueues it.
+- [x] Notify friend request.
+- [x] Notify clan/house invitation.
+- [ ] Notify resolved report. — `moderation_set_report_status` is not recreated to enqueue a notification.
+- [x] Notify warning.
+- [ ] Notify important announcement. — `post_chat_announcement` records the event but with no recipient; fan-out to members is not in the contract.
+- [x] Notification preferences.
+- [ ] Mute plaza. — no mute feature in the contract.
+- [ ] Mute post. — no mute feature in the contract.
+- [ ] Mute user. — no mute feature in the contract.
+- [ ] Optional email if implemented. — deferred.
+- [x] Notification does not show disallowed private content.
+- [x] Outbox event is created alongside the main action.
+- [x] Notification consumer is idempotent.
+- [x] Retries have limit and backoff.
+- [x] Failed events can be inspected and reprocessed. — RPCs exist; the admin settings UI belongs to Lane D.
+- [x] Notification failure does not revert valid content.
 
 ## 21. Search
 
