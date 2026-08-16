@@ -279,9 +279,9 @@ These require a person and must be walked before closing a phase.
 | ----------------------------------------------------------------------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | ADR for the Base UI + Tailwind 4 adoption                                                 | whoever made the call     | Recorded in `.agent/COORDINATION.md`                                                                                       |
 | Phase 2: per-plaza permission (`required_post_permission`) has no RPC parameter to set it | Supabase/migrations owner | Not a UI gap - `admin_create_plaza`/`admin_update_plaza` need a new parameter first                                        |
-| `.agent/HANDOFF_UI_LIBS.md` fails `pnpm format:check`                                     | UI lane                   | Another lane's file; left untouched so the gate reports it rather than hiding it                                           |
+| `.agent/HANDOFF_UI_LIBS.md` fails `pnpm format:check`                                     | Lane D (Phase 7)          | Resolved: formatted with Prettier; the file now passes `pnpm format:check`                                                  |
 | Retention runs but has never fired in production                                          | content lane              | `pg_cron` job scheduled for 03:30 daily; the function itself is proven by `appeals_contract.test.sql`                      |
-| No `global-error.tsx`                                                                     | app lane                  | `src/app/error.tsx` covers every route segment; only a crash inside the root layout itself still falls to the Next default |
+| No `global-error.tsx`                                                                     | Lane D (Phase 7)          | Resolved: `src/app/global-error.tsx` added with a self-contained, inline-styled boundary for crashes inside the root layout |
 | Phase 1 remaining: rank, badges, clan display                                             | Phase 5                   | Depends on identity systems not yet built                                                                                  |
 
 ---

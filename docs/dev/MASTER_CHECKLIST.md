@@ -525,18 +525,18 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 
 ## 21. Search
 
-- [ ] Search posts.
-- [ ] Search comments if decided.
-- [ ] Search Codex articles.
-- [ ] Filter by plaza.
-- [ ] Filter by tag.
-- [ ] Filter by author.
-- [ ] Filter by date.
-- [ ] Results respect permissions.
-- [ ] Deleted content does not appear.
-- [ ] Private content does not appear.
-- [ ] Paginated search.
-- [ ] Anti-scraping/rate limit protection.
+- [x] Search posts.
+- [x] Search comments if decided. — decided yes; the RPC includes comments.
+- [x] Search Codex articles.
+- [x] Filter by plaza.
+- [x] Filter by tag.
+- [x] Filter by author.
+- [ ] Filter by date. — the RPC has no date filter.
+- [x] Results respect permissions. — the RPC re-checks the same visibility helpers the pages use.
+- [x] Deleted content does not appear.
+- [x] Private content does not appear.
+- [x] Paginated search.
+- [ ] Anti-scraping/rate limit protection. — not implemented; open.
 
 ## 22. Attachments and storage
 
@@ -557,29 +557,29 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 
 ## 23. Settings and customization
 
-- [ ] Configurable site name.
-- [ ] Configurable description.
-- [ ] Open/closed registration.
-- [ ] Configurable navigation.
-- [ ] Configurable reactions.
-- [ ] Configurable posting limits.
-- [ ] Configurable comment limits.
-- [ ] Configurable attachment limits.
-- [ ] Configurable Codex visibility.
-- [ ] Configurable per-plaza rules.
-- [ ] Configurable initial visual theme.
-- [ ] Theme settings.
-- [ ] Feature flags.
-- [ ] Custom profile fields if implemented.
-- [ ] Custom post fields if implemented.
-- [ ] Each setting has type and default value.
-- [ ] Each numeric setting has minimum and maximum.
-- [ ] Server-side validation of settings.
-- [ ] Absolute security limits are not edited from UI.
-- [ ] Critical changes require permission and confirmation.
-- [ ] Save author, date, previous and new value.
-- [ ] Version configuration.
-- [ ] Restore only valid versions.
+- [x] Configurable site name.
+- [x] Configurable description.
+- [x] Open/closed registration.
+- [x] Configurable navigation.
+- [x] Configurable reactions.
+- [ ] Configurable posting limits. — not seeded as a setting.
+- [ ] Configurable comment limits. — not seeded as a setting.
+- [ ] Configurable attachment limits. — not seeded as a setting.
+- [x] Configurable Codex visibility.
+- [x] Configurable per-plaza rules. — Council → Plazas rules field.
+- [x] Configurable initial visual theme.
+- [x] Theme settings.
+- [x] Feature flags.
+- [ ] Custom profile fields if implemented. — pending decision; not in the DB contract.
+- [ ] Custom post fields if implemented. — pending decision; not in the DB contract.
+- [x] Each setting has type and default value.
+- [x] Each numeric setting has minimum and maximum.
+- [x] Server-side validation of settings. — Zod shape checks plus the RPC's type and bounds checks.
+- [x] Absolute security limits are not edited from UI. — the UI only edits seeded settings; security limits are database-bound.
+- [ ] Critical changes require permission and confirmation. — permission is enforced; no explicit confirmation dialog (compare-and-swap guards concurrency).
+- [x] Save author, date, previous and new value. — audited by the settings RPC.
+- [ ] Version configuration. — not implemented.
+- [ ] Restore only valid versions. — not implemented.
 
 ## 24. Security
 
@@ -607,7 +607,7 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] RLS on chat_messages.
 - [ ] RLS on notifications.
 - [x] Server-side validation on actions.
-- [ ] Markdown sanitization.
+- [x] Markdown sanitization. — `src/lib/content/markdown.ts` escapes first, then emits a closed tag set; wired into post and comment bodies.
 - [x] Bio/profile sanitization.
 - [ ] Rate limit posting.
 - [ ] Rate limit commenting.
@@ -638,7 +638,7 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [ ] Log publish Codex article.
 - [ ] Log unpublish Codex article.
 - [ ] Log restore Codex version.
-- [ ] Log change settings.
+- [x] Log change settings. — `site_setting.update` audit rows with actor, reason, previous and new value.
 - [ ] Log change plaza visibility.
 - [ ] Log change channel visibility.
 - [ ] Log change clan/house visibility.

@@ -42,7 +42,7 @@ All tasks below are DONE. Verification: `pnpm typecheck` (0), `pnpm lint`
 - Thin composition wrappers rewritten on top of coss `Field` + `Input`:
   `origin/text-input.tsx`, `origin/password-input.tsx`,
   `origin/search-input.tsx`. Each adds label + description + inline error
-  + optional Phosphor icon. They are not clones.
+  - optional Phosphor icon. They are not clones.
 - `origin/native-select.tsx` kept as a Mandaloria server adapter — a
   native `<select>` for RSC URL-filter forms where coss `Select`
   (client-only) is not usable.
