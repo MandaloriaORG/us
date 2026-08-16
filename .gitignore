@@ -46,3 +46,5 @@ next-env.d.ts
 .claude/
 .playwright-mcp/
 home-320.png
+.env*
+openconfig.b4freebuff.json
