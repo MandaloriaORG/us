@@ -10,5 +10,13 @@ export default async function CouncilPage() {
     return null;
   }
 
-  redirect(access.canViewUsers ? "/council/users" : "/council/audit");
+  const firstDestination =
+    (access.canViewUsers && "/council/users") ||
+    (access.canManageCodex && "/council/codex") ||
+    (access.canViewReports && "/council/reports") ||
+    (access.canManagePlazas && "/council/plazas") ||
+    (access.canManageSettings && "/council/settings") ||
+    "/council/audit";
+
+  redirect(firstDestination);
 }

@@ -6,6 +6,11 @@ const COUNCIL_AUDIT_PERMISSION = "admin.view_audit_logs";
 // the same permission the queue RPCs re-check rather than on an admin one.
 const COUNCIL_REPORT_PERMISSION = "moderation.hide";
 const COUNCIL_PLAZA_PERMISSION = "admin.manage_plazas";
+const COUNCIL_SETTINGS_PERMISSION = "admin.manage_settings";
+// The Codex work surface lives inside the Council shell. `codex.edit` is what
+// opens it; `codex.publish` stays a distinct grant the RPCs re-check on their
+// own, so both open the shell but neither implies the other's authority.
+const COUNCIL_CODEX_PERMISSIONS = ["codex.edit", "codex.publish"] as const;
 
 export function getCouncilUserAccess() {
   return can(COUNCIL_USER_PERMISSION);
@@ -21,6 +26,14 @@ export function getCouncilReportAccess() {
 
 export function getCouncilPlazaAccess() {
   return can(COUNCIL_PLAZA_PERMISSION);
+}
+
+export function getCouncilSettingsAccess() {
+  return can(COUNCIL_SETTINGS_PERMISSION);
+}
+
+export function getCouncilCodexAccess() {
+  return can(COUNCIL_CODEX_PERMISSIONS[0]);
 }
 
 /**
@@ -57,16 +70,29 @@ export async function getCouncilShellAccess() {
   const canViewAudit = permissionNames.has(COUNCIL_AUDIT_PERMISSION);
   const canViewReports = permissionNames.has(COUNCIL_REPORT_PERMISSION);
   const canManagePlazas = permissionNames.has(COUNCIL_PLAZA_PERMISSION);
+  const canManageSettings = permissionNames.has(COUNCIL_SETTINGS_PERMISSION);
+  const canManageCodex = COUNCIL_CODEX_PERMISSIONS.some((permission) =>
+    permissionNames.has(permission),
+  );
 
   // A moderator who can only work the queue still belongs in the Council shell;
   // the shell opens when any destination inside it is reachable.
-  if (!canViewUsers && !canViewAudit && !canViewReports && !canManagePlazas) {
+  if (
+    !canViewUsers &&
+    !canViewAudit &&
+    !canViewReports &&
+    !canManagePlazas &&
+    !canManageSettings &&
+    !canManageCodex
+  ) {
     return { allowed: false, reason: "missing_permission" } as const;
   }
 
   return {
     allowed: true,
+    canManageCodex,
     canManagePlazas,
+    canManageSettings,
     canViewAudit,
     canViewReports,
     canViewUsers,

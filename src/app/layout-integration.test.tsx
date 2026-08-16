@@ -96,7 +96,9 @@ describe("root layout identity integration", () => {
 
     const mobileItems = within(screen.getByLabelText("Mobile navigation items"));
     expect(mobileItems.getByText("Plazas")).toBeInTheDocument();
+    expect(mobileItems.getByText("Holochat")).toBeInTheDocument();
     expect(mobileItems.getByText("Codex Libre")).toBeInTheDocument();
+    expect(mobileItems.getByText("Clans and Casas")).toBeInTheDocument();
     expect(mobileItems.getByText("Members")).toBeInTheDocument();
     expect(mobileItems.queryByText("Council")).toBeNull();
   });

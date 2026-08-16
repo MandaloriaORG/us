@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BookmarkSimpleIcon,
+  ListChecksIcon,
   PaperPlaneTiltIcon,
   SealQuestionIcon,
 } from "@phosphor-icons/react/dist/ssr";
@@ -16,8 +17,9 @@ export function CodexNav({ signedIn }: { signedIn: boolean }) {
   if (!signedIn) return null;
 
   const items = [
+    { href: "/codex/propose", label: "Propose a conversation", Icon: PaperPlaneTiltIcon },
     { href: "/codex/bookmarks", label: "Saved articles", Icon: BookmarkSimpleIcon },
-    { href: "/codex/proposals", label: "My proposals", Icon: PaperPlaneTiltIcon },
+    { href: "/codex/proposals", label: "My proposals", Icon: ListChecksIcon },
     { href: "/codex/suggestions", label: "My suggestions", Icon: SealQuestionIcon },
   ] as const;
 

@@ -28,8 +28,6 @@ export default async function ProposePage({ searchParams }: ProposePageProps) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect("/auth/login?next=/codex/propose");
-
   const params = await searchParams;
   const post = typeof params.post === "string" ? params.post : "";
   const comment = typeof params.comment === "string" ? params.comment : "";
@@ -42,6 +40,19 @@ export default async function ProposePage({ searchParams }: ProposePageProps) {
   if (post && !UUID_PATTERN.test(post)) notFound();
   if (comment && !UUID_PATTERN.test(comment)) notFound();
   if (external && !/^https?:\/\/\S+$/.test(external.trim())) notFound();
+
+  if (!user) {
+    // Keep the source on the return trip so a visitor who signs in lands back
+    // on the same proposal, not on a bare form.
+    const proposePath = post
+      ? `/codex/propose?post=${post}`
+      : comment
+        ? `/codex/propose?comment=${comment}`
+        : external
+          ? `/codex/propose?external=${encodeURIComponent(external.trim())}`
+          : "/codex/propose";
+    redirect(`/auth/login?next=${encodeURIComponent(proposePath)}`);
+  }
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-6">

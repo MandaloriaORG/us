@@ -70,7 +70,9 @@ export default async function CouncilLayout({ children }: { children: React.Reac
         </div>
         <div className="overflow-x-auto px-4 pb-2">
           <CouncilNavigation
+            canManageCodex={access.canManageCodex}
             canManagePlazas={access.canManagePlazas}
+            canManageSettings={access.canManageSettings}
             canViewAudit={access.canViewAudit}
             canViewReports={access.canViewReports}
             canViewUsers={access.canViewUsers}
@@ -94,7 +96,9 @@ export default async function CouncilLayout({ children }: { children: React.Reac
         <p className="text-fg mt-5 mb-2 text-sm font-semibold">Council</p>
 
         <CouncilNavigation
+          canManageCodex={access.canManageCodex}
           canManagePlazas={access.canManagePlazas}
+          canManageSettings={access.canManageSettings}
           canViewAudit={access.canViewAudit}
           canViewReports={access.canViewReports}
           canViewUsers={access.canViewUsers}

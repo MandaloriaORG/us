@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
+import { PaperPlaneTiltIcon, PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { CopyLinkButton } from "@/components/system/copy-link-button";
 import { ReactionControl } from "@/components/system/reaction-control";
@@ -124,6 +125,12 @@ export function CommentItem({
                 onToggle={(key) => toggleCommentReaction(node.id, key)}
               />
               <CopyLinkButton path={`/posts/${postId}#comment-${node.id}`} />
+              <Button asChild size="sm" variant="ghost">
+                <Link href={`/codex/propose?comment=${node.id}`}>
+                  <PaperPlaneTiltIcon aria-hidden="true" className="h-4 w-4" />
+                  Propose
+                </Link>
+              </Button>
               {node.can_reply ? (
                 <Button
                   type="button"

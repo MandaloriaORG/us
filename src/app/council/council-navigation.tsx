@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  BookOpenIcon,
   BuildingsIcon,
   FlagIcon,
   GavelIcon,
+  GearIcon,
   ScrollIcon,
   UsersIcon,
 } from "@phosphor-icons/react/dist/ssr";
@@ -13,7 +15,9 @@ import {
 import { cn } from "@/lib/cn";
 
 export interface CouncilNavigationProps {
+  canManageCodex: boolean;
   canManagePlazas: boolean;
+  canManageSettings: boolean;
   canViewAudit: boolean;
   canViewReports: boolean;
   canViewUsers: boolean;
@@ -54,6 +58,20 @@ const navigationItems = [
     permission: "canViewAudit",
     Icon: ScrollIcon,
   },
+  {
+    // The Codex work surface is its own destination inside the shell; the
+    // nested CodexCouncilNav carries its internal pages.
+    href: "/council/codex",
+    label: "Codex",
+    permission: "canManageCodex",
+    Icon: BookOpenIcon,
+  },
+  {
+    href: "/council/settings",
+    label: "Settings",
+    permission: "canManageSettings",
+    Icon: GearIcon,
+  },
 ] as const;
 
 function isCurrentRoute(pathname: string, href: string) {
@@ -66,7 +84,9 @@ function isCurrentRoute(pathname: string, href: string) {
  * filters already-authorized links and derives the active route.
  */
 export function CouncilNavigation({
+  canManageCodex,
   canManagePlazas,
+  canManageSettings,
   canViewAudit,
   canViewReports,
   canViewUsers,
@@ -74,7 +94,14 @@ export function CouncilNavigation({
   variant = "vertical",
 }: CouncilNavigationProps) {
   const pathname = usePathname();
-  const permissions = { canManagePlazas, canViewAudit, canViewReports, canViewUsers };
+  const permissions = {
+    canManageCodex,
+    canManagePlazas,
+    canManageSettings,
+    canViewAudit,
+    canViewReports,
+    canViewUsers,
+  };
   const visibleItems = navigationItems.filter((item) => permissions[item.permission]);
 
   if (visibleItems.length === 0) {

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { getCouncilReportAccess } from "@/app/council/access";
+import { Button } from "@/components/ui/button";
 import { CopyLinkButton } from "@/components/system/copy-link-button";
 import { ReportControl } from "@/components/system/report-control";
 import { renderMarkdown } from "@/lib/content/markdown";
@@ -137,8 +139,16 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
         />
       </div>
 
-      <div className="mt-3">
+      <div className="mt-3 flex flex-wrap items-center gap-2">
         <CopyLinkButton path={`/posts/${post.id}`} />
+        {!removed ? (
+          <Button asChild size="sm" variant="ghost">
+            <Link href={`/codex/propose?post=${post.id}`}>
+              <PaperPlaneTiltIcon aria-hidden="true" className="h-4 w-4" />
+              Propose for the Codex
+            </Link>
+          </Button>
+        ) : null}
       </div>
 
       {post.can_edit ? (

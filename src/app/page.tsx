@@ -1,4 +1,5 @@
 import { CapabilityList } from "@/components/marketing/capability-list";
+import { ProductPrinciples } from "@/components/marketing/product-principles";
 import { PublicHero } from "@/components/marketing/public-hero";
 import { KnowledgePipeline } from "@/components/system/knowledge-pipeline";
 import { PostList } from "@/components/system/post-list";
@@ -32,6 +33,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   return (
     <main className="min-h-[calc(100svh-3rem)]">
       <PublicHero visual={<KnowledgePipeline />} />
+      <ProductPrinciples />
       <CapabilityList />
 
       <section aria-labelledby="recent-posts-title">

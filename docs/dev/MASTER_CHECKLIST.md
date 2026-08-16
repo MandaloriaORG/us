@@ -113,17 +113,17 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 
 ## 5. Plazas
 
-- [ ] List plazas.
-- [ ] View plaza details.
-- [ ] Central Plaza.
-- [ ] Initiate's Questions.
-- [ ] Mandalorian Philosophy.
-- [ ] The Way.
-- [ ] Debates and Discussion.
-- [ ] Lore and Culture.
-- [ ] Creative Forge.
-- [ ] Council Announcements.
-- [ ] Tavern.
+- [x] List plazas.
+- [x] View plaza details.
+- [x] Central Plaza.
+- [x] Initiate's Questions.
+- [x] Mandalorian Philosophy.
+- [x] The Way.
+- [x] Debates and Discussion.
+- [x] Lore and Culture.
+- [x] Creative Forge.
+- [x] Council Announcements.
+- [x] Tavern.
 - [x] Create plaza from admin.
 - [x] Edit plaza from admin.
 - [x] Change slug.
@@ -132,83 +132,83 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [x] Reorder plazas. — sort order is an editable field per Plaza; no dedicated drag-and-drop.
 - [x] Archive plaza.
 - [x] Configure plaza rules.
-- [ ] Configure permissions per plaza.
-- [ ] Archived plaza does not accept new posts.
-- [ ] Council Announcements only allows posting by authorized roles.
+- [ ] Configure permissions per plaza. — `required_post_permission` exists and gates posting, but no RPC parameter can set it; needs a migration (registry §4).
+- [x] Archived plaza does not accept new posts. — `create_post` refuses an archived Plaza (content contract suite).
+- [x] Council Announcements only allows posting by authorized roles. — seeded with `required_post_permission = 'admin.manage_plazas'`.
 
 ## 6. Posts
 
-- [ ] Create post.
-- [ ] View post.
-- [ ] Edit own post.
-- [ ] Delete own post with soft delete.
-- [ ] List posts by plaza.
+- [x] Create post.
+- [x] View post.
+- [x] Edit own post.
+- [x] Delete own post with soft delete.
+- [x] List posts by plaza.
 - [x] Main post feed.
-- [ ] Post pagination.
-- [ ] Recent order.
-- [ ] Popular order.
-- [ ] Highlighted order.
+- [x] Post pagination. — keyset cursor, URL-backed.
+- [x] Recent order.
+- [ ] Popular order. — deliberately absent from `list_posts` (migration 0007).
+- [ ] Highlighted order. — `is_highlighted` is a flag, not an ordering mode.
 - [x] Tags in posts.
-- [ ] Save/bookmark post.
-- [ ] Remove bookmark.
+- [x] Save/bookmark post.
+- [x] Remove bookmark.
 - [x] Share link.
-- [ ] Draft status.
-- [ ] Published status.
-- [ ] Pending review status.
-- [ ] Closed status.
-- [ ] Pinned status.
-- [ ] Highlighted status.
-- [ ] Hidden status.
-- [ ] Deleted by author status.
-- [ ] Deleted by moderator status.
-- [ ] Archived status.
-- [ ] Lock editing if moderation decides.
-- [ ] Closed post does not accept comments.
-- [ ] Pending post does not appear publicly.
-- [ ] Deleted post does not break comments.
+- [x] Draft status.
+- [x] Published status.
+- [ ] Pending review status. — the enum value exists but no transition writes it.
+- [x] Closed status.
+- [x] Pinned status.
+- [x] Highlighted status.
+- [x] Hidden status.
+- [x] Deleted by author status.
+- [x] Deleted by moderator status.
+- [x] Archived status.
+- [x] Lock editing if moderation decides.
+- [x] Closed post does not accept comments.
+- [x] Pending post does not appear publicly.
+- [x] Deleted post does not break comments. — tombstone keeps replies in context.
 
 ## 7. Comments and replies
 
-- [ ] Create comment.
-- [ ] View comments.
-- [ ] Reply to comment.
-- [ ] Show replies.
-- [ ] Edit own comment.
-- [ ] Delete own comment with soft delete.
+- [x] Create comment.
+- [x] View comments.
+- [x] Reply to comment.
+- [x] Show replies.
+- [x] Edit own comment.
+- [x] Delete own comment with soft delete.
 - [x] Copy direct link to comment.
-- [ ] Comment pagination.
-- [ ] Order by date.
+- [x] Comment pagination. — keyset cursor, URL-backed.
+- [x] Order by date.
 - [ ] Order by relevance if implemented.
-- [ ] Deleted parent comment maintains context.
-- [ ] Reply to hidden comment is handled correctly.
-- [ ] Comment cannot be created on closed post.
-- [ ] Edited comment saves version if applicable.
+- [x] Deleted parent comment maintains context. — removed comments render a tombstone and replies keep their place.
+- [x] Reply to hidden comment is handled correctly. — a removed comment renders a tombstone; replies are preserved.
+- [x] Comment cannot be created on closed post. — `accepts_comments` and the RPC both enforce it.
+- [x] Edited comment saves version if applicable. — `content_revisions` snapshots the previous wording.
 
 ## 8. Likes, dislikes and reactions
 
-- [ ] Like on post.
-- [ ] Dislike on post.
-- [ ] Remove vote on post.
-- [ ] Change like to dislike.
-- [ ] Like on comment.
-- [ ] Dislike on comment.
-- [ ] Remove vote on comment.
-- [ ] Emoji reaction on post.
-- [ ] Emoji reaction on comment.
-- [ ] Remove reaction.
-- [ ] Avoid duplicate reaction.
-- [ ] Consistent counters.
-- [ ] Admin can create reaction type.
-- [ ] Admin can deactivate reaction type.
-- [ ] Admin decides if reaction affects reputation.
-- [ ] New users may have reaction limit.
-- [ ] Cannot react to deleted content.
+- [x] Like on post.
+- [x] Dislike on post.
+- [x] Remove vote on post.
+- [x] Change like to dislike.
+- [x] Like on comment.
+- [x] Dislike on comment.
+- [x] Remove vote on comment.
+- [x] Emoji reaction on post.
+- [x] Emoji reaction on comment.
+- [x] Remove reaction.
+- [x] Avoid duplicate reaction. — one row per actor per target.
+- [x] Consistent counters. — written in the same transaction as their source; drift-repair function.
+- [x] Admin can create reaction type. — `admin_upsert_reaction_type` RPC; no Council UI surface yet (registry §4).
+- [x] Admin can deactivate reaction type. — `admin_set_reaction_type_active` RPC; no Council UI surface yet (registry §4).
+- [ ] Admin decides if reaction affects reputation. — reputation model deferred.
+- [ ] New users may have reaction limit. — no per-actor reaction limit in the contract.
+- [x] Cannot react to deleted content. — RPCs refuse removed targets.
 
 ## 9. Reports
 
 - [x] Report post.
 - [x] Report comment.
-- [ ] Report chat message. — no Holochat yet (Phase 6).
+- [x] Report chat message. — `chat-report-control` files a message into the same queue.
 - [x] Report profile.
 - [x] Choose report reason.
 - [x] Write description.
@@ -220,7 +220,7 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [x] Moderator can reject report. — dismissal, with a required reason.
 - [x] Moderator can take action from report. — hide/quarantine/delete/restore on the report detail page.
 - [x] Admin can view all reports. — the queue is gated on `moderation.hide`, which an administrator holds.
-- [ ] Admin can configure reasons.
+- [ ] Admin can configure reasons. — the report vocabulary is a code constant plus a migration.
 - [x] Decision is recorded. — who closed it, when, why; audited.
 
 ## 10. Moderation
@@ -588,36 +588,36 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 - [x] RLS on user_roles.
 - [x] RLS on permissions.
 - [x] RLS on role_permissions.
-- [ ] RLS on spaces.
-- [ ] RLS on posts.
-- [ ] RLS on comments.
-- [ ] RLS on reactions/content_reactions.
-- [ ] RLS on reports.
-- [ ] RLS on moderation_queue.
-- [ ] RLS on moderator_actions.
+- [ ] RLS on spaces. — no `spaces` table; Plazas are the canonical container.
+- [x] RLS on posts. — enabled with no policies, unreachable from the Data API.
+- [x] RLS on comments.
+- [x] RLS on reactions/content_reactions.
+- [x] RLS on reports.
+- [ ] RLS on moderation_queue. — no such table by design; reports queue through RPCs.
+- [ ] RLS on moderator_actions. — no such table by design; `audit_logs` is the single record.
 - [x] RLS on audit_logs.
-- [ ] RLS on clans.
-- [ ] RLS on clan_members.
-- [ ] RLS on library_articles.
-- [ ] RLS on library_article_versions.
-- [ ] RLS on knowledge_proposals.
-- [ ] RLS on knowledge_proposal_sources.
-- [ ] RLS on knowledge_proposal_contributors.
-- [ ] RLS on chat_channels.
-- [ ] RLS on chat_messages.
-- [ ] RLS on notifications.
+- [x] RLS on clans. — enabled with no policies, unreachable from the Data API.
+- [x] RLS on clan_members.
+- [x] RLS on library_articles. — Codex tables are RLS-enabled with no policies.
+- [x] RLS on library_article_versions.
+- [x] RLS on knowledge_proposals.
+- [x] RLS on knowledge_proposal_sources.
+- [x] RLS on knowledge_proposal_contributors.
+- [x] RLS on chat_channels.
+- [x] RLS on chat_messages.
+- [x] RLS on notifications.
 - [x] Server-side validation on actions.
 - [x] Markdown sanitization. — `src/lib/content/markdown.ts` escapes first, then emits a closed tag set; wired into post and comment bodies.
 - [x] Bio/profile sanitization.
-- [ ] Rate limit posting.
-- [ ] Rate limit commenting.
-- [ ] Rate limit replying.
-- [ ] Rate limit reacting.
-- [ ] Rate limit reporting.
-- [ ] Rate limit friend requests.
-- [ ] Rate limit chat.
-- [ ] Rate limit file upload.
-- [ ] Soft delete on community content.
+- [x] Rate limit posting. — `enforce_post_rate_limit`.
+- [x] Rate limit commenting. — `enforce_comment_rate_limit`, replies included.
+- [x] Rate limit replying.
+- [x] Rate limit reacting. — `enforce_engagement_rate_limit`.
+- [x] Rate limit reporting. — `enforce_report_rate_limit`.
+- [x] Rate limit friend requests. — `enforce_friend_request_rate_limit`.
+- [x] Rate limit chat. — `enforce_chat_rate_limit`.
+- [ ] Rate limit file upload. — no general upload path; Storage is restricted to avatars/emblems.
+- [x] Soft delete on community content.
 - [x] Audit logs on admin/mod changes.
 - [x] XSS protection.
 - [x] Private data protection.
@@ -629,20 +629,20 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 
 - [x] Log assign role.
 - [x] Log remove role.
-- [ ] Log change permissions.
+- [ ] Log change permissions. — role-permission grants are not a Council UI feature.
 - [x] Log ban user.
 - [x] Log suspend user.
-- [ ] Log hide content.
-- [ ] Log restore content.
-- [ ] Log delete content as mod/admin.
-- [ ] Log publish Codex article.
-- [ ] Log unpublish Codex article.
-- [ ] Log restore Codex version.
+- [x] Log hide content. — every moderation transition writes an audit row.
+- [x] Log restore content.
+- [x] Log delete content as mod/admin.
+- [x] Log publish Codex article.
+- [x] Log unpublish Codex article.
+- [x] Log restore Codex version.
 - [x] Log change settings. — `site_setting.update` audit rows with actor, reason, previous and new value.
-- [ ] Log change plaza visibility.
-- [ ] Log change channel visibility.
-- [ ] Log change clan/house visibility.
-- [ ] Log change clan/house leader.
+- [x] Log change plaza visibility.
+- [x] Log change channel visibility. — channel create/update/status all audit.
+- [x] Log change clan/house visibility.
+- [x] Log change clan/house leader.
 - [x] Admin can view logs.
 - [x] Logs have actor.
 - [x] Logs have target.

@@ -166,6 +166,16 @@ describe("CommentItem", () => {
     expect(screen.getByRole("button", { name: "Copy link" })).toBeInTheDocument();
   });
 
+  it("offers a proposal entry point that carries the comment as its source", () => {
+    const comment = node();
+    render(<CommentItem node={comment} postId={postId} reactionTypes={[]} />);
+
+    expect(screen.getByRole("link", { name: "Propose" })).toHaveAttribute(
+      "href",
+      `/codex/propose?comment=${comment.id}`,
+    );
+  });
+
   it("renders nested replies recursively", () => {
     const reply = node({ id: "reply-1", depth: 1, author_display_name: "Bob" });
     render(<CommentItem node={node({ replies: [reply] })} postId={postId} reactionTypes={[]} />);

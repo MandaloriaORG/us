@@ -12,8 +12,10 @@ vi.mock("@/lib/permissions", () => ({
 
 import {
   getCouncilAuditAccess,
+  getCouncilCodexAccess,
   getCouncilPlazaAccess,
   getCouncilReportAccess,
+  getCouncilSettingsAccess,
   getCouncilShellAccess,
   getCouncilUserAccess,
   getReportTargetModerationAccess,
@@ -60,13 +62,34 @@ describe("getCouncilUserAccess", () => {
     expect(mocks.can).toHaveBeenCalledWith("admin.manage_plazas");
   });
 
+  it("requires the exact Council settings permission", async () => {
+    const denial = { allowed: false, reason: "missing_permission" } as const;
+    mocks.can.mockResolvedValue(denial);
+
+    await expect(getCouncilSettingsAccess()).resolves.toBe(denial);
+    expect(mocks.can).toHaveBeenCalledOnce();
+    expect(mocks.can).toHaveBeenCalledWith("admin.manage_settings");
+  });
+
+  it("requires codex.edit for the Council Codex surface", async () => {
+    const denial = { allowed: false, reason: "missing_permission" } as const;
+    mocks.can.mockResolvedValue(denial);
+
+    await expect(getCouncilCodexAccess()).resolves.toBe(denial);
+    expect(mocks.can).toHaveBeenCalledOnce();
+    expect(mocks.can).toHaveBeenCalledWith("codex.edit");
+  });
+
   it("resolves every visible destination from one authorization snapshot", async () => {
     mocks.getAuthorizationSnapshot.mockResolvedValue({
       allowed: true,
       permissionNames: [
         "admin.manage_plazas",
+        "admin.manage_settings",
         "admin.view_audit_logs",
         "admin.view_users",
+        "codex.edit",
+        "codex.publish",
         "moderation.hide",
       ],
       userId: "user-1",
@@ -74,7 +97,9 @@ describe("getCouncilUserAccess", () => {
 
     await expect(getCouncilShellAccess()).resolves.toEqual({
       allowed: true,
+      canManageCodex: true,
       canManagePlazas: true,
+      canManageSettings: true,
       canViewAudit: true,
       canViewReports: true,
       canViewUsers: true,
@@ -125,6 +150,52 @@ describe("getCouncilUserAccess", () => {
       canViewAudit: false,
       canViewReports: true,
       canViewUsers: false,
+    });
+  });
+
+  it("opens the shell for an Archivist holding only codex permissions", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: true,
+      permissionNames: ["codex.edit", "codex.publish"],
+      userId: "user-1",
+    });
+
+    await expect(getCouncilShellAccess()).resolves.toMatchObject({
+      allowed: true,
+      canManageCodex: true,
+      canManagePlazas: false,
+      canManageSettings: false,
+      canViewAudit: false,
+      canViewReports: false,
+      canViewUsers: false,
+    });
+  });
+
+  it("opens the shell for an administrator whose only destination is Settings", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: true,
+      permissionNames: ["admin.manage_settings"],
+      userId: "user-1",
+    });
+
+    await expect(getCouncilShellAccess()).resolves.toMatchObject({
+      allowed: true,
+      canManageCodex: false,
+      canManageSettings: true,
+      canViewUsers: false,
+    });
+  });
+
+  it("does not open the shell for codex.propose alone, which every User holds", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: true,
+      permissionNames: ["codex.propose"],
+      userId: "user-1",
+    });
+
+    await expect(getCouncilShellAccess()).resolves.toEqual({
+      allowed: false,
+      reason: "missing_permission",
     });
   });
 

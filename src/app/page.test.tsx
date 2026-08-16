@@ -47,7 +47,7 @@ describe("public landing page", () => {
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: "Conversation that becomes shared knowledge.",
+        name: "Essential knowledge, kept free by the community.",
       }),
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Explore Plazas/ })).toHaveAttribute("href", "/plazas");
@@ -55,6 +55,29 @@ describe("public landing page", () => {
       "href",
       "/codex",
     );
+  });
+
+  it("states the Mandalorian philosophy plainly in a bordered principle list", async () => {
+    mocks.listPosts.mockResolvedValue({ items: [], nextCursor: null });
+    await renderHome();
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "What Mandaloria stands for" }),
+    ).toBeInTheDocument();
+
+    const section = screen
+      .getByRole("heading", { level: 2, name: "What Mandaloria stands for" })
+      .closest("section");
+    const titles = section ? within(section).getAllByRole("heading", { level: 3 }) : [];
+    expect(titles.map((title) => title.textContent)).toEqual([
+      "Knowledge stays free",
+      "Community before tool",
+      "Permanent knowledge",
+      "Provenance",
+      "Real responsibility",
+      "Moderation from the start",
+      "Freedom requires responsibility",
+    ]);
   });
 
   it("uses the custom knowledge lifecycle as the hero proof", async () => {
@@ -75,15 +98,18 @@ describe("public landing page", () => {
 
   it("links the four canonical participation areas without card-only navigation", async () => {
     mocks.listPosts.mockResolvedValue({ items: [], nextCursor: null });
-    const { container } = await renderHome();
+    await renderHome();
 
-    expect(
-      screen.getByRole("heading", { level: 2, name: "One network, four ways to participate" }),
-    ).toBeInTheDocument();
+    const capabilitiesHeading = screen.getByRole("heading", {
+      level: 2,
+      name: "One network, four ways to participate",
+    });
+    expect(capabilitiesHeading).toBeInTheDocument();
 
     const hrefs = screen.getAllByRole("link").map((link) => link.getAttribute("href"));
     expect(hrefs).toEqual(expect.arrayContaining(["/plazas", "/codex", "/holochat", "/clans"]));
-    expect(container.querySelectorAll("section ul > li")).toHaveLength(4);
+    const capabilitiesSection = capabilitiesHeading.closest("section");
+    expect(capabilitiesSection?.querySelectorAll("ul > li")).toHaveLength(4);
   });
 
   it("calls listPosts for a cross-Plaza recent feed with the URL cursor", async () => {

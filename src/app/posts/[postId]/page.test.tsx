@@ -172,4 +172,21 @@ describe("PostPage", () => {
     await renderPage();
     expect(screen.getByRole("button", { name: "Copy link" })).toBeInTheDocument();
   });
+
+  it("offers a proposal entry point that carries the post as its source", async () => {
+    mocks.getPost.mockResolvedValue(post());
+    await renderPage();
+
+    expect(screen.getByRole("link", { name: "Propose for the Codex" })).toHaveAttribute(
+      "href",
+      `/codex/propose?post=${postId}`,
+    );
+  });
+
+  it("withholds the proposal entry point from a removed post", async () => {
+    mocks.getPost.mockResolvedValue(post({ body: null }));
+    await renderPage();
+
+    expect(screen.queryByRole("link", { name: "Propose for the Codex" })).not.toBeInTheDocument();
+  });
 });

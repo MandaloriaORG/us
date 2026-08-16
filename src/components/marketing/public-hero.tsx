@@ -33,11 +33,12 @@ function PublicHero({ visual }: PublicHeroProps) {
             id="public-hero-title"
             className="font-display text-fg max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl"
           >
-            Conversation that becomes shared knowledge.
+            Essential knowledge, kept free by the community.
           </h1>
           <p className="prose-width text-fg-muted mt-6 text-base sm:text-lg">
-            Debate ideas in Plazas, review proposals with the community, and preserve what matters
-            in Codex Libre with its sources and attribution intact.
+            Mandaloria is a network around the Mandalorian philosophy. Ideas are debated in Plazas,
+            followed live in Holochat, and become reviewed, sourced articles in Codex Libre —
+            knowledge stays free because freedom carries responsibility.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">

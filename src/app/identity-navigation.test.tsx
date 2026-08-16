@@ -11,6 +11,9 @@ vi.mock("next/font/google", () => ({
 vi.mock("@/lib/actions/auth", () => ({ logout: vi.fn() }));
 vi.mock("@/lib/permissions", () => ({ canAny: vi.fn() }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/components/system/notification-bell", () => ({
+  NotificationBell: () => <span data-testid="notification-bell" />,
+}));
 vi.mock("react-dom", async (importOriginal) => {
   const actual = await importOriginal<typeof import("react-dom")>();
   return { ...actual, useFormStatus: () => ({ pending: mocks.pending }) };
@@ -28,16 +31,23 @@ describe("identity navigation", () => {
     expect(dynamic).toBe("force-dynamic");
   });
 
-  it("renders a full-height sign-in target for visitors", () => {
+  it("renders a search target and a full-height sign-in target for visitors", () => {
     render(<NavAuth user={null} profile={null} />);
 
+    expect(screen.getByRole("link", { name: "Search" })).toHaveAttribute("href", "/search");
+    expect(screen.getByRole("link", { name: "Search" })).toHaveClass(
+      "h-11",
+      "w-11",
+      "focus-visible:ring-2",
+    );
     expect(screen.getByRole("link", { name: "Sign in" })).toHaveClass(
       "h-11",
       "focus-visible:ring-2",
     );
+    expect(screen.queryByTestId("notification-bell")).not.toBeInTheDocument();
   });
 
-  it("renders labelled 44px profile and sign-out targets", () => {
+  it("renders the notification bell and labelled 44px profile and sign-out targets", () => {
     render(
       <NavAuth
         user={{ id: "00000000-0000-4000-8000-000000000001" }}
@@ -45,6 +55,8 @@ describe("identity navigation", () => {
       />,
     );
 
+    expect(screen.getByTestId("notification-bell")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Search" })).toHaveAttribute("href", "/search");
     expect(screen.getByRole("link", { name: "Edit profile" })).toHaveClass(
       "min-h-11",
       "focus-visible:ring-2",

@@ -17,12 +17,12 @@ Every one of these must pass before a change is considered done. Run them in thi
 | 1   | Types                    | `pnpm typecheck`                                                      | pass                |
 | 2   | Lint                     | `pnpm lint`                                                           | pass                |
 | 3   | Format                   | `pnpm format:check`                                                   | pass                |
-| 4   | Unit / component tests   | `pnpm test`                                                           | 791 pass / 71 files |
+| 4   | Unit / component tests   | `pnpm test`                                                           | 1128 pass / 97 files |
 | 5   | Production build         | `pnpm build`                                                          | pass                |
-| 6   | Database contract        | `supabase test db --linked`                                           | 558/558 pass        |
+| 6   | Database contract        | `supabase test db --linked`                                           | 829 planned (eleven suites; linked run owed) |
 | 7   | Types match the database | `pnpm db:types` then `git diff --exit-code src/lib/database.types.ts` | clean               |
 
-Checks 6 and 7 run against the hosted project (`rvostprtlwksknuarnlk`). There is no local stack; its ports are held by another project.
+Checks 6 and 7 run against the hosted project (`rvostprtlwksknuarnlk`). There is no local stack; its ports are held by another project. The eleven suites total 829 pgTAP assertions; the last linked run (558/558) predates the Codex, Clans, Holochat and Search/Settings suites, so a fresh `supabase test db --linked` is owed.
 
 A green gate is necessary, not sufficient. Sections 2-4 list what the gate does _not_ cover.
 
@@ -256,6 +256,81 @@ The Council shell now opens for `moderation.hide` alone, so a moderator whose on
 | Edit history renders nothing for a profile report and reads none            | `revision-history.test.tsx`                                             | verified                                                                                                                                                                                         |
 | Full design gate (density, zoom, 320px, keyboard, states)                   | —                                                                       | **owed** — automated typecheck/lint/format/test/build are clean for the new Plaza/post/report UI, but no Chromium 320px/200%-zoom/keyboard walk has been done, `docs/dev/DESIGN_VERIFICATION.md` |
 
+### 2.8 Database — Codex Libre (migrations `0015`)
+
+Every Codex table is RLS-enabled with no policies and no grants; all access goes through SECURITY DEFINER RPCs that re-check the actor's permission and the target's visibility inside the transaction.
+
+| Must be checked                                                        | Evidence                                             | Status   |
+| ---------------------------------------------------------------------- | ---------------------------------------------------- | -------- |
+| Tables unreachable from the Data API                                    | `codex_contract.test.sql` (85 assertions)            | verified |
+| Visitors read only published and locked articles                       | same suite                                           | verified |
+| Drafts, unpublished and archived articles are Archivist-only            | same suite                                           | verified |
+| A proposal never leaks a source that is no longer visible to the caller | same suite                                           | verified |
+| A member proposes with a post, comment or external source               | same suite                                           | verified |
+| Sources are re-validated for visibility at read time                    | same suite                                           | verified |
+| Attribution is a status (`public`/`anonymous`/`withdrawn`), not a feeling | same suite                                          | verified |
+| Versions are snapshots taken before a change, bounded to 50 per article | same suite                                           | verified |
+| Restoring a version snapshots the state being reverted first            | same suite                                           | verified |
+| Publishing a proposal requires `codex.publish`, never the proposal text | same suite                                           | verified |
+| Suggestions are one open per member per article, rate-limited           | same suite                                           | verified |
+| `codex.propose` is granted to the User role; `codex.edit`/`codex.publish` to Archivist | migration 0015 seed                      | reviewed |
+
+### 2.9 Database — Clans, Casas and identity (migration `0016`)
+
+| Must be checked                                                | Evidence                                                     | Status   |
+| -------------------------------------------------------------- | ------------------------------------------------------------ | -------- |
+| Tables unreachable from the Data API                           | `clans_identity_contract.test.sql` (70 assertions)           | verified |
+| Membership, internal roles, ranks, badges, friends and blocks  | same suite                                                   | verified |
+| A member cannot escalate their own rank or role                | same suite                                                   | verified |
+| A leader only manages their own clan/house                     | same suite                                                   | verified |
+| Blocked users cannot send requests or interact directly        | same suite                                                   | verified |
+| Friend requests are rate-limited                               | same suite                                                   | verified |
+
+### 2.10 Database — Holochat and notifications (migration `0017`)
+
+| Must be checked                                                          | Evidence                                                          | Status   |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------------- | -------- |
+| Tables unreachable from the Data API                                     | `holochat_notifications_contract.test.sql` (68 assertions)        | verified |
+| Channels are permission-filtered per viewer                              | same suite                                                        | verified |
+| A message edit snapshots its previous wording                            | same suite (`chat_message_edits`)                                 | verified |
+| Chat reports enter the existing moderation queue                         | same suite                                                        | verified |
+| Notification outbox event is transactional with the main action          | same suite                                                        | verified |
+| The notification consumer is idempotent and bounded                      | same suite                                                        | verified |
+| Failed events can be inspected and reprocessed (`outbox_list_failed`, `outbox_reprocess`) | same suite RPCs                          | verified |
+
+### 2.11 Database — Search and site settings (migration `0018`)
+
+| Must be checked                                                       | Evidence                                                   | Status   |
+| --------------------------------------------------------------------- | ---------------------------------------------------------- | -------- |
+| Search RPCs re-check the same visibility helpers the pages use        | `search_settings_contract.test.sql` (48 assertions)        | verified |
+| Deleted and private content never appears in results                  | same suite                                                 | verified |
+| Settings are typed, bounded, and their mutations are audited          | same suite                                                 | verified |
+| Security-critical settings are not editable from the UI               | same suite                                                 | verified |
+
+### 2.12 Documented DB-contract gaps (migrations frozen this wave)
+
+These are real gaps in the 0015-0018 contract that the UI cannot paper over.
+Each names its owning RPC/migration and the surface that would consume it.
+They are **not** UI debt: closing them needs a forward-only migration.
+
+| Gap                                                                        | Owning contract                                                                                        | Surface that would consume it                        |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
+| No duplicate-proposal detector                                             | `create_codex_proposal` (0015) has no "same source already proposed" check                             | `/codex/propose` could warn before filing            |
+| No public by-article provenance RPC                                        | `codex_proposals.article_id` points one way; `resolveArticleProvenance` scans client-side               | `/codex/[slug]` provenance panel                     |
+| No non-public article list RPC                                             | `list_codex_articles` returns only `published`/`locked` (0015)                                          | `/council/codex` dashboard cannot list drafts        |
+| Archived-category reactivation                                             | `list_codex_categories` returns only active categories (0015)                                           | `category-manager.tsx` cannot list archived shelves  |
+| Propose-to-Codex chat sources                                              | `codex_source_type` includes `chat_message` but no RPC overload accepts a `chat_message_id` (0015/0017) | `chat-report-control` / Holochat propose entry       |
+| Mention notification producer                                               | the `mention` enum exists but no DB producer enqueues it (0017)                                         | NotificationBell                                    |
+| Resolved-report notification                                               | `moderation_set_report_status` is not recreated to enqueue a notification (0009)                        | NotificationBell                                    |
+| Announcement fan-out                                                        | `post_chat_announcement` records the event with no recipient (0017)                                     | NotificationBell                                    |
+| Moderator mute RPC                                                          | no mute function in the 0015-0018 contract; blocks are self-initiated (0016)                            | Holochat moderation controls                        |
+| Private-channel member list RPC                                             | no RPC lists a private channel's members (0017)                                                         | `/holochat/[slug]` management                       |
+| Archived-channel reactivation UI                                            | `admin_set_chat_channel_status` exists but no surface lists archived channels (0017)                    | `/holochat/manage`                                  |
+| Failed-event admin UI                                                       | `outbox_list_failed`/`outbox_reprocess` exist (0017) but nothing surfaces them                          | `/council/settings` (Lane D surface)                |
+| Message edit-history viewer                                                 | `chat_message_edits` is written (0017) but no read RPC or UI shows it                                   | message context menu                                |
+| Reaction-type Council UI                                                    | `admin_upsert_reaction_type`/`admin_set_reaction_type_active` exist (0008) but no Council surface       | Council settings                                    |
+| Per-plaza posting permission field                                          | `admin_create_plaza`/`admin_update_plaza` accept no `required_post_permission` parameter (0007)         | Council Plaza administration                        |
+
 ---
 
 ## 3. Checks the gate cannot run
@@ -278,11 +353,11 @@ These require a person and must be walked before closing a phase.
 | Item                                                                                      | Owner                     | Note                                                                                                                       |
 | ----------------------------------------------------------------------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | ADR for the Base UI + Tailwind 4 adoption                                                 | whoever made the call     | Recorded in `.agent/COORDINATION.md`                                                                                       |
-| Phase 2: per-plaza permission (`required_post_permission`) has no RPC parameter to set it | Supabase/migrations owner | Not a UI gap - `admin_create_plaza`/`admin_update_plaza` need a new parameter first                                        |
-| `.agent/HANDOFF_UI_LIBS.md` fails `pnpm format:check`                                     | Lane D (Phase 7)          | Resolved: formatted with Prettier; the file now passes `pnpm format:check`                                                  |
+| Phase 2: per-plaza permission (`required_post_permission`) has no RPC parameter to set it | Supabase/migrations owner | Not a UI gap - `admin_create_plaza`/`admin_update_plaza` need a new parameter first (registry §2.12)                        |
 | Retention runs but has never fired in production                                          | content lane              | `pg_cron` job scheduled for 03:30 daily; the function itself is proven by `appeals_contract.test.sql`                      |
-| No `global-error.tsx`                                                                     | Lane D (Phase 7)          | Resolved: `src/app/global-error.tsx` added with a self-contained, inline-styled boundary for crashes inside the root layout |
-| Phase 1 remaining: rank, badges, clan display                                             | Phase 5                   | Depends on identity systems not yet built                                                                                  |
+| Fresh `supabase test db --linked` for the 0015-0018 suites                               | Supabase/migrations owner | The last linked run (558/558) predates Codex/Clans/Holochat/Search; the four new suites add 271 assertions                  |
+| Council UI for reaction-type administration                                              | Council lane              | RPCs exist (0008); no surface yet (registry §2.12)                                                                         |
+| All other 0015-0018 contract gaps                                                         | Supabase/migrations owner | Registry §2.12: chat proposal sources, mention/announcement/resolved-report notifications, moderator mute, private-channel members, archived reactivation surfaces, outbox admin UI, edit-history viewer |
 
 ---
 
@@ -295,6 +370,8 @@ Phase 0 was reconciled against reality and closed: 35/35, each item verified aga
 Phase 2 and Phase 3 both moved this session, once Plaza/post/comment UI and the report queue/decision/target-moderation UI landed on top of already-verified server logic. Phase 3 then closed everything that was only missing a control: content flags, move, lock/reopen, comment pin/lock, edit history, warnings, Council notes and moderation history. Appeals and retention then closed the rest: migration `0013` gives a member one argument per recorded action and a Council queue to answer it, and `0013`/`0014` purge closed reports and decided appeals after 180 days on a `pg_cron` schedule that lives in the repository rather than in the Dashboard.
 
 Current phase state: 0 -> 35/35 - 1 -> 37/40 (remainder depends on Phase 5 identity) - 2 -> 43/44 (only the per-plaza permission field remains, which needs a migration) - 3 -> 49/50. The single open Phase 3 item is "permanent deletion requires superior permission, reason and confirmation", which does not apply: this system has no physical deletion by design.
+
+The integration wave (Phases 4-7) shipped Codex Libre (0015), Clans/Casas identity (0016), Holochat + notifications (0017) and Search + settings (0018), each with its own pgTAP suite (§2.8-2.11). The Council shell now opens for Archivists holding `codex.edit`/`codex.publish` alone and carries Codex and Settings destinations; the shell nav, mobile nav and signed-in chrome (search entry, notification bell) reach every product area; and the home page states the network's identity plainly. Self-service content is verified end-to-end for a normal registered member: post in a Plaza, propose a conversation for the Codex (from a post, comment, or external source), and suggest a correction on a published article. Writing directly to the Codex is an Archivist permission (`codex.edit`) by design — a normal member's path is propose → review → article. The Philosophy category is not seeded; an Archivist creates it once through Council → Codex → Categories, after which published articles under it appear in the library and flow to the home via the Codex entry point. The remaining 0015-0018 contract gaps are listed in §2.12 and are migration work, not UI debt.
 
 **Running the database contract.** The four suites need pgTAP. Against a local stack: `pnpm db:reset:local` then `supabase test db`.
 

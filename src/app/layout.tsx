@@ -80,7 +80,9 @@ export default async function RootLayout({
 
   const mobileNavigationItems = [
     { href: "/plazas", label: "Plazas" },
+    { href: "/holochat", label: "Holochat" },
     { href: "/codex", label: "Codex Libre" },
+    { href: "/clans", label: "Clans and Casas" },
     { href: "/members", label: "Members" },
     ...(canOpenCouncil ? [{ href: "/council", label: "Council" }] : []),
   ];
@@ -124,10 +126,22 @@ export default async function RootLayout({
                 Plazas
               </Link>
               <Link
+                href="/holochat"
+                className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus hidden min-h-11 items-center rounded-md px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden sm:inline-flex"
+              >
+                Holochat
+              </Link>
+              <Link
                 href="/codex"
                 className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus hidden min-h-11 items-center rounded-md px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden sm:inline-flex"
               >
                 Codex
+              </Link>
+              <Link
+                href="/clans"
+                className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus hidden min-h-11 items-center rounded-md px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden sm:inline-flex"
+              >
+                Clans
               </Link>
               <Link
                 href="/members"
