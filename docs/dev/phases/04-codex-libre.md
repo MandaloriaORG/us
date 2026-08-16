@@ -6,78 +6,78 @@ Create the free library of Mandaloria with Markdown editor and versioning.
 
 ## Public reading
 
-- [ ] List categories.
-- [ ] View published article.
-- [ ] Search articles.
-- [ ] Save article.
-- [ ] Link article to discussion.
+- [x] List categories.
+- [x] View published article.
+- [x] Search articles.
+- [x] Save article.
+- [x] Link article to discussion.
 
 ## Markdown Editor
 
-- [ ] Create article from Council.
-- [ ] Edit article from Council.
-- [ ] Title field.
-- [ ] Slug field.
-- [ ] Category field.
-- [ ] Markdown editor.
-- [ ] Markdown preview.
-- [ ] Save draft.
-- [ ] Publish.
-- [ ] Unpublish.
-- [ ] Archive.
-- [ ] Lock article.
+- [x] Create article from Council.
+- [x] Edit article from Council.
+- [x] Title field.
+- [x] Slug field.
+- [x] Category field.
+- [x] Markdown editor.
+- [x] Markdown preview.
+- [x] Save draft.
+- [x] Publish.
+- [x] Unpublish.
+- [x] Archive.
+- [x] Lock article.
 
 ## Versioning
 
-- [ ] Create version on publish.
-- [ ] Create version when editing published article.
-- [ ] View history.
-- [ ] Restore version.
-- [ ] Save change author.
-- [ ] Save change summary.
+- [x] Create version on publish.
+- [x] Create version when editing published article.
+- [x] View history.
+- [x] Restore version.
+- [x] Save change author.
+- [x] Save change summary.
 
 ## Suggestions
 
-- [ ] User can suggest correction.
-- [ ] Archivist/admin can review suggestions.
-- [ ] Accept suggestion.
-- [ ] Reject suggestion.
+- [x] User can suggest correction.
+- [x] Archivist/admin can review suggestions.
+- [x] Accept suggestion.
+- [x] Reject suggestion.
 
 ## Conversation Distillation
 
-- [ ] Member proposes content eligible for the Codex.
-- [ ] Proposal saves reason and sources.
+- [x] Member proposes content eligible for the Codex.
+- [x] Proposal saves reason and sources.
 - [ ] Avoid or merge duplicate proposals.
-- [ ] Archivist classifies and takes/assigns proposal.
-- [ ] Validate visibility and consent of each source.
-- [ ] Create draft from proposal.
-- [ ] Confirm contributors and type of contribution.
-- [ ] Allow public attribution, anonymous attribution or withdrawal according to policy.
-- [ ] Only publish a reviewed version.
-- [ ] Link article and conversations in both directions.
-- [ ] Show permitted provenance.
-- [ ] Reject, withdraw, reopen and replace proposals.
-- [ ] Test private, deleted and quarantined sources.
+- [x] Archivist classifies and takes/assigns proposal.
+- [x] Validate visibility and consent of each source.
+- [x] Create draft from proposal.
+- [x] Confirm contributors and type of contribution.
+- [x] Allow public attribution, anonymous attribution or withdrawal according to policy.
+- [x] Only publish a reviewed version.
+- [x] Link article and conversations in both directions.
+- [x] Show permitted provenance.
+- [x] Reject, withdraw, reopen and replace proposals.
+- [x] Test private, deleted and quarantined sources.
 
 ## Permissions
 
-- [ ] Visitor reads published articles.
-- [ ] User suggests corrections.
-- [ ] Archivist creates/edits according to permissions.
-- [ ] Admin controls everything.
+- [x] Visitor reads published articles.
+- [x] User suggests corrections.
+- [x] Archivist creates/edits according to permissions.
+- [x] Admin controls everything.
 
 ## Security
 
-- [ ] Sanitize Markdown.
-- [ ] Block scripts.
-- [ ] Validate links.
-- [ ] Limit images if applicable.
-- [ ] Audit log on publish/unpublish/restore.
+- [x] Sanitize Markdown.
+- [x] Block scripts.
+- [x] Validate links.
+- [x] Limit images if applicable.
+- [x] Audit log on publish/unpublish/restore.
 
 ## Done when
 
-- [ ] Admin can create and publish Markdown articles.
-- [ ] Public can read Codex Libre.
-- [ ] Versions are saved.
-- [ ] Rendered content does not allow XSS.
-- [ ] A conversation can result in traceable knowledge without leaking private data.
+- [x] Admin can create and publish Markdown articles.
+- [x] Public can read Codex Libre.
+- [x] Versions are saved.
+- [x] Rendered content does not allow XSS.
+- [x] A conversation can result in traceable knowledge without leaking private data.
