@@ -41,3 +41,8 @@ next-env.d.ts
 # Uncomment once Supabase is linked:
 # supabase/.branches/
 # supabase/.temp/
+
+# local agent tooling
+.claude/
+.playwright-mcp/
+home-320.png
