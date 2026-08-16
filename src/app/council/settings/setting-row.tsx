@@ -9,8 +9,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
   updateSiteSetting,
   type SettingActionResult,
-  type SettingValueType,
 } from "@/lib/actions/settings";
+import type { SettingValueType } from "./settings-dto";
 import type { Json } from "@/lib/database.types";
 import { cn } from "@/lib/cn";
 

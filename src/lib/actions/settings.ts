@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import type { Json } from "@/lib/database.types";
 import { createClient } from "@/lib/supabase/server";
+import { SETTING_VALUE_TYPES, type SettingValueType } from "@/app/council/settings/settings-dto";
 
 /**
  * Site settings administration.
@@ -16,9 +17,6 @@ import { createClient } from "@/lib/supabase/server";
  * validates shape early enough to keep a bad payload off the wire; it never
  * decides authority.
  */
-
-export const SETTING_VALUE_TYPES = ["string", "number", "boolean", "json", "array"] as const;
-export type SettingValueType = (typeof SETTING_VALUE_TYPES)[number];
 
 const KEY_PATTERN = /^[a-z0-9]+(\.[a-z0-9_]+)*$/;
 

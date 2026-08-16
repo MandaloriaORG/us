@@ -1,5 +1,4 @@
 import type { Json } from "@/lib/database.types";
-import { SETTING_VALUE_TYPES, type SettingValueType } from "@/lib/actions/settings";
 
 /**
  * Normalized read projection of `admin_get_site_settings`.
@@ -9,6 +8,9 @@ import { SETTING_VALUE_TYPES, type SettingValueType } from "@/lib/actions/settin
  * Unknown keys are kept (a newer deployment may seed settings this build does
  * not know about) and fall back to a humanized label in the UI.
  */
+
+export const SETTING_VALUE_TYPES = ["string", "number", "boolean", "json", "array"] as const;
+export type SettingValueType = (typeof SETTING_VALUE_TYPES)[number];
 
 const KEY_PATTERN = /^[a-z0-9]+(\.[a-z0-9_]+)*$/;
 const valueTypeSet = new Set<string>(SETTING_VALUE_TYPES);
