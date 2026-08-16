@@ -10,8 +10,11 @@ import { getProfileById } from "@/lib/actions/profile";
 import { APPEAL_STATUS_LABELS, appealActionLabel } from "@/lib/content/appeal-labels";
 import { listOwnAppeals, listOwnModerationActions } from "@/lib/content/appeals";
 import { listOwnWarnings } from "@/lib/content/user-moderation";
+import { loadProfileIdentity, loadSocialState } from "@/lib/clans/identity";
 import { getAuthorizationSnapshot } from "@/lib/permissions";
 
+import { IdentityBadges } from "./identity-badges";
+import { MemberSocial } from "./member-social";
 import { OwnAppeals } from "./own-appeals";
 import { OwnWarnings } from "./own-warnings";
 
@@ -49,6 +52,13 @@ export default async function MemberProfilePage({ params }: Props) {
   const [ownWarnings, ownActions, ownAppeals] = isSelf
     ? await Promise.all([listOwnWarnings(), listOwnModerationActions(), listOwnAppeals()])
     : [[], [], []];
+
+  const [identity, social] = await Promise.all([
+    loadProfileIdentity(params.id, isSelf),
+    isSelf || !authorization.allowed
+      ? Promise.resolve(null)
+      : loadSocialState(authorization.userId, params.id),
+  ]);
 
   // The action list carries the appeal's id and status; its wording lives on the
   // appeal itself, so the decision is read from there rather than duplicated.
@@ -92,6 +102,18 @@ export default async function MemberProfilePage({ params }: Props) {
 
         <div className="min-w-0">
           <h1 className="text-fg text-2xl font-semibold wrap-break-word">{profile.display_name}</h1>
+
+          {/* Rank — progression, grants no permissions */}
+          {identity.status === "ok" && identity.rank ? (
+            <div className="mt-1.5">
+              <span
+                className="border-brand/40 bg-brand-muted/10 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
+                style={identity.rank.color ? { color: identity.rank.color } : undefined}
+              >
+                {identity.rank.name}
+              </span>
+            </div>
+          ) : null}
 
           {/* Staff badge */}
           {staffRoles.length > 0 && (
@@ -156,6 +178,18 @@ export default async function MemberProfilePage({ params }: Props) {
           </a>
         </div>
       )}
+
+      {/* Badges — identity display with issuer, date, reason and status */}
+      {identity.status === "ok" && identity.badges.length > 0 ? (
+        <IdentityBadges badges={identity.badges} />
+      ) : null}
+
+      {/* Friend and block controls — never on the viewer's own profile */}
+      {!isSelf && social ? (
+        <div className="border-border mt-8 border-t pt-4">
+          <MemberSocial targetUserId={params.id} social={social} />
+        </div>
+      ) : null}
 
       {isSelf ? (
         <OwnAppeals

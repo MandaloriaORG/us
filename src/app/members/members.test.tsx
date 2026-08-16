@@ -11,6 +11,8 @@ const mocks = vi.hoisted(() => ({
   listOwnWarnings: vi.fn(),
   listOwnModerationActions: vi.fn(),
   listOwnAppeals: vi.fn(),
+  loadProfileIdentity: vi.fn(),
+  loadSocialState: vi.fn(),
 }));
 
 vi.mock("@/lib/actions/profile", () => ({
@@ -33,6 +35,17 @@ vi.mock("@/lib/content/appeals", () => ({
 }));
 vi.mock("@/lib/actions/appeals", () => ({ createAppeal: vi.fn() }));
 vi.mock("@/lib/actions/user-moderation", () => ({ acknowledgeWarning: vi.fn() }));
+vi.mock("@/lib/clans/identity", () => ({
+  loadProfileIdentity: mocks.loadProfileIdentity,
+  loadSocialState: mocks.loadSocialState,
+}));
+vi.mock("@/lib/actions/clans", () => ({
+  blockUser: vi.fn(),
+  cancelFriendRequest: vi.fn(),
+  respondFriendRequest: vi.fn(),
+  sendFriendRequest: vi.fn(),
+  unblockUser: vi.fn(),
+}));
 
 import MemberProfilePage from "@/app/members/[id]/page";
 import MembersError from "@/app/members/error";
@@ -74,6 +87,8 @@ beforeEach(() => {
     search: "",
   });
   mocks.getProfileById.mockResolvedValue(publicProfile());
+  mocks.loadProfileIdentity.mockResolvedValue({ status: "ok", rank: null, badges: [] });
+  mocks.loadSocialState.mockResolvedValue({ relationship: "none" });
   mocks.getAuthorizationSnapshot.mockResolvedValue({ allowed: false, reason: "not_authenticated" });
   mocks.notFound.mockImplementation(() => {
     throw new Error("NEXT_NOT_FOUND");
@@ -288,6 +303,74 @@ describe("member profile", () => {
 
     render(await MemberProfilePage({ params: { id: memberId } }));
     expect(screen.queryByRole("button", { name: "Report" })).not.toBeInTheDocument();
+  });
+
+  it("shows the member's rank next to their name", async () => {
+    mocks.loadProfileIdentity.mockResolvedValue({
+      status: "ok",
+      rank: {
+        slug: "mandalorian",
+        name: "Mandalorian",
+        color: "#aabbcc",
+        assignedAt: "2025-01-01T00:00:00.000Z",
+      },
+      badges: [],
+    });
+
+    render(await MemberProfilePage({ params: { id: memberId } }));
+    expect(screen.getByText("Mandalorian")).toBeInTheDocument();
+  });
+
+  it("renders badge records with issuer, date, reason and status", async () => {
+    mocks.loadProfileIdentity.mockResolvedValue({
+      status: "ok",
+      rank: null,
+      badges: [
+        {
+          id: "20000000-0000-4000-8000-000000000001",
+          slug: "historian",
+          name: "Historian of the Forge",
+          description: "Preserved a Codex article.",
+          issuerName: "Bo-Katan",
+          reason: "Restored the forge records.",
+          evidenceRef: "https://codex.example/historian",
+          evidenceVisibility: "public",
+          status: "awarded",
+          awardedAt: "2025-01-01T00:00:00.000Z",
+          revokedReason: null,
+          revokedAt: null,
+        },
+      ],
+    });
+
+    render(await MemberProfilePage({ params: { id: memberId } }));
+    expect(screen.getByText("Historian of the Forge")).toBeInTheDocument();
+    expect(screen.getByText(/Issued by Bo-Katan/)).toBeInTheDocument();
+    expect(screen.getByText(/Restored the forge records/)).toBeInTheDocument();
+    expect(screen.getByText(/Public evidence/)).toBeInTheDocument();
+  });
+
+  it("shows the Add friend control to a signed-in viewer on another profile", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: true,
+      permissionNames: [],
+      userId: "50000000-0000-4000-8000-000000000009",
+    });
+    mocks.loadSocialState.mockResolvedValue({ relationship: "none" });
+
+    render(await MemberProfilePage({ params: { id: memberId } }));
+    expect(screen.getByRole("button", { name: "Add friend" })).toBeInTheDocument();
+  });
+
+  it("does not offer friend controls on the viewer's own profile", async () => {
+    mocks.getAuthorizationSnapshot.mockResolvedValue({
+      allowed: true,
+      permissionNames: [],
+      userId: memberId,
+    });
+
+    render(await MemberProfilePage({ params: { id: memberId } }));
+    expect(screen.queryByRole("button", { name: "Add friend" })).not.toBeInTheDocument();
   });
 });
 

@@ -367,64 +367,64 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 
 ## 14. Clans, houses and circles
 
-- [ ] List clans/houses.
-- [ ] View clan/house page.
-- [ ] Create clan/house.
-- [ ] Edit name.
-- [ ] Edit slug.
-- [ ] Edit description.
-- [ ] Edit emblem.
-- [ ] Change color.
-- [ ] Change privacy.
-- [ ] Archive clan/house.
-- [ ] Request to join.
-- [ ] Invite user.
-- [ ] Accept request.
-- [ ] Reject request.
-- [ ] Leave clan/house.
-- [ ] Expel member.
-- [ ] Change leader.
-- [ ] Create internal roles.
-- [ ] Assign internal role.
-- [ ] Remove internal role.
-- [ ] Create internal announcement.
+- [x] List clans/houses.
+- [x] View clan/house page.
+- [x] Create clan/house.
+- [x] Edit name.
+- [ ] Edit slug. (no RPC parameter in 0016 — handoff)
+- [x] Edit description.
+- [x] Edit emblem.
+- [ ] Change color. (clans have no colour field in the contract)
+- [x] Change privacy.
+- [x] Archive clan/house.
+- [x] Request to join.
+- [x] Invite user.
+- [ ] Accept request. (action exists; no RPC lists a clan's pending requests — handoff)
+- [ ] Reject request. (same read-contract gap as accept)
+- [x] Leave clan/house.
+- [x] Expel member.
+- [x] Change leader.
+- [x] Create internal roles.
+- [x] Assign internal role.
+- [x] Remove internal role.
+- [ ] Create internal announcement. (holochat announcement — Phase 6)
 - [ ] Clan internal space if applicable.
-- [ ] Clan internal channel if applicable.
-- [ ] Define House mission.
-- [ ] Define areas of responsibility/Codex.
-- [ ] Create research expedition.
-- [ ] Define expedition goal and responsible parties.
-- [ ] Manage expedition participants and sources.
-- [ ] Close or archive expedition with result.
-- [ ] Propose expedition result to the Codex.
-- [ ] Maintaining an area does not grant ownership or automatic publishing.
-- [ ] Leader only manages their clan/house.
-- [ ] Admin can intervene.
+- [ ] Clan internal channel if applicable. (holochat clan channel — Phase 6)
+- [x] Define House mission.
+- [ ] Define areas of responsibility/Codex. (no DB table links clans to areas/Codex topics — handoff)
+- [ ] Create research expedition. (no expeditions contract in migrations 0015-0018 — handoff)
+- [ ] Define expedition goal and responsible parties. (handoff)
+- [ ] Manage expedition participants and sources. (handoff)
+- [ ] Close or archive expedition with result. (handoff)
+- [ ] Propose expedition result to the Codex. (handoff)
+- [ ] Maintaining an area does not grant ownership or automatic publishing. (no area-maintenance mechanism exists to grant it)
+- [x] Leader only manages their clan/house.
+- [x] Admin can intervene.
 
 ## 15. Ranks and badges
 
-- [ ] Create rank.
-- [ ] Edit rank.
-- [ ] Delete/archive rank.
-- [ ] Assign rank manually.
-- [ ] Remove rank.
-- [ ] Show rank on profile.
-- [ ] Show rank next to name.
-- [ ] Create badge.
-- [ ] Edit badge.
-- [ ] Delete/archive badge.
-- [ ] Assign badge manually.
-- [ ] Withdraw badge.
-- [ ] Show badges on profile.
-- [ ] Show issuer, date, reason and verifiable badge status.
-- [ ] Link public evidence or show protected reference.
-- [ ] Revoke badge without deleting internal history.
-- [ ] Only authorized issuers assign each badge type.
-- [ ] Private evidence is not exposed on profiles.
+- [x] Create rank.
+- [x] Edit rank.
+- [x] Delete/archive rank.
+- [x] Assign rank manually.
+- [x] Remove rank.
+- [x] Show rank on profile.
+- [x] Show rank next to name.
+- [x] Create badge.
+- [x] Edit badge.
+- [x] Delete/archive badge.
+- [x] Assign badge manually.
+- [x] Withdraw badge.
+- [x] Show badges on profile.
+- [x] Show issuer, date, reason and verifiable badge status.
+- [x] Link public evidence or show protected reference.
+- [x] Revoke badge without deleting internal history.
+- [x] Only authorized issuers assign each badge type.
+- [x] Private evidence is not exposed on profiles.
 - [ ] Automatic badges if implemented.
 - [ ] Automatic ranks if implemented.
-- [ ] Rank does not grant permissions without explicit rule.
-- [ ] Badge does not grant permissions without explicit rule.
+- [x] Rank does not grant permissions without explicit rule.
+- [x] Badge does not grant permissions without explicit rule.
 
 ## 16. Reputation
 
@@ -440,17 +440,17 @@ Rule: a feature is not complete if it lacks UI, data, permissions, validation, e
 
 ## 17. Friends, blocks and connections
 
-- [ ] Send friend request.
-- [ ] Accept request.
-- [ ] Reject request.
-- [ ] Cancel request.
-- [ ] Remove friend.
-- [ ] View friends on profile according to privacy.
-- [ ] Block user.
-- [ ] Unblock user.
-- [ ] Blocked user cannot send request.
-- [ ] Blocked user cannot interact directly.
-- [ ] Rate limit on requests.
+- [x] Send friend request.
+- [x] Accept request.
+- [x] Reject request.
+- [x] Cancel request.
+- [ ] Remove friend. (action exists; no RPC exposes an accepted friendship's id to the UI — handoff)
+- [x] View friends on profile according to privacy.
+- [x] Block user.
+- [x] Unblock user.
+- [x] Blocked user cannot send request.
+- [x] Blocked user cannot interact directly.
+- [x] Rate limit on requests.
 - [ ] Moderation can review abuse/harassment.
 
 ## 18. Holochat
