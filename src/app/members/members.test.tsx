@@ -13,6 +13,9 @@ const mocks = vi.hoisted(() => ({
   listOwnAppeals: vi.fn(),
   loadProfileIdentity: vi.fn(),
   loadSocialState: vi.fn(),
+  listFriendsOf: vi.fn(),
+  listPostsByAuthor: vi.fn(),
+  countAuthorPosts: vi.fn(),
 }));
 
 vi.mock("@/lib/actions/profile", () => ({
@@ -38,6 +41,7 @@ vi.mock("@/lib/actions/user-moderation", () => ({ acknowledgeWarning: vi.fn() })
 vi.mock("@/lib/clans/identity", () => ({
   loadProfileIdentity: mocks.loadProfileIdentity,
   loadSocialState: mocks.loadSocialState,
+  listFriendsOf: mocks.listFriendsOf,
 }));
 vi.mock("@/lib/actions/clans", () => ({
   blockUser: vi.fn(),
@@ -45,6 +49,10 @@ vi.mock("@/lib/actions/clans", () => ({
   respondFriendRequest: vi.fn(),
   sendFriendRequest: vi.fn(),
   unblockUser: vi.fn(),
+}));
+vi.mock("@/lib/content/queries", () => ({
+  listPostsByAuthor: mocks.listPostsByAuthor,
+  countAuthorPosts: mocks.countAuthorPosts,
 }));
 
 import MemberProfilePage from "@/app/members/[id]/page";
@@ -89,6 +97,9 @@ beforeEach(() => {
   mocks.getProfileById.mockResolvedValue(publicProfile());
   mocks.loadProfileIdentity.mockResolvedValue({ status: "ok", rank: null, badges: [] });
   mocks.loadSocialState.mockResolvedValue({ relationship: "none" });
+  mocks.listFriendsOf.mockResolvedValue([]);
+  mocks.listPostsByAuthor.mockResolvedValue({ items: [], nextCursor: null });
+  mocks.countAuthorPosts.mockResolvedValue(0);
   mocks.getAuthorizationSnapshot.mockResolvedValue({ allowed: false, reason: "not_authenticated" });
   mocks.notFound.mockImplementation(() => {
     throw new Error("NEXT_NOT_FOUND");

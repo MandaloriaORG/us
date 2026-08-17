@@ -32,6 +32,7 @@ export type PlazaDetail = Nullable<
   "description" | "rules"
 >;
 export type PostSummary = Nullable<Functions["list_posts"]["Returns"][number], "excerpt">;
+export type PostByAuthor = Nullable<Functions["list_posts_by_author"]["Returns"][number], "excerpt">;
 export type PostDetail = Nullable<Functions["get_post"]["Returns"][number], "body">;
 export type PostComment = Nullable<
   Functions["list_post_comments"]["Returns"][number],
@@ -216,4 +217,36 @@ export function buildCommentTree(comments: PostComment[]): CommentNode[] {
 function boundedPageSize(requested: number | undefined, fallback: number, max: number) {
   if (!Number.isInteger(requested) || requested === undefined) return fallback;
   return Math.min(Math.max(requested, 1), max);
+}
+
+export async function listPostsByAuthor(
+  authorId: string,
+  options: { cursor?: string | null; pageSize?: number } = {},
+): Promise<Page<PostByAuthor>> {
+  const cursor = decodeCursor(options.cursor);
+  const pageSize = boundedPageSize(options.pageSize, 10, 50);
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("list_posts_by_author", {
+    p_author_id: authorId,
+    p_cursor_created_at: cursor?.createdAt ?? undefined,
+    p_cursor_id: cursor?.id ?? undefined,
+    p_limit: pageSize,
+  });
+
+  if (error) return emptyPage();
+
+  return toPage(
+    data as Array<Database["public"]["Functions"]["list_posts_by_author"]["Returns"][number]> | null,
+    pageSize,
+    (row) => ({ createdAt: row.created_at, id: row.id }),
+  );
+}
+
+export async function countAuthorPosts(authorId: string): Promise<number> {
+  if (!authorId) return 0;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("count_author_posts", { p_author_id: authorId });
+  if (error) return 0;
+  return typeof data === "number" ? data : 0;
 }

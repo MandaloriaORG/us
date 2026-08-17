@@ -3314,6 +3314,36 @@ export type Database = {
           updated_at: string;
         }[];
       };
+      count_author_posts: {
+        Args: { p_author_id: string };
+        Returns: number;
+      };
+      list_posts_by_author: {
+        Args: {
+          p_author_id: string;
+          p_cursor_created_at?: string;
+          p_cursor_id?: string;
+          p_limit?: number;
+        };
+        Returns: {
+          author_display_name: string;
+          author_id: string;
+          comments_count: number;
+          created_at: string;
+          dislikes_count: number;
+          excerpt: string;
+          id: string;
+          is_highlighted: boolean;
+          is_pinned: boolean;
+          likes_count: number;
+          plaza_id: string;
+          plaza_name: string;
+          plaza_slug: string;
+          score: number;
+          status: Database["public"]["Enums"]["post_status"];
+          title: string;
+        }[];
+      };
       list_posts: {
         Args: {
           p_cursor_created_at?: string;

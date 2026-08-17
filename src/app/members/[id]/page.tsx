@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { CalendarBlankIcon, GlobeIcon, ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr";
+import { CalendarBlankIcon, GlobeIcon, ArrowLeftIcon, ChatCircleDotsIcon, UsersIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
 import { safeExternalUrl } from "@/app/members/safe-external-url";
@@ -10,8 +10,9 @@ import { getProfileById } from "@/lib/actions/profile";
 import { APPEAL_STATUS_LABELS, appealActionLabel } from "@/lib/content/appeal-labels";
 import { listOwnAppeals, listOwnModerationActions } from "@/lib/content/appeals";
 import { listOwnWarnings } from "@/lib/content/user-moderation";
-import { loadProfileIdentity, loadSocialState } from "@/lib/clans/identity";
+import { listFriendsOf, loadProfileIdentity, loadSocialState } from "@/lib/clans/identity";
 import { getAuthorizationSnapshot } from "@/lib/permissions";
+import { listPostsByAuthor, countAuthorPosts } from "@/lib/content/queries";
 
 import { IdentityBadges } from "./identity-badges";
 import { MemberSocial } from "./member-social";
@@ -53,11 +54,14 @@ export default async function MemberProfilePage({ params }: Props) {
     ? await Promise.all([listOwnWarnings(), listOwnModerationActions(), listOwnAppeals()])
     : [[], [], []];
 
-  const [identity, social] = await Promise.all([
+  const [identity, social, friends, postsPage, postsTotal] = await Promise.all([
     loadProfileIdentity(params.id, isSelf),
     isSelf || !authorization.allowed
       ? Promise.resolve(null)
       : loadSocialState(authorization.userId, params.id),
+    listFriendsOf(params.id),
+    listPostsByAuthor(params.id, { pageSize: 5 }),
+    countAuthorPosts(params.id),
   ]);
 
   // The action list carries the appeal's id and status; its wording lives on the
@@ -174,6 +178,14 @@ export default async function MemberProfilePage({ params }: Props) {
                 </span>
               </div>
             )}
+            <div className="text-fg-muted flex items-center gap-1.5 text-xs">
+              <ChatCircleDotsIcon aria-hidden="true" className="h-3.5 w-3.5" />
+              <span>{postsTotal} {postsTotal === 1 ? "post" : "posts"}</span>
+            </div>
+            <div className="text-fg-muted flex items-center gap-1.5 text-xs">
+              <UsersIcon aria-hidden="true" className="h-3.5 w-3.5" />
+              <span>{friends.length} {friends.length === 1 ? "friend" : "friends"}</span>
+            </div>
             {identity.status === "ok" && identity.badges.length > 0 ? (
               <div className="text-fg-muted flex items-center gap-1.5 text-xs">
                 <span
@@ -252,6 +264,80 @@ export default async function MemberProfilePage({ params }: Props) {
             acknowledgedAt: warning.acknowledged_at,
           }))}
         />
+      ) : null}
+
+      {/* Recent posts */}
+      <section className="border-border mt-8 border-t pt-6" aria-labelledby="member-posts">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h2 id="member-posts" className="text-fg text-base font-semibold">
+            Recent posts
+          </h2>
+          {postsTotal > postsPage.items.length ? (
+            <Link
+              href={`/plazas`}
+              className="text-brand focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex min-h-11 items-center text-xs font-medium hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+            >
+              See all {postsTotal} posts →
+            </Link>
+          ) : null}
+        </div>
+
+        {postsPage.items.length === 0 ? (
+          <p className="text-fg-muted text-sm">No public posts yet.</p>
+        ) : (
+          <ul className="space-y-3">
+            {postsPage.items.map((post) => (
+              <li
+                key={post.id}
+                className="border-border bg-surface/40 hover:bg-surface/70 rounded-lg border px-4 py-3 transition-colors"
+              >
+                <Link
+                  href={`/posts/${post.id}`}
+                  className="text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg block rounded font-medium hover:text-brand focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+                >
+                  {post.title}
+                </Link>
+                <div className="text-fg-muted mt-1 flex items-center gap-3 text-xs">
+                  <span>in {post.plaza_name}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{post.comments_count} comments</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{post.likes_count - post.dislikes_count} score</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {/* Friends */}
+      {friends.length > 0 ? (
+        <section className="border-border mt-8 border-t pt-6" aria-labelledby="member-friends">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <h2 id="member-friends" className="text-fg text-base font-semibold">
+              Friends
+            </h2>
+            <Link
+              href={`/clans/connections`}
+              className="text-fg-muted hover:text-fg inline-flex min-h-11 items-center text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden"
+            >
+              View connections →
+            </Link>
+          </div>
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+            {friends.slice(0, 8).map((friend) => (
+              <li key={friend.friendId}>
+                <Link
+                  href={`/members/${friend.friendId}`}
+                  className="border-border bg-surface/40 hover:bg-surface/70 focus-visible:ring-border-focus focus-visible:ring-offset-bg flex items-center gap-2.5 rounded-lg border px-3 py-2 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+                >
+                  <Avatar name={friend.displayName} src={friend.avatarUrl} className="h-8 w-8 shrink-0" />
+                  <span className="text-fg truncate text-xs font-medium">{friend.displayName}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       ) : null}
 
       {/* Report — never offered on the viewer's own profile */}

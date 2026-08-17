@@ -161,3 +161,39 @@ export async function loadSocialState(
     return { relationship: "none" };
   }
 }
+
+/** Public friend list of a user, gated by profile visibility. Empty array if the
+ * target is hidden from the viewer or unauthenticated. */
+export async function listFriendsOf(userId: string): Promise<Array<{ friendId: string; displayName: string; avatarPath: string | null; avatarUrl: string | null; friendsSince: string }>> {
+  if (!userId) return [];
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc("list_friends", {
+      p_user_id: userId,
+      p_limit: 24,
+    });
+    if (error) return [];
+
+    const rows = (data ?? []) as FriendRow[];
+    const paths = rows.map((r) => r.avatar_path).filter((p): p is string => Boolean(p));
+    const urlMap = new Map<string, string>();
+    if (paths.length > 0) {
+      const { data: signed } = await supabase.storage
+        .from("avatars")
+        .createSignedUrls(Array.from(new Set(paths)), 300);
+      for (const item of signed ?? []) {
+        if (item.path && item.signedUrl && !item.error) urlMap.set(item.path, item.signedUrl);
+      }
+    }
+
+    return rows.map((row) => ({
+      friendId: row.friend_id,
+      displayName: row.display_name,
+      avatarPath: row.avatar_path,
+      avatarUrl: row.avatar_path ? (urlMap.get(row.avatar_path) ?? null) : null,
+      friendsSince: row.friends_since,
+    }));
+  } catch {
+    return [];
+  }
+}
