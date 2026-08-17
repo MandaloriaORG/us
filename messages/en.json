@@ -13,7 +13,8 @@
     "editProfile": "Edit profile",
     "settings": "Account settings",
     "signOut": "Sign out",
-    "openUserMenu": "Open user menu"
+    "openUserMenu": "Open user menu",
+    "signingOut": "Signing out"
   },
   "auth": {
     "signInHeading": "Sign in to Mandaloria"

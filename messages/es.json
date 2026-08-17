@@ -13,7 +13,8 @@
     "editProfile": "Editar perfil",
     "settings": "Ajustes de la cuenta",
     "signOut": "Cerrar sesión",
-    "openUserMenu": "Abrir menú de usuario"
+    "openUserMenu": "Abrir menú de usuario",
+    "signingOut": "Cerrando sesión"
   },
   "auth": {
     "signInHeading": "Inicia sesión en Mandaloria"

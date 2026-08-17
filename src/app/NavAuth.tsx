@@ -8,6 +8,7 @@ import {
   GearIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useFormStatus } from "react-dom";
+import { useTranslations } from "next-intl";
 
 import { NotificationBell } from "@/components/system/notification-bell";
 import { Avatar } from "@/components/ui/avatar";
@@ -20,13 +21,14 @@ interface NavAuthProps {
 
 function LogoutButton() {
   const { pending } = useFormStatus();
+  const t = useTranslations("nav");
 
   return (
     <button
       type="submit"
       disabled={pending}
       aria-busy={pending || undefined}
-      aria-label={pending ? "Signing out" : "Sign out"}
+      aria-label={pending ? t("signingOut") : t("signOut")}
       className="text-fg-muted duration-fast hover:bg-error/10 hover:text-error focus-visible:ring-border-focus focus-visible:ring-offset-bg flex h-11 w-11 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:cursor-wait disabled:opacity-60"
     >
       {pending ? (
@@ -39,12 +41,14 @@ function LogoutButton() {
 }
 
 export function NavAuth({ user, profile }: NavAuthProps) {
+  const t = useTranslations("nav");
+
   return (
     <div className="ml-2 flex items-center gap-1.5 sm:gap-2">
       <Link
         href="/search"
         prefetch
-        aria-label="Search"
+        aria-label={t("search")}
         className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 w-11 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
       >
         <MagnifyingGlassIcon aria-hidden="true" className="h-5 w-5" />
@@ -56,7 +60,7 @@ export function NavAuth({ user, profile }: NavAuthProps) {
           prefetch
           className="border-border text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 items-center rounded-lg border px-3 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
         >
-          Sign in
+          {t("signIn")}
         </Link>
       ) : (
         <>
@@ -65,7 +69,7 @@ export function NavAuth({ user, profile }: NavAuthProps) {
           <Link
             href="/profile/edit"
             prefetch
-            aria-label="Edit profile"
+            aria-label={t("editProfile")}
             className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg ring-brand/0 hover:ring-brand/30 flex min-h-11 items-center gap-2 rounded-lg px-2 py-1 text-sm transition-all hover:ring-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
           >
             <Avatar
@@ -79,7 +83,7 @@ export function NavAuth({ user, profile }: NavAuthProps) {
           <Link
             href="/settings"
             prefetch
-            aria-label="Account settings"
+            aria-label={t("settings")}
             className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg flex h-11 w-11 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
           >
             <GearIcon aria-hidden="true" className="h-4 w-4" />
