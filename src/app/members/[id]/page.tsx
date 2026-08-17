@@ -85,75 +85,107 @@ export default async function MemberProfilePage({ params }: Props) {
       {/* Back */}
       <Link
         href="/members"
-        className="text-fg-muted duration-fast hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg mb-8 inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+        className="text-fg-muted duration-fast group hover:text-fg focus-visible:ring-border-focus inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
       >
         <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
         All members
       </Link>
 
       {/* Profile header */}
-      <div className="flex items-start gap-6">
-        <Avatar
-          name={profile.display_name}
-          src={profile.avatarUrl}
-          alt={`${profile.display_name}'s avatar`}
-          className="h-20 w-20"
+      <section className="border-border bg-bg-raised relative mt-6 overflow-hidden rounded-xl border">
+        <div
+          aria-hidden="true"
+          className="from-brand/20 via-brand-muted/10 absolute inset-x-0 top-0 h-24 bg-gradient-to-br to-transparent"
         />
+        <div
+          aria-hidden="true"
+          className="via-brand/40 absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent to-transparent"
+        />
+        <div className="relative flex flex-col gap-5 p-6 sm:flex-row sm:items-start sm:p-8">
+          <Avatar
+            name={profile.display_name}
+            src={profile.avatarUrl}
+            alt={`${profile.display_name}'s avatar`}
+            className="ring-brand/40 ring-offset-bg h-20 w-20 border-transparent shadow-[0_0_32px_-8px_hsl(42_40%_55%/0.55)] ring-2 ring-offset-2"
+          />
 
-        <div className="min-w-0">
-          <h1 className="text-fg text-2xl font-semibold wrap-break-word">{profile.display_name}</h1>
+          <div className="min-w-0 flex-1">
+            <h1 className="text-fg from-fg via-fg to-brand/80 bg-gradient-to-br bg-clip-text text-2xl font-semibold tracking-tight wrap-break-word text-transparent">
+              {profile.display_name}
+            </h1>
 
-          {/* Rank — progression, grants no permissions */}
-          {identity.status === "ok" && identity.rank ? (
-            <div className="mt-1.5">
-              <span
-                className="border-brand/40 bg-brand-muted/10 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
-                style={identity.rank.color ? { color: identity.rank.color } : undefined}
-              >
-                {identity.rank.name}
-              </span>
-            </div>
-          ) : null}
-
-          {/* Staff badge */}
-          {staffRoles.length > 0 && (
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
-              {staffRoles.map((role) => (
+            {/* Rank — progression, grants no permissions */}
+            {identity.status === "ok" && identity.rank ? (
+              <div className="mt-2.5">
                 <span
-                  key={role}
-                  className="border-brand/40 bg-brand-muted/10 text-brand inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
+                  className="border-brand/40 bg-brand-muted/10 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
+                  style={
+                    identity.rank.color
+                      ? {
+                          color: identity.rank.color,
+                          boxShadow: `0 0 14px -4px ${identity.rank.color}`,
+                        }
+                      : undefined
+                  }
                 >
-                  {role}
+                  {identity.rank.name}
                 </span>
-              ))}
-            </div>
-          )}
+              </div>
+            ) : null}
 
-          {/* Other roles */}
-          {otherRoles.length > 0 && (
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
-              {otherRoles.map((role) => (
-                <span
-                  key={role}
-                  className="border-border text-fg-muted inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs"
-                >
-                  {role}
-                </span>
-              ))}
-            </div>
-          )}
+            {/* Staff badge */}
+            {staffRoles.length > 0 && (
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                {staffRoles.map((role) => (
+                  <span
+                    key={role}
+                    className="border-brand/40 bg-brand-muted/10 text-brand inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium shadow-[0_0_12px_-3px_hsl(42_40%_55%/0.4)]"
+                  >
+                    {role}
+                  </span>
+                ))}
+              </div>
+            )}
 
-          {/* Join date */}
-          {joinedLabel && (
-            <div className="text-fg-muted mt-3 flex items-center gap-1.5 text-xs">
-              <CalendarBlankIcon aria-hidden="true" className="h-3.5 w-3.5" />
-              <span>
-                Joined <time dateTime={profile.created_at}>{joinedLabel}</time>
-              </span>
-            </div>
-          )}
+            {/* Other roles */}
+            {otherRoles.length > 0 && (
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                {otherRoles.map((role) => (
+                  <span
+                    key={role}
+                    className="border-border text-fg-muted inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs"
+                  >
+                    {role}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+
+        {/* Stats row */}
+        <div className="border-border relative border-t px-6 py-3 sm:px-8">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+            {joinedLabel && (
+              <div className="text-fg-muted flex items-center gap-1.5 text-xs">
+                <CalendarBlankIcon aria-hidden="true" className="h-3.5 w-3.5" />
+                <span>
+                  Joined <time dateTime={profile.created_at}>{joinedLabel}</time>
+                </span>
+              </div>
+            )}
+            {identity.status === "ok" && identity.badges.length > 0 ? (
+              <div className="text-fg-muted flex items-center gap-1.5 text-xs">
+                <span
+                  className="text-brand h-1.5 w-1.5 rounded-full bg-current"
+                  aria-hidden="true"
+                />
+                {identity.badges.length} {identity.badges.length === 1 ? "badge" : "badges"}
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </section>
 
       {/* Bio */}
       {profile.bio && (
@@ -171,7 +203,7 @@ export default async function MemberProfilePage({ params }: Props) {
             href={website.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-brand focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+            className="text-brand focus-visible:ring-border-focus focus-visible:ring-offset-bg group inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
           >
             <GlobeIcon aria-hidden="true" className="h-4 w-4" />
             <span className="break-all">{website.label}</span>

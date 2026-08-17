@@ -1,4 +1,4 @@
-import { UsersIcon } from "@phosphor-icons/react/dist/ssr";
+import { CalendarBlankIcon, UsersIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -35,6 +35,12 @@ function pageHref(page: number, search: string) {
   return query ? `/members?${query}` : "/members";
 }
 
+function joinedLabel(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.valueOf())) return null;
+  return date.toLocaleDateString("en-US", { year: "numeric", month: "short" });
+}
+
 export default async function MembersPage({ searchParams }: MembersPageProps) {
   const search = (firstValue(searchParams?.q) ?? "").trim().slice(0, 50);
   const page = parsePage(firstValue(searchParams?.page));
@@ -48,9 +54,9 @@ export default async function MembersPage({ searchParams }: MembersPageProps) {
     result.status === "ok" ? Math.max(1, Math.ceil(result.totalCount / result.pageSize)) : 1;
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="text-fg text-2xl font-semibold">Members</h1>
-      <p className="text-fg-muted mt-1 text-sm">
+    <main className="mx-auto w-full max-w-5xl px-6 py-12">
+      <h1 className="text-fg text-2xl font-semibold tracking-tight">Members</h1>
+      <p className="text-fg-muted mt-1.5 text-sm">
         The Mandalorian community — profiles, ranks, and clan affiliations.
       </p>
 
@@ -93,35 +99,50 @@ export default async function MembersPage({ searchParams }: MembersPageProps) {
           <p className="text-fg-muted mt-6 text-sm" role="status">
             {result.totalCount} {result.totalCount === 1 ? "member" : "members"}
           </p>
-          <div className="divide-border border-border mt-3 divide-y rounded-md border">
-            {result.profiles.map((member) => (
-              <Link
-                key={member.id}
-                href={`/members/${member.id}`}
-                className="duration-fast hover:bg-surface focus-visible:ring-border-focus flex min-h-16 items-center gap-4 px-4 py-3 transition-colors focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-inset"
-              >
-                <Avatar name={member.display_name} src={member.avatarUrl} />
-                <div className="min-w-0 flex-1">
-                  <span className="text-fg text-sm font-medium wrap-break-word">
-                    {member.display_name}
-                  </span>
-                  {member.bio ? (
-                    <p className="text-fg-muted truncate text-xs">{member.bio}</p>
-                  ) : null}
-                  {member.roles.length > 0 ? (
-                    <p className="text-fg-subtle mt-1 truncate text-xs">
-                      {member.roles.join(", ")}
-                    </p>
-                  ) : null}
-                </div>
-              </Link>
-            ))}
+          <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {result.profiles.map((member) => {
+              const joined = joinedLabel(member.created_at);
+              return (
+                <Link
+                  key={member.id}
+                  href={`/members/${member.id}`}
+                  className="duration-normal group border-border bg-bg-raised hover:border-brand/30 focus-visible:ring-border-focus focus-visible:ring-offset-bg flex items-start gap-4 rounded-lg border p-5 transition-[border-color,box-shadow,transform] ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-12px_hsl(42_40%_55%/0.25)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+                >
+                  <Avatar
+                    name={member.display_name}
+                    src={member.avatarUrl}
+                    className="ring-border duration-normal group-hover:ring-brand/50 h-12 w-12 border-transparent shadow-[0_0_20px_-8px_hsl(42_40%_55%/0.4)] ring-1 transition-shadow"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <span className="text-fg block truncate text-sm font-medium wrap-break-word">
+                      {member.display_name}
+                    </span>
+                    {member.roles.length > 0 ? (
+                      <span className="text-fg-subtle mt-1 block truncate text-xs">
+                        {member.roles.join(", ")}
+                      </span>
+                    ) : null}
+                    {member.bio ? (
+                      <span className="text-fg-muted mt-1 block truncate text-xs">
+                        {member.bio}
+                      </span>
+                    ) : null}
+                    {joined ? (
+                      <span className="text-fg-subtle mt-2 flex items-center gap-1.5 text-xs">
+                        <CalendarBlankIcon aria-hidden="true" className="h-3.5 w-3.5" />
+                        Joined {joined}
+                      </span>
+                    ) : null}
+                  </div>
+                </Link>
+              );
+            })}
           </div>
 
           {totalPages > 1 ? (
             <nav
               aria-label="Member directory pages"
-              className="mt-6 flex items-center justify-between gap-4"
+              className="mt-8 flex items-center justify-between gap-4"
             >
               {page > 1 ? (
                 <Button asChild variant="secondary">

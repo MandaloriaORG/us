@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 
 import { SubmitButton } from "@/components/ui/submit-button";
@@ -31,15 +32,25 @@ export function EmblemForm({ clanId, slug, currentEmblemUrl, currentPath }: Embl
   const error = uploadState && !uploadState.ok ? uploadState : null;
   const resetError = resetState && !resetState.ok ? resetState : null;
 
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
+
+  const emblemSrc = previewUrl ?? currentEmblemUrl;
+
   return (
     <div className="mt-3 flex flex-col gap-5">
       <div className="flex items-center gap-4">
-        {currentEmblemUrl ? (
+        {emblemSrc ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={currentEmblemUrl}
-            alt="Current clan emblem"
-            className="border-border bg-bg-raised h-16 w-16 shrink-0 rounded-md border object-cover"
+            src={emblemSrc}
+            alt={previewUrl ? "New emblem preview" : "Current clan emblem"}
+            className="border-brand/30 ring-brand/40 ring-offset-bg h-16 w-16 shrink-0 rounded-md border object-cover shadow-[0_0_18px_-6px_hsl(42_40%_55%/0.5)] ring-1 ring-offset-2"
           />
         ) : (
           <span className="text-fg-subtle text-sm">No emblem yet.</span>
@@ -58,9 +69,16 @@ export function EmblemForm({ clanId, slug, currentEmblemUrl, currentPath }: Embl
               type="file"
               accept="image/jpeg,image/png,image/webp"
               required
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                setPreviewUrl(file ? URL.createObjectURL(file) : null);
+              }}
               className="text-fg-muted file:border-border file:bg-surface file:text-fg block w-full max-w-sm text-sm file:mr-3 file:min-h-11 file:cursor-pointer file:rounded-md file:border file:px-3 file:text-sm"
             />
           </div>
+          {previewUrl ? (
+            <p className="text-fg-muted text-xs">Previewing the new emblem — upload to apply it.</p>
+          ) : null}
           {error?.fieldErrors?.emblem ? (
             <p role="alert" className="text-error text-xs">
               {error.fieldErrors.emblem}

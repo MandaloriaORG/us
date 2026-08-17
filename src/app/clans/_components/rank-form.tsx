@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
 
@@ -44,9 +44,13 @@ export function RankForm({
 
   const [state, formAction] = useFormState<ClanActionResult | null, FormData>(submitAction, null);
 
+  const [color, setColor] = useState(initialColor ?? "");
+
   useEffect(() => {
     if (state?.ok) router.refresh();
   }, [router, state]);
+
+  const colorIsValid = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i.test(color);
 
   const fieldErrors = state && !state.ok ? (state.fieldErrors ?? {}) : {};
   const formError = state && !state.ok ? state.message : null;
@@ -85,12 +89,26 @@ export function RankForm({
           id="rank-color"
           name="color"
           label="Color"
-          defaultValue={initialColor ?? ""}
+          value={color}
+          onChange={(event) => setColor(event.target.value)}
           maxLength={9}
           error={fieldErrors.color}
           fieldClassName="sm:max-w-40"
           placeholder="#aabbcc"
-          description="Optional accent used next to the name."
+          description={
+            <span className="flex items-center gap-1.5">
+              <span
+                aria-hidden="true"
+                className="ring-brand/40 h-2.5 w-2.5 shrink-0 rounded-full ring-1"
+                style={
+                  colorIsValid
+                    ? { backgroundColor: color, boxShadow: `0 0 8px -1px ${color}` }
+                    : undefined
+                }
+              />
+              {colorIsValid ? `Preview — ${color}` : "Optional accent used next to the name."}
+            </span>
+          }
         />
         <TextInput
           id="rank-sort"

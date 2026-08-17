@@ -89,20 +89,33 @@ export default async function ConnectionsPage({ searchParams }: Props) {
             </h2>
             {connections.friends.length > 0 ? (
               <div className="border-border divide-border mt-3 divide-y rounded-md border">
-                {connections.friends.map((friend) => (
-                  <Link
-                    key={friend.friendId}
-                    href={`/members/${friend.friendId}`}
-                    className="duration-fast hover:bg-surface focus-visible:ring-border-focus flex min-h-12 items-center gap-3 px-4 py-2.5 transition-colors focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-inset"
-                  >
-                    <span className="text-fg flex-1 truncate text-sm">{friend.displayName}</span>
-                    <span className="text-fg-subtle text-xs">
-                      {joinedLabel(friend.friendsSince)
-                        ? `Friends since ${joinedLabel(friend.friendsSince)}`
-                        : ""}
-                    </span>
-                  </Link>
-                ))}
+                {connections.friends.map((friend) => {
+                  const since = joinedLabel(friend.friendsSince);
+                  return (
+                    <Link
+                      key={friend.friendId}
+                      href={`/members/${friend.friendId}`}
+                      className="duration-fast hover:bg-surface focus-visible:ring-border-focus flex min-h-12 items-center gap-3 px-4 py-2.5 transition-colors focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-inset"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="border-brand/30 bg-brand-muted/15 text-brand ring-brand/40 ring-offset-bg flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ring-1 ring-offset-2"
+                      >
+                        <span className="font-display text-xs font-semibold">
+                          {friend.displayName.charAt(0).toUpperCase()}
+                        </span>
+                      </span>
+                      <span className="text-fg min-w-0 flex-1 truncate text-sm">
+                        {friend.displayName}
+                      </span>
+                      {since ? (
+                        <span className="text-fg-subtle shrink-0 text-xs">
+                          Friends since {since}
+                        </span>
+                      ) : null}
+                    </Link>
+                  );
+                })}
               </div>
             ) : (
               <p className="text-fg-subtle mt-3 text-sm">No friends yet. Send a request below.</p>

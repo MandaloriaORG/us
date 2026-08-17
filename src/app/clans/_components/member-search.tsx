@@ -81,7 +81,11 @@ export function MemberSearch({
                 aria-current={member.id === targetId ? "true" : undefined}
                 className="duration-fast hover:bg-surface focus-visible:ring-border-focus flex min-h-11 items-center gap-3 px-3 py-2 transition-colors focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-inset"
               >
-                <Avatar name={member.display_name} src={member.avatarUrl} className="h-8 w-8" />
+                <Avatar
+                  name={member.display_name}
+                  src={member.avatarUrl}
+                  className="ring-brand/40 ring-offset-bg h-8 w-8 border-transparent ring-1 ring-offset-2"
+                />
                 <span className="text-fg truncate text-sm">{member.display_name}</span>
                 {member.id === targetId ? (
                   <span className="text-fg-muted ml-auto text-xs">Selected</span>

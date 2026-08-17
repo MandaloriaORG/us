@@ -1,4 +1,5 @@
 import {
+  CaretRightIcon,
   HouseLineIcon,
   ShieldIcon,
   UserPlusIcon,
@@ -28,11 +29,13 @@ export default async function ClansPage() {
   const authenticated = authorization.allowed;
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
+    <main className="mx-auto w-full max-w-5xl px-6 py-12">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-fg text-3xl font-semibold">Clans &amp; Casas</h1>
-          <p className="text-fg-muted mt-1 text-sm">
+          <h1 className="text-fg font-display text-3xl font-semibold tracking-tight">
+            Clans &amp; Casas
+          </h1>
+          <p className="text-fg-muted mt-2 text-sm">
             Belong to a Casa, take responsibility for areas of knowledge, and carry its name.
           </p>
         </div>
@@ -48,21 +51,42 @@ export default async function ClansPage() {
 
       <nav
         aria-label="Clan tools"
-        className="text-fg-muted mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm"
+        className="text-fg-muted mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm"
       >
         {canManageRanks ? (
-          <Link className="hover:text-fg hover:underline" href="/clans/ranks">
+          <Link
+            className="duration-fast group hover:text-fg focus-visible:ring-border-focus inline-flex min-h-11 items-center gap-1.5 rounded-md px-1 transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
+            href="/clans/ranks"
+          >
             Manage ranks
+            <CaretRightIcon
+              aria-hidden="true"
+              className="duration-fast h-3.5 w-3.5 -translate-x-0.5 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
+            />
           </Link>
         ) : null}
         {canManageBadges ? (
-          <Link className="hover:text-fg hover:underline" href="/clans/badges">
+          <Link
+            className="duration-fast group hover:text-fg focus-visible:ring-border-focus inline-flex min-h-11 items-center gap-1.5 rounded-md px-1 transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
+            href="/clans/badges"
+          >
             Manage badges
+            <CaretRightIcon
+              aria-hidden="true"
+              className="duration-fast h-3.5 w-3.5 -translate-x-0.5 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
+            />
           </Link>
         ) : null}
         {authenticated ? (
-          <Link className="hover:text-fg hover:underline" href="/clans/connections">
+          <Link
+            className="duration-fast group hover:text-fg focus-visible:ring-border-focus inline-flex min-h-11 items-center gap-1.5 rounded-md px-1 transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
+            href="/clans/connections"
+          >
             Friends &amp; blocks
+            <CaretRightIcon
+              aria-hidden="true"
+              className="duration-fast h-3.5 w-3.5 -translate-x-0.5 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
+            />
           </Link>
         ) : null}
       </nav>
@@ -77,38 +101,49 @@ export default async function ClansPage() {
           />
         </div>
       ) : clansResult.data.length > 0 ? (
-        <div className="border-border divide-border mt-8 divide-y rounded-md border">
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {clansResult.data.map((clan) => (
             <Link
               key={clan.id}
               href={`/clans/${clan.slug}`}
-              className="duration-fast hover:bg-surface focus-visible:ring-border-focus flex min-h-16 items-center gap-4 px-4 py-3 transition-colors focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-inset"
+              className="duration-normal group border-border bg-bg-raised focus-visible:ring-border-focus hover:border-brand/40 focus-visible:ring-offset-bg relative overflow-hidden rounded-lg border transition-[border-color,box-shadow,transform] ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-12px_hsl(42_40%_55%/0.28)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
             >
-              <div className="text-brand-muted flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-transparent">
-                <HouseLineIcon aria-hidden="true" className="h-5 w-5" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <span className="text-fg flex items-center gap-2 text-sm font-medium wrap-break-word">
-                  {clan.name}
-                  {clan.caller_role ? (
-                    <Badge variant="outline" size="sm">
-                      {CLAN_MEMBER_ROLE_LABELS[clan.caller_role]}
-                    </Badge>
+              <div
+                aria-hidden="true"
+                className="from-brand/70 via-brand-muted/40 h-1 w-full bg-gradient-to-r to-amber-500/25"
+              />
+              <div className="flex items-start gap-4 p-5">
+                <div
+                  aria-hidden="true"
+                  className="border-brand/30 bg-brand-muted/15 text-brand ring-brand/40 ring-offset-bg flex h-11 w-11 shrink-0 items-center justify-center rounded-md border shadow-[0_0_0_1px_hsl(42_40%_55%/0.14),0_0_18px_-6px_hsl(42_40%_55%/0.5)] ring-1 ring-offset-2"
+                >
+                  <span className="font-display text-base font-semibold">
+                    {clan.name.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <span className="text-fg font-display flex items-center gap-2 text-base font-semibold wrap-break-word">
+                    {clan.name}
+                    {clan.caller_role ? (
+                      <Badge variant="outline" size="sm">
+                        {CLAN_MEMBER_ROLE_LABELS[clan.caller_role]}
+                      </Badge>
+                    ) : null}
+                  </span>
+                  {clan.description ? (
+                    <p className="text-fg-muted mt-1 truncate text-xs">{clan.description}</p>
                   ) : null}
-                </span>
-                {clan.description ? (
-                  <p className="text-fg-muted truncate text-xs">{clan.description}</p>
-                ) : null}
-                <p className="text-fg-subtle mt-0.5 text-xs">Led by {clan.leader_display_name}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-fg-muted flex items-center justify-end gap-1.5 text-xs">
-                  <UsersThreeIcon aria-hidden="true" className="h-3.5 w-3.5" />
-                  {clan.member_count}
-                </p>
-                <p className="text-fg-subtle mt-0.5 text-xs">
-                  {CLAN_PRIVACY_SHORT_LABELS[clan.privacy]}
-                </p>
+                  <p className="text-fg-subtle mt-1.5 text-xs">Led by {clan.leader_display_name}</p>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className="text-fg-muted flex items-center justify-end gap-1.5 text-xs">
+                    <UsersThreeIcon aria-hidden="true" className="h-3.5 w-3.5" />
+                    {clan.member_count}
+                  </p>
+                  <p className="text-fg-subtle mt-1 text-xs">
+                    {CLAN_PRIVACY_SHORT_LABELS[clan.privacy]}
+                  </p>
+                </div>
               </div>
             </Link>
           ))}
