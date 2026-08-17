@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ShieldIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { NavLinks } from "@/components/layout/nav-links";
 import { canAny } from "@/lib/permissions";
 import { createClient } from "@/lib/supabase/server";
 import { NavAuth } from "./NavAuth";
@@ -100,14 +101,20 @@ export default async function RootLayout({
           Skip to content
         </a>
 
-        <header className="z-raised border-border bg-bg/95 sticky top-0 border-b backdrop-blur-xs">
+        <header className="z-raised border-border bg-bg/70 supports-[backdrop-filter]:bg-bg/70 sticky top-0 border-b shadow-[0_1px_0_hsl(210_10%_18%/0.6),0_8px_24px_-16px_hsl(0_0%_0%/0.8)] backdrop-blur-md">
           <div className="mx-auto flex min-h-12 max-w-7xl flex-wrap items-center justify-between px-4 py-0.5 md:px-6">
             <Link
               href="/"
-              className="text-fg duration-fast hover:text-brand focus-visible:ring-border-focus focus-visible:ring-offset-bg flex min-h-11 items-center gap-2 rounded-md text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+              aria-label="Mandaloria home"
+              className="duration-fast group focus-visible:ring-border-focus focus-visible:ring-offset-bg flex min-h-11 items-center gap-2 rounded-md text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
             >
-              <ShieldIcon aria-hidden="true" className="text-brand h-5 w-5" />
-              Mandaloria
+              <ShieldIcon
+                aria-hidden="true"
+                className="text-brand duration-fast h-5 w-5 transition-transform group-hover:scale-105"
+              />
+              <span className="bg-[linear-gradient(90deg,hsl(42_40%_55%),hsl(45_70%_62%))] bg-clip-text text-transparent">
+                Mandaloria
+              </span>
             </Link>
 
             <nav
@@ -119,46 +126,19 @@ export default async function RootLayout({
                 items={mobileNavigationItems}
                 triggerLabel="Open main navigation"
               />
-              <Link
-                href="/plazas"
-                className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus hidden min-h-11 items-center rounded-md px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden sm:inline-flex"
-              >
-                Plazas
-              </Link>
-              <Link
-                href="/holochat"
-                className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus hidden min-h-11 items-center rounded-md px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden sm:inline-flex"
-              >
-                Holochat
-              </Link>
-              <Link
-                href="/codex"
-                className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus hidden min-h-11 items-center rounded-md px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden sm:inline-flex"
-              >
-                Codex
-              </Link>
-              <Link
-                href="/clans"
-                className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus hidden min-h-11 items-center rounded-md px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden sm:inline-flex"
-              >
-                Clans
-              </Link>
-              <Link
-                href="/members"
-                className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus hidden min-h-11 items-center rounded-md px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden sm:inline-flex"
-              >
-                Members
-              </Link>
-
-              {canOpenCouncil && (
-                <Link
-                  href="/council"
-                  className="text-warning duration-fast hover:bg-warning/10 hover:text-warning focus-visible:ring-border-focus hidden min-h-11 items-center rounded-md px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden sm:inline-flex"
-                >
-                  Council
-                </Link>
-              )}
-
+              <NavLinks
+                className="hidden sm:flex"
+                items={[
+                  { href: "/plazas", label: "Plazas" },
+                  { href: "/holochat", label: "Holochat" },
+                  { href: "/codex", label: "Codex" },
+                  { href: "/clans", label: "Clans" },
+                  { href: "/members", label: "Members" },
+                  ...(canOpenCouncil
+                    ? [{ href: "/council", label: "Council", warning: true }]
+                    : []),
+                ]}
+              />
               <NavAuth user={user} profile={profile} />
             </nav>
           </div>
