@@ -21,6 +21,8 @@ import {
 import { cn } from "@/lib/cn";
 import { CHAT_CHANNEL_KIND_LABELS, type ChatChannelSummary } from "@/lib/holochat/types";
 import { ChannelForm } from "./channel-form";
+import { Textarea } from "@/components/ui/textarea";
+
 
 const KIND_ICONS = {
   public: HashIcon,
@@ -157,7 +159,7 @@ export function ChannelAdmin({ channels: initial }: ChannelAdminProps) {
                     >
                       Archive this channel — why?
                     </label>
-                    <textarea
+                    <Textarea
                       id={`archive-reason-${channel.id}`}
                       value={archiveReason}
                       required

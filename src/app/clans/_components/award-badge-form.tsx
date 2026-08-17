@@ -8,6 +8,8 @@ import { NativeSelect } from "@/components/origin/native-select";
 import { TextInput } from "@/components/origin/text-input";
 import { Button } from "@/components/ui/button";
 import { awardBadge } from "@/lib/actions/clans";
+import { Textarea } from "@/components/ui/textarea";
+
 
 interface AwardBadgeFormProps {
   userId: string;
@@ -74,7 +76,7 @@ export function AwardBadgeForm({ userId, userName }: AwardBadgeFormProps) {
         <label htmlFor="award-badge-reason" className="text-fg text-sm font-medium">
           Reason <span className="text-error">*</span>
         </label>
-        <textarea
+        <Textarea
           id="award-badge-reason"
           value={reason}
           required

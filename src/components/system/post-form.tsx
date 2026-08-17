@@ -6,6 +6,8 @@ import { useState, useTransition } from "react";
 import { TextInput } from "@/components/origin/text-input";
 import { Button } from "@/components/ui/button";
 import { createPost, setPostTags, updatePost } from "@/lib/actions/content";
+import { Textarea } from "@/components/ui/textarea";
+
 
 export type PostFormProps =
   | { mode: "create"; plazaId: string }
@@ -120,7 +122,7 @@ export function PostForm(props: PostFormProps) {
         <label htmlFor="post-body" className="text-fg text-sm font-medium">
           Body
         </label>
-        <textarea
+        <Textarea
           id="post-body"
           value={body}
           required

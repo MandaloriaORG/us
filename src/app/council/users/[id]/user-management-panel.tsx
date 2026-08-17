@@ -11,6 +11,8 @@ import {
 import { NativeSelect } from "@/components/origin/native-select";
 import { Badge } from "@/components/origin/badge";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+
 
 export interface CouncilRoleOption {
   id: string;
@@ -298,7 +300,7 @@ export function UserManagementPanel({
           </span>
           <span className="sr-only"> (required)</span>
         </label>
-        <textarea
+        <Textarea
           id={reasonId}
           value={reason}
           required

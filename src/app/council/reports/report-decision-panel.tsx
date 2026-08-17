@@ -5,6 +5,8 @@ import { useId, useState } from "react";
 import { setReportStatus } from "@/lib/actions/reports";
 import type { ReportStatus } from "@/lib/content/report-reasons";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+
 
 interface ReportDecisionPanelProps {
   reportId: string;
@@ -73,7 +75,7 @@ export function ReportDecisionPanel({ reportId, status }: ReportDecisionPanelPro
           </span>
           <span className="sr-only"> (required)</span>
         </label>
-        <textarea
+        <Textarea
           id={reasonId}
           value={reason}
           required

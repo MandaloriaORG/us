@@ -6,6 +6,10 @@ import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NativeSelect } from "@/components/origin/native-select";
 import { movePost, setPostFlags, setPostStatus } from "@/lib/actions/moderation";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+
 
 export interface PostModerationPanelPlaza {
   id: string;
@@ -166,7 +170,7 @@ export function PostModerationPanel({
           </span>
           <span className="sr-only"> (required)</span>
         </label>
-        <textarea
+        <Textarea
           id={reasonId}
           value={reason}
           required
@@ -208,7 +212,7 @@ export function PostModerationPanel({
             ] as const
           ).map((flag) => (
             <label key={flag.key} className="text-fg flex min-h-11 items-center gap-2 text-sm">
-              <input
+              <Input
                 type="checkbox"
                 checked={flags[flag.key]}
                 disabled={isPending}

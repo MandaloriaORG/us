@@ -4,6 +4,8 @@ import { useState } from "react";
 
 import { setPlazaStatus } from "@/lib/actions/plazas";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+
 
 interface PlazaStatusControlProps {
   plazaId: string;
@@ -79,7 +81,7 @@ export function PlazaStatusControl({ plazaId, status }: PlazaStatusControlProps)
           </span>
           <span className="sr-only"> (required)</span>
         </label>
-        <textarea
+        <Textarea
           id="plaza-status-reason"
           value={reason}
           required

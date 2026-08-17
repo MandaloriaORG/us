@@ -8,6 +8,8 @@ import { NativeSelect } from "@/components/origin/native-select";
 import { TextInput } from "@/components/origin/text-input";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { createPlaza, updatePlaza, type PlazaActionResult } from "@/lib/actions/plazas";
+import { Textarea } from "@/components/ui/textarea";
+
 
 export type PlazaFormProps =
   | { mode: "create" }
@@ -106,7 +108,7 @@ export function PlazaForm(props: PlazaFormProps) {
         <label htmlFor="plaza-description" className="text-fg text-sm font-medium">
           Description
         </label>
-        <textarea
+        <Textarea
           id="plaza-description"
           name="description"
           rows={3}
@@ -129,7 +131,7 @@ export function PlazaForm(props: PlazaFormProps) {
           <label htmlFor="plaza-rules" className="text-fg text-sm font-medium">
             Rules
           </label>
-          <textarea
+          <Textarea
             id="plaza-rules"
             name="rules"
             rows={6}

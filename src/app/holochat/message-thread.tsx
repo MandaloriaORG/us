@@ -318,21 +318,19 @@ export function MessageThread({
               View all messages
             </Button>
           </div>
-        ) : (
+        ) : olderCursor ? (
           <div className="border-border flex items-center justify-center border-b px-3 py-1.5 md:px-4">
-            {olderCursor ? (
-              <button
-                type="button"
-                onClick={handleLoadOlder}
-                disabled={loadingOlder}
-                className="text-fg-subtle hover:text-fg focus-visible:ring-border-focus inline-flex min-h-8 items-center gap-1.5 rounded-lg px-2 text-xs transition-colors focus-visible:ring-2 focus-visible:outline-hidden disabled:cursor-wait"
-              >
-                <ArrowClockwiseIcon aria-hidden="true" className="h-3.5 w-3.5" />
-                {loadingOlder ? "Loading…" : "Load earlier messages"}
-              </button>
-            ) : null}
+            <button
+              type="button"
+              onClick={handleLoadOlder}
+              disabled={loadingOlder}
+              className="text-fg-subtle hover:text-fg focus-visible:ring-border-focus inline-flex min-h-8 items-center gap-1.5 rounded-lg px-2 text-xs transition-colors focus-visible:ring-2 focus-visible:outline-hidden disabled:cursor-wait"
+            >
+              <ArrowClockwiseIcon aria-hidden="true" className="h-3.5 w-3.5" />
+              {loadingOlder ? "Loading…" : "Load earlier messages"}
+            </button>
           </div>
-        )}
+        ) : null}
 
         {displayed.length === 0 ? (
           pinnedOnly ? (

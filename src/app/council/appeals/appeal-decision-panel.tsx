@@ -5,6 +5,8 @@ import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { resolveAppeal } from "@/lib/actions/appeals";
 import type { AppealStatus } from "@/lib/content/appeal-labels";
+import { Textarea } from "@/components/ui/textarea";
+
 
 interface AppealDecisionPanelProps {
   appealId: string;
@@ -98,7 +100,7 @@ export function AppealDecisionPanel({ appealId, status, isOwnAction }: AppealDec
           </span>
           <span className="sr-only"> (required)</span>
         </label>
-        <textarea
+        <Textarea
           id={reasonId}
           value={reason}
           required

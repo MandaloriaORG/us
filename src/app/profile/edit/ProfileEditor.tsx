@@ -20,6 +20,10 @@ import {
   type ProfileResult,
 } from "@/lib/actions/profile";
 import { cn } from "@/lib/cn";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+
 
 type ProfileVisibility = "public" | "members" | "private";
 
@@ -105,12 +109,12 @@ export function ProfileEditor({
             <Feedback state={resetState} />
 
             <form action={avatarAction} aria-label="Upload avatar" className="space-y-3">
-              <input type="hidden" name="expectedAvatarPath" value={avatarPath ?? ""} />
+              <Input type="hidden" name="expectedAvatarPath" value={avatarPath ?? ""} />
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="avatar" className="text-fg text-sm font-medium">
                   Avatar image
                 </label>
-                <input
+                <Input
                   id="avatar"
                   name="avatar"
                   type="file"
@@ -134,7 +138,7 @@ export function ProfileEditor({
 
             {avatarPath ? (
               <form action={resetAction} aria-label="Remove avatar">
-                <input type="hidden" name="expectedAvatarPath" value={avatarPath} />
+                <Input type="hidden" name="expectedAvatarPath" value={avatarPath} />
                 <SubmitButton pendingLabel="Removing avatar…">Remove avatar</SubmitButton>
               </form>
             ) : null}
@@ -168,7 +172,7 @@ export function ProfileEditor({
               aria-hidden="true"
               className="text-fg-muted absolute top-3 left-3 h-4 w-4"
             />
-            <textarea
+            <Textarea
               id="bio"
               name="bio"
               rows={4}

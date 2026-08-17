@@ -7,6 +7,8 @@ import { NativeSelect } from "@/components/origin/native-select";
 import { Button } from "@/components/ui/button";
 import { reportChatMessage } from "@/lib/actions/holochat";
 import { REPORT_REASONS, REPORT_REASON_LABELS } from "@/lib/content/report-reasons";
+import { Textarea } from "@/components/ui/textarea";
+
 
 const TEXTAREA_CLASS =
   "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-20 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
@@ -93,7 +95,7 @@ export function ChatReportControl({ messageId, onClose }: ChatReportControlProps
         <label htmlFor={`${baseId}-details`} className="text-fg text-sm font-medium">
           Details <span className="text-fg-subtle font-normal">(optional)</span>
         </label>
-        <textarea
+        <Textarea
           id={`${baseId}-details`}
           value={details}
           disabled={isPending}

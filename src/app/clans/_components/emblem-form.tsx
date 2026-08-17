@@ -6,6 +6,8 @@ import { useFormState } from "react-dom";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { resetClanEmblem, uploadClanEmblem } from "@/lib/actions/clans";
 import type { ClanActionResult } from "@/lib/clans/errors";
+import { Input } from "@/components/ui/input";
+
 
 interface EmblemFormProps {
   clanId: string;
@@ -56,14 +58,14 @@ export function EmblemForm({ clanId, slug, currentEmblemUrl, currentPath }: Embl
           <span className="text-fg-subtle text-sm">No emblem yet.</span>
         )}
         <form action={uploadAction} className="flex flex-col gap-3">
-          <input type="hidden" name="clanId" value={clanId} />
-          <input type="hidden" name="slug" value={slug} />
-          <input type="hidden" name="expectedEmblemPath" value={currentPath ?? ""} />
+          <Input type="hidden" name="clanId" value={clanId} />
+          <Input type="hidden" name="slug" value={slug} />
+          <Input type="hidden" name="expectedEmblemPath" value={currentPath ?? ""} />
           <div className="flex flex-col gap-1.5">
             <label htmlFor="clan-emblem" className="text-fg text-sm font-medium">
               Emblem image
             </label>
-            <input
+            <Input
               id="clan-emblem"
               name="emblem"
               type="file"
@@ -97,9 +99,9 @@ export function EmblemForm({ clanId, slug, currentEmblemUrl, currentPath }: Embl
 
       {currentPath ? (
         <form action={resetAction} className="flex flex-col gap-2">
-          <input type="hidden" name="clanId" value={clanId} />
-          <input type="hidden" name="slug" value={slug} />
-          <input type="hidden" name="expectedEmblemPath" value={currentPath} />
+          <Input type="hidden" name="clanId" value={clanId} />
+          <Input type="hidden" name="slug" value={slug} />
+          <Input type="hidden" name="expectedEmblemPath" value={currentPath} />
           {resetError ? (
             <p role="alert" className="text-error text-xs">
               {resetError.message}

@@ -8,6 +8,10 @@ import { NativeSelect } from "@/components/origin/native-select";
 import { Button } from "@/components/ui/button";
 import { expelMember, setMemberRole, transferLeadership } from "@/lib/actions/clans";
 import type { ClanActionResult } from "@/lib/clans/errors";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+
 
 const TEXTAREA_CLASS =
   "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-20 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
@@ -110,7 +114,7 @@ export function MemberManageForm({ clanId, slug, members }: MemberManageFormProp
         <label htmlFor="manage-reason" className="text-fg text-sm font-medium">
           Reason <span className="text-error">*</span>
         </label>
-        <textarea
+        <Textarea
           id="manage-reason"
           value={reason}
           required
@@ -124,7 +128,7 @@ export function MemberManageForm({ clanId, slug, members }: MemberManageFormProp
 
       {action === "expel" ? (
         <label className="text-fg-muted flex items-start gap-2 text-sm">
-          <input
+          <Input
             type="checkbox"
             checked={confirmed}
             disabled={isPending}

@@ -9,6 +9,8 @@ import { TextInput } from "@/components/origin/text-input";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { updateClan } from "@/lib/actions/clans";
 import type { ClanActionResult } from "@/lib/clans/errors";
+import { Textarea } from "@/components/ui/textarea";
+
 
 const TEXTAREA_CLASS =
   "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
@@ -76,7 +78,7 @@ export function ClanEditForm({
         <label htmlFor="clan-description" className="text-fg text-sm font-medium">
           Description
         </label>
-        <textarea
+        <Textarea
           id="clan-description"
           name="description"
           rows={3}
@@ -97,7 +99,7 @@ export function ClanEditForm({
         <label htmlFor="clan-mission" className="text-fg text-sm font-medium">
           Mission
         </label>
-        <textarea
+        <Textarea
           id="clan-mission"
           name="mission"
           rows={4}

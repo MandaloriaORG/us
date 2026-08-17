@@ -7,6 +7,8 @@ import { CheckCircleIcon } from "@phosphor-icons/react/dist/ssr";
 import { NativeSelect } from "@/components/origin/native-select";
 import { Button } from "@/components/ui/button";
 import { assignRank } from "@/lib/actions/clans";
+import { Textarea } from "@/components/ui/textarea";
+
 
 interface RankOption {
   slug: string;
@@ -72,7 +74,7 @@ export function AssignRankForm({ userId, userName, ranks }: AssignRankFormProps)
         <label htmlFor="assign-rank-reason" className="text-fg text-sm font-medium">
           Reason <span className="text-error">*</span>
         </label>
-        <textarea
+        <Textarea
           id="assign-rank-reason"
           value={reason}
           required

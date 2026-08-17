@@ -8,6 +8,8 @@ import { NativeSelect } from "@/components/origin/native-select";
 import { Button } from "@/components/ui/button";
 import { adminCreateChatChannel, adminUpdateChatChannel } from "@/lib/actions/holochat";
 import type { ChatChannelSummary } from "@/lib/holochat/types";
+import { Textarea } from "@/components/ui/textarea";
+
 
 const INPUT_CLASS =
   "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/30 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 h-11 w-full rounded-md border px-3 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
@@ -137,7 +139,7 @@ export function ChannelForm({ mode, channel, onSaved }: ChannelFormProps) {
         <label htmlFor="channel-description" className="text-fg text-sm font-medium">
           Description <span className="text-fg-subtle font-normal">(optional)</span>
         </label>
-        <textarea
+        <Textarea
           id="channel-description"
           value={description}
           disabled={isPending}

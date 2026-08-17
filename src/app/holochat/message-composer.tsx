@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { ArrowBendUpLeftIcon, PencilSimpleIcon, XIcon } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
+import { ArrowBendUpLeftIcon, LockKeyIcon, PencilSimpleIcon, XIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { Button } from "@/components/ui/button";
-
-const TEXTAREA_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-brand/50 focus-visible:ring-brand/25 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden transition-colors focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50";
+import { Textarea } from "@/components/ui/textarea";
 
 export interface ComposerReply {
   id: string;
@@ -53,11 +52,17 @@ export function MessageComposer({
   }, [editing]);
 
   if (!canSend) {
-    return notice ? (
-      <p className="text-fg-muted border-border bg-bg-raised rounded-md border px-3 py-3 text-sm">
-        {notice}
-      </p>
-    ) : null;
+    return (
+      <div className="border-border bg-bg-raised border-t px-3 py-3 md:px-4">
+        <div className="mx-auto flex w-full max-w-3xl items-center gap-3 rounded-lg border border-dashed border-border px-4 py-3">
+          <LockKeyIcon aria-hidden="true" className="text-fg-subtle h-4 w-4 shrink-0" />
+          <p className="text-fg-muted min-w-0 flex-1 truncate text-sm">{notice}</p>
+          <Button asChild size="sm" variant="secondary">
+            <Link href="/auth/login">Sign in</Link>
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -126,7 +131,7 @@ export function MessageComposer({
         <label htmlFor="chat-message" className="text-fg mb-1 block text-sm font-medium">
           Message
         </label>
-        <textarea
+        <Textarea
           id="chat-message"
           ref={textareaRef}
           value={body}
@@ -137,7 +142,7 @@ export function MessageComposer({
           onChange={(event) => setBody(event.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Write a message…"
-          className={TEXTAREA_CLASS}
+          className="min-h-24 resize-y focus-visible:ring-brand/25 focus-visible:border-brand/50"
         />
         {error ? (
           <p role="alert" className="text-error mt-2 text-xs">

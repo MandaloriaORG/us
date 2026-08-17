@@ -4,6 +4,8 @@ import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import type { ChatMessageStatus } from "@/lib/holochat/types";
+import { Textarea } from "@/components/ui/textarea";
+
 
 export type ModerationAction = "hide" | "restore" | "delete";
 
@@ -55,7 +57,7 @@ export function MessageModerationControl({
       <label htmlFor={`${baseId}-reason`} className="text-fg text-sm font-medium">
         {MODERATION_LABELS[action]} — why?
       </label>
-      <textarea
+      <Textarea
         id={`${baseId}-reason`}
         value={reason}
         disabled={isPending}

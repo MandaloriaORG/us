@@ -14,6 +14,8 @@ import {
 } from "@/lib/actions/clans";
 import type { SocialState } from "@/lib/clans/types";
 import type { ClanActionResult } from "@/lib/clans/errors";
+import { Textarea } from "@/components/ui/textarea";
+
 
 interface MemberSocialProps {
   targetUserId: string;
@@ -146,7 +148,7 @@ export function MemberSocial({ targetUserId, social }: MemberSocialProps) {
               <label htmlFor="block-reason" className="text-fg-muted text-xs">
                 Reason <span className="text-fg-subtle">(optional, not shown to them)</span>
               </label>
-              <textarea
+              <Textarea
                 id="block-reason"
                 value={blockReason}
                 maxLength={500}

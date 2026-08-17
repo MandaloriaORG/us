@@ -5,6 +5,8 @@ import { useId, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { setCommentFlags } from "@/lib/actions/moderation";
+import { Input } from "@/components/ui/input";
+
 
 export interface CommentModerationControlProps {
   commentId: string;
@@ -81,7 +83,7 @@ export function CommentModerationControl({
         </span>
         <span className="sr-only"> (required)</span>
       </label>
-      <input
+      <Input
         id={reasonId}
         type="text"
         value={reason}

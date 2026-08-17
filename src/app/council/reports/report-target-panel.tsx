@@ -5,6 +5,8 @@ import { useId, useState } from "react";
 
 import { setCommentStatus, setPostStatus } from "@/lib/actions/moderation";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+
 
 type TargetStatus =
   | "draft"
@@ -192,7 +194,7 @@ export function ReportTargetPanel({
           </span>
           <span className="sr-only"> (required)</span>
         </label>
-        <textarea
+        <Textarea
           id={reasonId}
           value={reason}
           required

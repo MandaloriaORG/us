@@ -5,6 +5,8 @@ import { useId, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { addUserNote, deleteUserNote, warnUser } from "@/lib/actions/user-moderation";
+import { Textarea } from "@/components/ui/textarea";
+
 
 export interface CouncilUserNote {
   noteId: string;
@@ -146,7 +148,7 @@ export function UserModerationPanel({
             <label htmlFor={warningId} className="text-fg text-sm font-medium">
               Warning
             </label>
-            <textarea
+            <Textarea
               id={warningId}
               value={warning}
               rows={3}
@@ -228,7 +230,7 @@ export function UserModerationPanel({
           <label htmlFor={noteId} className="text-fg text-sm font-medium">
             New note
           </label>
-          <textarea
+          <Textarea
             id={noteId}
             value={note}
             rows={3}

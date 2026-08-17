@@ -10,6 +10,10 @@ import { Button } from "@/components/ui/button";
 import { assignInternalRole, removeInternalRole, upsertInternalRole } from "@/lib/actions/clans";
 import type { ClanActionResult } from "@/lib/clans/errors";
 import { KNOWN_CLAN_INTERNAL_PERMISSIONS } from "@/lib/clans/labels";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+
 
 const TEXTAREA_CLASS =
   "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-20 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
@@ -161,7 +165,7 @@ export function InternalRoles({ clanId, slug, roles, members }: InternalRolesPro
             <label htmlFor="internal-role-description" className="text-fg text-sm font-medium">
               Description <span className="text-fg-subtle font-normal">(optional)</span>
             </label>
-            <textarea
+            <Textarea
               id="internal-role-description"
               value={description}
               onChange={(event) => setDescription(event.target.value)}
@@ -178,7 +182,7 @@ export function InternalRoles({ clanId, slug, roles, members }: InternalRolesPro
                   key={permission.value}
                   className="text-fg-muted flex items-center gap-2 text-sm"
                 >
-                  <input
+                  <Input
                     type="checkbox"
                     checked={permissions.includes(permission.value)}
                     onChange={() => togglePermission(permission.value)}

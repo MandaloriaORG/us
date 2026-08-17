@@ -6,6 +6,10 @@ import { CheckCircleIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { Button } from "@/components/ui/button";
 import type { ClanActionResult } from "@/lib/clans/errors";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+
 
 export interface ReasonActionField {
   name: string;
@@ -106,7 +110,7 @@ export function ReasonActionForm({
               disabled={isPending}
               value={values[field.name]}
               onChange={(event) => setValues((v) => ({ ...v, [field.name]: event.target.value }))}
-              className="border-border bg-bg text-fg focus-visible:border-border-focus focus-visible:ring-border-focus/40 min-h-11 rounded-md border px-3 text-sm outline-hidden focus-visible:ring-2"
+              className="border-input bg-background text-fg focus-visible:ring-ring/24 duration-fast hover:border-border-raised min-h-10 w-full rounded-lg border px-3 text-sm shadow-[var(--shadow-xs),inset_0_1px_0_var(--color-black/4%)] transition-[border-color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-none dark:shadow-[var(--shadow-xs),inset_0_-1px_0_var(--color-white/6%)]"
             >
               {field.options?.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -120,7 +124,7 @@ export function ReasonActionForm({
             <label htmlFor={field.name} className="text-fg text-xs font-medium">
               {field.label}
             </label>
-            <input
+            <Input
               id={field.name}
               name={field.name}
               type="text"
@@ -139,7 +143,7 @@ export function ReasonActionForm({
           <label htmlFor={`${idBase}-reason`} className="text-fg text-xs font-medium">
             {reasonLabel} {reasonRequired ? <span className="text-error">*</span> : null}
           </label>
-          <textarea
+          <Textarea
             id={`${idBase}-reason`}
             value={reason}
             disabled={isPending}

@@ -13,6 +13,8 @@ import {
 import type { SettingValueType } from "./settings-dto";
 import type { Json } from "@/lib/database.types";
 import { cn } from "@/lib/cn";
+import { Textarea } from "@/components/ui/textarea";
+
 
 const TEXTAREA_CLASS =
   "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
@@ -137,7 +139,7 @@ export function SettingRow({
         onCheckedChange={(next) => setChecked(next === true)}
       />
     ) : valueType === "json" || valueType === "array" ? (
-      <textarea
+      <Textarea
         aria-label={label}
         aria-invalid={localError ? true : undefined}
         aria-describedby={localError ? `${controlId}-error` : undefined}

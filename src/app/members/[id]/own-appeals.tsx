@@ -5,6 +5,8 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { createAppeal } from "@/lib/actions/appeals";
+import { Textarea } from "@/components/ui/textarea";
+
 
 export interface OwnModerationActionItem {
   auditLogId: string;
@@ -107,7 +109,7 @@ export function OwnAppeals({ actions }: OwnAppealsProps) {
                 >
                   Your appeal
                 </label>
-                <textarea
+                <Textarea
                   id={`appeal-${action.auditLogId}`}
                   value={body}
                   rows={4}
