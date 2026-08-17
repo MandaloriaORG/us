@@ -12,10 +12,11 @@ import { getSiteOrigin } from "@/lib/supabase/auth";
  * private by purpose rather than by data — account flows, profile editing and
  * Council administration — so they never reach an index even as a redirect.
  *
- * There is deliberately no sitemap: publishing one would mean enumerating post
- * URLs, and that enumeration would have to re-derive visibility outside the
- * database. Discovery stays with the Plaza listing, which is already
- * visibility-filtered.
+ * There is deliberately no content sitemap: publishing one would mean
+ * enumerating post URLs, and that enumeration would have to re-derive
+ * visibility outside the database. Discovery stays with the Plaza listing,
+ * which is already visibility-filtered. The companion `sitemap.ts` lists only
+ * the stable public hubs.
  */
 export default function robots(): MetadataRoute.Robots {
   const origin = getSiteOrigin();
@@ -28,6 +29,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/auth/", "/council/", "/profile/edit", "/bookmarks"],
       },
     ],
+    sitemap: origin ? `${origin}/sitemap.xml` : undefined,
     // Omitted rather than guessed when the canonical origin is not configured;
     // a wrong host is worse than none.
     ...(origin ? { host: origin } : {}),

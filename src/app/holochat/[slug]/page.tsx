@@ -10,6 +10,7 @@ import {
 } from "@/lib/holochat/queries";
 import { ChannelSidebar } from "../channel-sidebar";
 import { MessageThread } from "../message-thread";
+import { HolochatRealtimeBridge } from "../realtime-bridge";
 
 interface ChannelPageProps {
   params: Promise<{ slug: string }>;
@@ -41,6 +42,7 @@ export default async function ChannelPage({ params }: ChannelPageProps) {
 
   return (
     <div className="flex h-svh flex-col md:flex-row">
+      <HolochatRealtimeBridge channelId={channel.id} enabled={currentMember !== null} />
       <ChannelSidebar
         channels={channels}
         activeSlug={slug}

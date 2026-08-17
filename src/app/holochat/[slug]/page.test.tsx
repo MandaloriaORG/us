@@ -22,7 +22,10 @@ vi.mock("@/lib/holochat/queries", () => ({
 vi.mock("@/lib/permissions", () => ({
   getAuthorizationSnapshot: mocks.getAuthorizationSnapshot,
 }));
-vi.mock("next/navigation", () => ({ notFound: mocks.notFound }));
+vi.mock("next/navigation", () => ({
+  notFound: mocks.notFound,
+  useRouter: () => ({ refresh: vi.fn() }),
+}));
 vi.mock("@/components/system/notification-bell", () => ({
   NotificationBell: () => null,
 }));
