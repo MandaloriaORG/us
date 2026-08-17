@@ -29,6 +29,7 @@
 
   /* ── Brand: Beskar ── */
   --color-brand: hsl(42 40% 55%);
+  --color-brand-deep: hsl(38 45% 42%);
   --color-brand-muted: hsl(42 20% 30%);
   --color-brand-fg: hsl(42 50% 20%);
 

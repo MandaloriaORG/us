@@ -5,15 +5,16 @@ import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
 import { cn } from "@/lib/cn";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors duration-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:pointer-events-none disabled:opacity-50",
+  "relative inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors duration-fast focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-border-focus/24 focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
   {
     variants: {
       variant: {
-        primary: "bg-brand text-brand-fg hover:opacity-90",
+        primary:
+          "border border-brand/30 bg-linear-to-b from-brand to-brand-deep text-brand-fg shadow-md before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_0_var(--color-white/10%)] hover:border-brand/50 hover:brightness-105",
         secondary:
-          "border border-border bg-bg-raised text-fg hover:bg-surface hover:border-border-raised",
+          "border border-border bg-bg-raised text-fg shadow-xs/5 hover:bg-surface hover:border-border-raised before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_0_var(--color-white/6%)] dark:before:shadow-[0_-1px_0_var(--color-white/4%)]",
         ghost: "text-fg-muted hover:text-fg hover:bg-surface",
-        destructive: "bg-error/20 text-error border border-error/30 hover:bg-error/30",
+        destructive: "border border-error/30 bg-error/20 text-error hover:bg-error/30",
       },
       size: {
         sm: "h-8 px-3 text-xs",
