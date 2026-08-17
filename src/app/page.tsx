@@ -1,4 +1,5 @@
 import { CapabilityList } from "@/components/marketing/capability-list";
+import { PipelineVisual } from "@/components/marketing/pipeline-visual";
 import { ProductPrinciples } from "@/components/marketing/product-principles";
 import { PublicHero } from "@/components/marketing/public-hero";
 import { KnowledgePipeline } from "@/components/system/knowledge-pipeline";
@@ -32,15 +33,26 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
   return (
     <main className="min-h-[calc(100svh-3rem)]">
-      <PublicHero visual={<KnowledgePipeline />} />
+      <PublicHero
+        visual={
+          <PipelineVisual>
+            <KnowledgePipeline />
+          </PipelineVisual>
+        }
+      />
       <ProductPrinciples />
       <CapabilityList />
 
-      <section aria-labelledby="recent-posts-title">
+      <section aria-labelledby="recent-posts-title" className="border-border border-t">
         <div className="mx-auto w-full max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <h2 id="recent-posts-title" className="text-fg text-2xl font-semibold tracking-tight">
-            Recent posts
-          </h2>
+          <div className="border-border/70 border-l-2 pl-4">
+            <h2 id="recent-posts-title" className="text-fg text-2xl font-semibold tracking-tight">
+              Recent posts
+            </h2>
+            <p className="text-fg-muted mt-1 text-sm">
+              The latest conversation across every Plaza you can see.
+            </p>
+          </div>
 
           {posts.items.length === 0 ? (
             <EmptyState
