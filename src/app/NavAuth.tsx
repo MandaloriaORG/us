@@ -1,7 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { CircleNotchIcon, MagnifyingGlassIcon, SignOutIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  CircleNotchIcon,
+  MagnifyingGlassIcon,
+  SignOutIcon,
+  GearIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { useFormStatus } from "react-dom";
 
 import { NotificationBell } from "@/components/system/notification-bell";
@@ -35,9 +40,10 @@ function LogoutButton() {
 
 export function NavAuth({ user, profile }: NavAuthProps) {
   return (
-    <div className="ml-2 flex items-center gap-2">
+    <div className="ml-2 flex items-center gap-1.5 sm:gap-2">
       <Link
         href="/search"
+        prefetch
         aria-label="Search"
         className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 w-11 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
       >
@@ -47,6 +53,7 @@ export function NavAuth({ user, profile }: NavAuthProps) {
       {!user ? (
         <Link
           href="/auth/login"
+          prefetch
           className="border-border text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 items-center rounded-lg border px-3 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
         >
           Sign in
@@ -54,8 +61,10 @@ export function NavAuth({ user, profile }: NavAuthProps) {
       ) : (
         <>
           <NotificationBell />
+
           <Link
             href="/profile/edit"
+            prefetch
             aria-label="Edit profile"
             className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg ring-brand/0 hover:ring-brand/30 flex min-h-11 items-center gap-2 rounded-lg px-2 py-1 text-sm transition-all hover:ring-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
           >
@@ -65,6 +74,15 @@ export function NavAuth({ user, profile }: NavAuthProps) {
               className="ring-brand/0 h-6 w-6 transition-shadow hover:shadow-[0_0_0_1px_hsl(42_40%_55%/0.4)]"
             />
             <span className="hidden sm:inline">{profile?.display_name ?? "Profile"}</span>
+          </Link>
+
+          <Link
+            href="/settings"
+            prefetch
+            aria-label="Account settings"
+            className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg flex h-11 w-11 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+          >
+            <GearIcon aria-hidden="true" className="h-4 w-4" />
           </Link>
 
           <form action={logout}>
