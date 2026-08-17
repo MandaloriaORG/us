@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { CheckCircleIcon } from "@phosphor-icons/react/dist/ssr";
+import { CheckCircleIcon, HashIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/origin/native-select";
@@ -84,6 +84,12 @@ export function ChannelForm({ mode, channel, onSaved }: ChannelFormProps) {
             placeholder="new-channel"
             className={INPUT_CLASS}
           />
+          <p className="text-fg-subtle flex items-center gap-1.5 text-xs">
+            <HashIcon aria-hidden="true" className="text-fg-subtle h-3.5 w-3.5 shrink-0" />
+            <span className="text-fg-muted truncate font-mono">
+              /holochat/{slug.trim() || "new-channel"}
+            </span>
+          </p>
           {fieldErrors.slug ? (
             <p role="alert" className="text-error text-xs">
               {fieldErrors.slug}

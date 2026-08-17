@@ -6,7 +6,7 @@ import { ArrowBendUpLeftIcon, PencilSimpleIcon, XIcon } from "@phosphor-icons/re
 import { Button } from "@/components/ui/button";
 
 const TEXTAREA_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
+  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-brand/50 focus-visible:ring-brand/25 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden transition-colors focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50";
 
 export interface ComposerReply {
   id: string;
@@ -86,6 +86,15 @@ export function MessageComposer({
     });
   }
 
+  function handleKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+    // Enter sends, Shift+Enter inserts a new line. Touch keyboards need Enter
+    // for a newline, so coarse pointers keep the default behavior.
+    if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
+    if (typeof window !== "undefined" && window.matchMedia?.("(pointer: coarse)").matches) return;
+    event.preventDefault();
+    event.currentTarget.form?.requestSubmit();
+  }
+
   const banner = editing
     ? { label: "Editing a message", onClose: onCancelEdit, icon: PencilSimpleIcon }
     : replyTo
@@ -126,6 +135,7 @@ export function MessageComposer({
           rows={3}
           aria-invalid={error ? true : undefined}
           onChange={(event) => setBody(event.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Write a message…"
           className={TEXTAREA_CLASS}
         />
@@ -134,8 +144,13 @@ export function MessageComposer({
             {error}
           </p>
         ) : null}
-        <div className="mt-2 flex items-center justify-end gap-2">
-          <span className="text-fg-subtle mr-auto text-xs tabular-nums">{body.length}/4000</span>
+        <div className="mt-2 flex items-center gap-3">
+          <span className="text-fg-subtle hidden text-xs sm:inline">
+            Enter to send · Shift+Enter for a new line
+          </span>
+          <span className="text-fg-subtle mr-auto text-xs tabular-nums sm:mr-auto">
+            {body.length}/4000
+          </span>
           <Button
             type="submit"
             size="sm"

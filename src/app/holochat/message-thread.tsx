@@ -1,8 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import Link from "next/link";
-import { ArrowClockwiseIcon, MegaphoneIcon, PushPinIcon } from "@phosphor-icons/react/dist/ssr";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  ArrowClockwiseIcon,
+  ChatCircleIcon,
+  LockKeyIcon,
+  MegaphoneIcon,
+  PushPinIcon,
+} from "@phosphor-icons/react/dist/ssr";
 
 import { Button } from "@/components/ui/button";
 import { NotificationBell } from "@/components/system/notification-bell";
@@ -37,6 +44,25 @@ export interface MessageThreadProps {
 interface EditTarget {
   id: string;
   body: string;
+}
+
+function dayKey(iso: string): string {
+  const d = new Date(iso);
+  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+}
+
+function dayLabel(iso: string, now: Date = new Date()): string {
+  const d = new Date(iso);
+  const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const startDay = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  const diffDays = Math.round((startToday - startDay) / 86_400_000);
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Yesterday";
+  const options: Intl.DateTimeFormatOptions =
+    d.getFullYear() === now.getFullYear()
+      ? { month: "long", day: "numeric" }
+      : { month: "long", day: "numeric", year: "numeric" };
+  return new Intl.DateTimeFormat("en", options).format(d);
 }
 
 export function MessageThread({
@@ -236,6 +262,9 @@ export function MessageThread({
             {channel.kind === "announcements" ? (
               <MegaphoneIcon aria-hidden="true" className="h-4 w-4" />
             ) : null}
+            {channel.kind === "private" ? (
+              <LockKeyIcon aria-hidden="true" className="text-fg-subtle h-4 w-4" />
+            ) : null}
             <span className="truncate">{channel.name}</span>
           </h1>
           {channel.description ? (
@@ -269,7 +298,7 @@ export function MessageThread({
       ) : null}
 
       <div
-        className="flex-1 overflow-y-auto"
+        className="flex-1 overflow-y-auto py-3"
         aria-live="polite"
         aria-label={`Messages in ${channel.name}`}
       >
@@ -294,7 +323,7 @@ export function MessageThread({
                 type="button"
                 onClick={handleLoadOlder}
                 disabled={loadingOlder}
-                className="text-fg-subtle hover:text-fg focus-visible:ring-border-focus inline-flex min-h-8 items-center gap-1.5 rounded-md px-2 text-xs transition-colors focus-visible:ring-2 focus-visible:outline-hidden disabled:cursor-wait"
+                className="text-fg-subtle hover:text-fg focus-visible:ring-border-focus inline-flex min-h-8 items-center gap-1.5 rounded-lg px-2 text-xs transition-colors focus-visible:ring-2 focus-visible:outline-hidden disabled:cursor-wait"
               >
                 <ArrowClockwiseIcon aria-hidden="true" className="h-3.5 w-3.5" />
                 {loadingOlder ? "Loading…" : "Load earlier messages"}
@@ -304,44 +333,40 @@ export function MessageThread({
         )}
 
         {displayed.length === 0 ? (
-          <p className="text-fg-muted px-4 py-10 text-center text-sm">
-            {pinnedOnly
-              ? "Nothing is pinned in this channel."
-              : "No messages yet. Start the conversation."}
-          </p>
+          pinnedOnly ? (
+            <div className="text-fg-muted flex flex-col items-center gap-2 px-4 py-12 text-center">
+              <PushPinIcon aria-hidden="true" className="text-fg-subtle h-6 w-6" />
+              <p className="text-sm">Nothing is pinned in this channel.</p>
+              <p className="text-fg-subtle text-xs">Pin a message to keep it easy to find.</p>
+            </div>
+          ) : (
+            <div className="text-fg-muted flex flex-col items-center gap-2 px-4 py-12 text-center">
+              <ChatCircleIcon aria-hidden="true" className="text-fg-subtle h-6 w-6" />
+              <p className="text-sm">Start the conversation.</p>
+              <p className="text-fg-subtle text-xs">Be the first to post in #{channel.name}.</p>
+            </div>
+          )
         ) : (
-          <ul>
-            {displayed.map((message) => {
-              const parent = message.parent_id ? findMessage(message.parent_id) : undefined;
-              const parentAuthor =
-                parent?.status !== "deleted" && parent?.author_display_name
-                  ? parent.author_display_name
-                  : null;
-              return (
-                <MessageItem
-                  key={message.id}
-                  message={message}
-                  parentAuthor={parentAuthor}
-                  currentUser={currentUser}
-                  canSend={canSend}
-                  canModerate={canModerate}
-                  reactionTypes={reactionTypes}
-                  reactionBusyKey={reactionBusyKey}
-                  onReply={(target) =>
-                    setReplyTo({
-                      id: target.id,
-                      authorName: target.author_display_name ?? "a member",
-                    })
-                  }
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                  onToggleReaction={handleToggleReaction}
-                  onModerate={handleModerate}
-                  onTogglePin={handleTogglePin}
-                />
-              );
-            })}
-          </ul>
+          <MessageList
+            messages={displayed}
+            currentUser={currentUser}
+            canSend={canSend}
+            canModerate={canModerate}
+            reactionTypes={reactionTypes}
+            reactionBusyKey={reactionBusyKey}
+            findMessage={findMessage}
+            onReply={(target) =>
+              setReplyTo({
+                id: target.id,
+                authorName: target.author_display_name ?? "a member",
+              })
+            }
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onToggleReaction={handleToggleReaction}
+            onModerate={handleModerate}
+            onTogglePin={handleTogglePin}
+          />
         )}
       </div>
 
@@ -357,5 +382,92 @@ export function MessageThread({
         />
       ) : null}
     </div>
+  );
+}
+
+/**
+ * The oldest-first scroll feed. Inserts a quiet day divider whenever the date
+ * changes and fades the feed in on mount (transform-only, disabled under
+ * reduced motion).
+ */
+function MessageList({
+  messages,
+  currentUser,
+  canSend,
+  canModerate,
+  reactionTypes,
+  reactionBusyKey,
+  findMessage,
+  onReply,
+  onEdit,
+  onDelete,
+  onToggleReaction,
+  onModerate,
+  onTogglePin,
+}: {
+  messages: ChatMessage[];
+  currentUser: { id: string; displayName: string } | null;
+  canSend: boolean;
+  canModerate: boolean;
+  reactionTypes: ReactionType[];
+  reactionBusyKey: string | null;
+  findMessage: (messageId: string) => ChatMessage | undefined;
+  onReply: (message: ChatMessage) => void;
+  onEdit: (message: ChatMessage) => void;
+  onDelete: (messageId: string) => void;
+  onToggleReaction: (messageId: string, reactionKey: string) => void;
+  onModerate: (
+    messageId: string,
+    expectedStatus: ChatMessageStatus,
+    status: ChatMessageStatus,
+    reason: string,
+  ) => Promise<boolean>;
+  onTogglePin: (messageId: string, expectedPinned: boolean, isPinned: boolean) => void;
+}) {
+  const reduceMotion = useReducedMotion();
+  const now = new Date();
+
+  return (
+    <motion.ul
+      initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {messages.map((message, index) => {
+        const prev = messages[index - 1];
+        const showDivider = !prev || dayKey(prev.created_at) !== dayKey(message.created_at);
+        const parent = message.parent_id ? findMessage(message.parent_id) : undefined;
+        const parentAuthor =
+          parent?.status !== "deleted" && parent?.author_display_name
+            ? parent.author_display_name
+            : null;
+        return (
+          <Fragment key={message.id}>
+            {showDivider ? (
+              <li className="flex items-center gap-3 px-4 py-2">
+                <span className="bg-border h-px flex-1" />
+                <span className="text-fg-subtle text-xs">{dayLabel(message.created_at, now)}</span>
+                <span className="bg-border h-px flex-1" />
+              </li>
+            ) : null}
+            <MessageItem
+              message={message}
+              parentAuthor={parentAuthor}
+              currentUser={currentUser}
+              canSend={canSend}
+              canModerate={canModerate}
+              reactionTypes={reactionTypes}
+              reactionBusyKey={reactionBusyKey}
+              onReply={onReply}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              onToggleReaction={onToggleReaction}
+              onModerate={onModerate}
+              onTogglePin={onTogglePin}
+            />
+          </Fragment>
+        );
+      })}
+    </motion.ul>
   );
 }

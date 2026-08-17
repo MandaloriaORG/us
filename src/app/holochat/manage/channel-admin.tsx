@@ -3,7 +3,11 @@
 import { useState, useTransition } from "react";
 import {
   ArrowClockwiseIcon,
+  HashIcon,
+  LockKeyIcon,
   MagnifyingGlassIcon,
+  MegaphoneIcon,
+  ShieldIcon,
   UserPlusIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
@@ -17,6 +21,13 @@ import {
 import { cn } from "@/lib/cn";
 import { CHAT_CHANNEL_KIND_LABELS, type ChatChannelSummary } from "@/lib/holochat/types";
 import { ChannelForm } from "./channel-form";
+
+const KIND_ICONS = {
+  public: HashIcon,
+  announcements: MegaphoneIcon,
+  clan: ShieldIcon,
+  private: LockKeyIcon,
+} as const;
 
 export interface ChannelAdminProps {
   channels: ChatChannelSummary[];
@@ -59,7 +70,9 @@ export function ChannelAdmin({ channels: initial }: ChannelAdminProps) {
         <h2 id="new-channel-heading" className="text-fg mb-3 text-sm font-medium">
           New channel
         </h2>
-        <ChannelForm mode="create" />
+        <div className="border-border bg-bg-raised rounded-lg border p-4 md:p-5">
+          <ChannelForm mode="create" />
+        </div>
       </section>
 
       {error ? (
@@ -74,11 +87,16 @@ export function ChannelAdmin({ channels: initial }: ChannelAdminProps) {
         </h2>
         <ul className="divide-border border-border flex flex-col divide-y rounded-md border">
           {channels.map((channel) => {
+            const KindIcon = KIND_ICONS[channel.kind];
             return (
-              <li key={channel.id} className="px-3 py-3 md:px-4">
+              <li
+                key={channel.id}
+                className="hover:bg-surface/40 px-3 py-3 transition-colors md:px-4"
+              >
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                   <div className="min-w-0 flex-1">
                     <p className="text-fg flex flex-wrap items-center gap-2 text-sm font-medium">
+                      <KindIcon aria-hidden="true" className="text-fg-subtle h-4 w-4 shrink-0" />
                       <span className="truncate">{channel.name}</span>
                       <span className="border-border text-fg-subtle rounded-sm border px-1.5 py-0.5 text-[10px] tracking-wide uppercase">
                         {CHAT_CHANNEL_KIND_LABELS[channel.kind]}
