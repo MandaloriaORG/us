@@ -1,0 +1,114 @@
+import { cn } from "@/lib/cn";
+
+interface MandaloriaLogoProps {
+  className?: string;
+  /** Unique prefix for gradient IDs — avoids collisions when multiple logos render on one page. */
+  gradientId?: string;
+}
+
+/**
+ * Mandalorian crest (escudo púrpura + oro Beskar), inlined from
+ * `mandaloria logo.svg` (source asset in repo root). Server-safe.
+ */
+export function MandaloriaLogo({
+  className,
+  gradientId = "mlogo",
+}: MandaloriaLogoProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 150 150"
+      aria-hidden="true"
+      role="img"
+      className={cn("shrink-0", className)}
+    >
+      <path fill="#54266B" d="m73.7 2.7-16 20.2 9.3 71v-0.1l2.9-4.1-0.9-52.4 4.6-5.9z" />
+      <path fill="#54266B" d="m76.4 2.8v28.9l4.2 5.8-0.9 51.9 3.1 4.5 1.2-9.1 8.5-61.9z" />
+      <linearGradient
+        id={`${gradientId}-g1`}
+        x1="4.984"
+        x2="145.2"
+        y1="76.94"
+        y2="76.94"
+        gradientTransform="matrix(1 0 0 -1 0 150)"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stopColor="#A28747" offset="0" />
+        <stop stopColor="#BCA76E" offset="0.5" />
+        <stop stopColor="#A1864F" offset="1" />
+      </linearGradient>
+      <path
+        fill={`url(#${gradientId}-g1)`}
+        stroke="#887142"
+        strokeWidth="0.8"
+        strokeMiterlimit="9.9996"
+        d="m118.5 96.8c-0.6-3.9-1.7-7.4-3.6-11.1l27.5-17.8c-1-0.7-4.6-12.5-4.6-12.5l-27.7 23.4c-1.7-2.1-4.9-4.9-6.8-6.3l21.5-33.7c-3.2-2.7-6.8-5.4-11.4-8.2l-17.5 37c-2-0.8-4-1.5-6.2-2.2l-1.5 10.8c7.2 2.4 19.6 10.8 19.7 29.6l33.6-1 3.7-12.6-26.7 4.6zm-56.6-20.5-1.3-10.9c-2.1 0.6-4 1.3-6.3 2.3l-17.3-37.2c-4.2 2.4-8 5.1-11.7 8.3l21.5 33.7c-2.3 1.8-4.4 3.9-6.7 6.3l-27.7-23.4-4.7 12.3 27.7 18.1c-1.9 3.5-3.1 7.2-4 11l-26.4-4.7 3.5 12.7 33.7 0.8c-0.6-16.5 9.9-26 19.7-29.3z"
+      />
+      <linearGradient
+        id={`${gradientId}-g2`}
+        x1="48.1"
+        x2="73.5"
+        y1="57.55"
+        y2="57.55"
+        gradientTransform="matrix(1 0 0 -1 0 150)"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stopColor="#A28747" offset="0" />
+        <stop stopColor="#AE995E" offset="1" />
+      </linearGradient>
+      <path
+        fill={`url(#${gradientId}-g2)`}
+        stroke="#887142"
+        strokeLinecap="square"
+        strokeMiterlimit="10"
+        strokeWidth="0.8"
+        d="m69.9 37-0.7 0.5 0.8 52.2-21.5 32.1c1.7 2.3 3.6 4 5.8 6.1l19.1-30v-66.3l-3.5 5.4z"
+      />
+      <linearGradient
+        id={`${gradientId}-g3`}
+        x1="76.4"
+        x2="101.8"
+        y1="52.3"
+        y2="52.3"
+        gradientTransform="matrix(1 0 0 -1 0 150)"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stopColor="#AB955B" offset="0" />
+        <stop stopColor="#BBAA75" offset="1" />
+      </linearGradient>
+      <path
+        fill={`url(#${gradientId}-g3)`}
+        stroke="#937C4C"
+        strokeMiterlimit="10"
+        strokeWidth="0.8"
+        d="m79.9 35.4-3.5-3.8v66.4l19.7 29.9c2-1.4 4.4-4 5.7-5.7l-22.1-32.8 0.7-51.9z"
+      />
+      <path fill="#9D8650" d="m70.5 107.5v39.4h8.7v-39.3l-4.2-7z" />
+      <linearGradient
+        id={`${gradientId}-g4`}
+        x1="71.1"
+        x2="78.9"
+        y1="25.75"
+        y2="25.75"
+        gradientTransform="matrix(1 0 0 -1 0 150)"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stopColor="#9D854F" offset="0" />
+        <stop stopColor="#AD965B" offset="1" />
+      </linearGradient>
+      <path
+        fill={`url(#${gradientId}-g4)`}
+        stroke="#967F48"
+        strokeMiterlimit="10"
+        strokeWidth="0.7"
+        d="m71.1 107.5 3.8-5.9 4 6.2v38.9l-7.8-0.1z"
+      />
+      <path fill="#54266C" d="m62.6 78.8 1.9 14.2-16.5 24.9c-1.6-3.2-3.3-8-3.2-13.8 0.1-10.1 7-21.1 17.8-25.3z" />
+      <path fill="#54266C" d="m87.6 78.8-2.1 14.2 16.2 24.9c1.7-2.5 3.5-8.3 3.4-13.3-0.2-12.4-10.2-23.6-17.5-25.8z" />
+      <path fill="#54266C" d="m30.5 108.4 12.3 0.3c1.1 10.7 10.4 23.5 25.5 26.1v11.9c-11.7-1.4-35.6-10.7-37.8-38.3z" />
+      <path fill="#54266C" d="m81.7 134.8v11.8c14.7-1.9 35.2-12.6 37.6-38.2l-12.2 0.3c-1.3 11.1-10.7 23.5-25.4 26.1z" />
+      <path fill="#54266C" d="m68.2 111.5-10.6 16.3c2.8 2.2 8.4 4.4 10.7 4.6l-0.1-20.9z" />
+      <path fill="#54266B" d="m81.6 111.7 11 15.9c-1.8 1.8-8.5 4.6-11 4.8v-20.7z" />
+    </svg>
+  );
+}

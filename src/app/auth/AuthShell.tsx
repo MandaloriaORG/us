@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { ShieldIcon } from "@phosphor-icons/react/dist/ssr";
+import { MandaloriaLogo } from "@/components/layout/mandaloria-logo";
 
 interface AuthShellProps {
   children: React.ReactNode;
@@ -51,9 +51,9 @@ export function AuthShell({ children }: AuthShellProps) {
               aria-hidden="true"
               className="absolute inset-0 rounded-full bg-[radial-gradient(circle,hsl(42_40%_55%/0.18)_0%,transparent_70%)]"
             />
-            <ShieldIcon
-              aria-hidden="true"
-              className="text-brand duration-fast relative h-7 w-7 transition-transform group-hover:scale-105"
+            <MandaloriaLogo
+              gradientId="ml-auth"
+              className="relative h-7 w-7 transition-transform group-hover:scale-105"
             />
           </Link>
         </motion.div>

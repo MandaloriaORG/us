@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Cinzel, JetBrains_Mono } from "next/font/google";
 import Link from "next/link";
-import { ShieldIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { NavLinks } from "@/components/layout/nav-links";
+import { MandaloriaLogo } from "@/components/layout/mandaloria-logo";
 import { canAny } from "@/lib/permissions";
 import { createClient } from "@/lib/supabase/server";
 import { NavAuth } from "./NavAuth";
@@ -108,9 +108,9 @@ export default async function RootLayout({
               aria-label="Mandaloria home"
               className="duration-fast group focus-visible:ring-border-focus focus-visible:ring-offset-bg flex min-h-11 items-center gap-2 rounded-md text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
             >
-              <ShieldIcon
-                aria-hidden="true"
-                className="text-brand duration-fast h-5 w-5 transition-transform group-hover:scale-105"
+              <MandaloriaLogo
+                gradientId="ml-nav"
+                className="duration-fast h-6 w-6 transition-transform group-hover:scale-105"
               />
               <span className="bg-[linear-gradient(90deg,hsl(42_40%_55%),hsl(45_70%_62%))] bg-clip-text text-transparent">
                 Mandaloria

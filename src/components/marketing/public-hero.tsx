@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "@/components/ui/button";
+import { MandaloriaLogo } from "@/components/layout/mandaloria-logo";
 
 export interface PublicHeroProps {
   /** Product-specific proof shown beside the copy, normally KnowledgePipeline. */
@@ -63,6 +64,15 @@ function PublicHero({ visual }: PublicHeroProps) {
           animate="visible"
           variants={heroStagger}
         >
+          <motion.div
+            variants={heroItem}
+            className="mb-6 flex justify-start"
+          >
+            <MandaloriaLogo
+              gradientId="ml-hero"
+              className="drop-shadow-[0_0_30px_hsl(42_40%_55%/0.35)] h-16 w-16 sm:h-20 sm:w-20"
+            />
+          </motion.div>
           <motion.h1
             id="public-hero-title"
             variants={heroItem}
