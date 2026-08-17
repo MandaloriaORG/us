@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { plazaHue } from "@/components/system/plaza-chip";
 import { EmptyState } from "@/components/ui/empty-state";
 import { listPlazas } from "@/lib/content/queries";
 
@@ -12,14 +13,14 @@ import { listPlazas } from "@/lib/content/queries";
  * `members` Plazas; `private` Plazas need `admin.manage_plazas`. There is no
  * client-side filtering to add, and adding one would be a privacy bug.
  *
- * DESIGN — not implemented, owned by the UI workstream:
- * - Plazas are a homogeneous list of equal-weight destinations, so the row
- *   pattern applies, not cards (`docs/DESIGN_SYSTEM.md`, rows vs cards).
- * - Each row needs name, description and post count. `posts_count` is quiet
- *   metadata, not a badge.
- * - An archived Plaza must read as archived without relying on colour alone.
- * - The empty state below is a placeholder: it should state why the directory
- *   is empty for this specific viewer rather than saying "no data".
+ * DESIGN — implemented by this file:
+ * - Plazas are destinations with their own identity, so each renders as a card
+ *   with a monogram emblem tile tinted from its slug (`plazaHue`), its name in
+ *   the display face, a description and a quiet post count.
+ * - An archived Plaza carries a status badge and reads as read-only without
+ *   relying on colour alone.
+ * - The empty state states why the directory is empty for this specific viewer
+ *   and offers a concrete next step, never a bare "no data".
  * - Ordering is `sort_order` then name, decided by the database. The UI must not
  *   re-sort.
  */
@@ -43,28 +44,49 @@ export default async function PlazasPage() {
     <main className="mx-auto w-full max-w-3xl px-4 py-6">
       <h1 className="text-fg text-2xl font-semibold">Plazas</h1>
 
-      <ul className="border-border mt-6 border-b">
-        {plazas.map((plaza) => (
-          <li key={plaza.id} className="border-border border-t">
-            <Link
-              href={`/plazas/${plaza.slug}`}
-              className="group duration-fast hover:bg-surface focus-visible:bg-surface focus-visible:ring-border-focus grid min-h-11 min-w-0 gap-1 py-4 transition-colors focus-visible:ring-2 focus-visible:outline-hidden sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-4"
-            >
-              <span className="min-w-0">
-                <span className="text-fg duration-fast group-hover:text-brand font-medium transition-colors">
-                  {plaza.name}
+      <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+        {plazas.map((plaza) => {
+          const hue = plazaHue(plaza.slug);
+          return (
+            <li key={plaza.id} className="min-w-0">
+              <Link
+                href={`/plazas/${plaza.slug}`}
+                className="group border-border bg-bg-raised duration-fast hover:border-brand/45 focus-visible:ring-border-focus grid min-h-11 min-w-0 grid-cols-[auto_minmax(0,1fr)] gap-3 rounded-lg border p-4 transition-all hover:-translate-y-px hover:shadow-lg focus-visible:ring-2 focus-visible:outline-hidden"
+              >
+                <span
+                  aria-hidden="true"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-base font-semibold"
+                  style={{
+                    backgroundColor: `hsl(${hue} 26% 19%)`,
+                    color: `hsl(${hue} 42% 78%)`,
+                    boxShadow: `inset 0 0 0 1px hsl(${hue} 42% 38% / 0.35)`,
+                  }}
+                >
+                  {plaza.name.trim().charAt(0).toLocaleUpperCase() || "?"}
                 </span>
-                {plaza.description ? (
-                  <span className="text-fg-muted mt-0.5 block text-sm">{plaza.description}</span>
-                ) : null}
-              </span>
-              <span className="text-fg-subtle text-sm text-nowrap sm:text-right">
-                {plaza.posts_count} {plaza.posts_count === 1 ? "post" : "posts"}
-                {plaza.status === "archived" ? " · Archived" : null}
-              </span>
-            </Link>
-          </li>
-        ))}
+
+                <span className="flex min-w-0 flex-col gap-1">
+                  <span className="flex flex-wrap items-center gap-2">
+                    <span className="font-display text-fg duration-fast group-hover:text-brand text-lg leading-tight font-semibold tracking-tight transition-colors">
+                      {plaza.name}
+                    </span>
+                    {plaza.status === "archived" ? (
+                      <span className="border-border text-fg-muted rounded-full border px-2 py-0.5 text-[11px] font-medium">
+                        Archived
+                      </span>
+                    ) : null}
+                  </span>
+                  {plaza.description ? (
+                    <span className="text-fg-muted line-clamp-2 text-sm">{plaza.description}</span>
+                  ) : null}
+                  <span className="text-fg-subtle mt-1 text-xs">
+                    {plaza.posts_count} {plaza.posts_count === 1 ? "post" : "posts"}
+                  </span>
+                </span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </main>
   );

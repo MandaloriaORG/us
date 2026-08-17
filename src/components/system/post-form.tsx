@@ -18,7 +18,7 @@ export type PostFormProps =
     };
 
 const TEXTAREA_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-64 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
+  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-brand/60 focus-visible:ring-brand/30 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-64 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
 
 /** Comma- or whitespace-separated; deduped case-insensitively, empties dropped. */
 function parseTagsInput(value: string): string[] {
@@ -100,7 +100,10 @@ export function PostForm(props: PostFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-6 flex max-w-2xl flex-col gap-5">
+    <form
+      onSubmit={handleSubmit}
+      className="border-border bg-bg-raised mt-6 flex max-w-2xl flex-col gap-5 rounded-lg border p-4 sm:p-5"
+    >
       <TextInput
         id="post-title"
         label="Title"
@@ -110,6 +113,7 @@ export function PostForm(props: PostFormProps) {
         maxLength={300}
         disabled={isPending}
         error={fieldErrors.title}
+        className="focus-visible:ring-brand/30 has-focus-visible:border-brand/60"
       />
 
       <div className="flex flex-col gap-2">
@@ -147,6 +151,7 @@ export function PostForm(props: PostFormProps) {
         placeholder="lore, west-marsh"
         description="Separate with commas or spaces, up to 5"
         error={fieldErrors.tagSlugs}
+        className="focus-visible:ring-brand/30 has-focus-visible:border-brand/60"
       />
 
       {formError ? (

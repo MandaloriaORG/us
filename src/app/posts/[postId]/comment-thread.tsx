@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { CaretRightIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { createComment } from "@/lib/actions/content";
 import type { CommentNode, ReactionType } from "@/lib/content/queries";
@@ -69,9 +70,13 @@ export function CommentThread({
       {nextCursor ? (
         <Link
           href={`/posts/${postId}?cursor=${encodeURIComponent(nextCursor)}`}
-          className="text-brand text-sm underline-offset-4 hover:underline"
+          className="group border-border bg-bg-raised text-fg-muted hover:text-fg hover:border-border-raised focus-visible:ring-border-focus inline-flex items-center gap-1.5 rounded-md border px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
         >
           Load more comments
+          <CaretRightIcon
+            aria-hidden="true"
+            className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+          />
         </Link>
       ) : null}
     </div>

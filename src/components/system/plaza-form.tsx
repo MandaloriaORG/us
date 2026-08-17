@@ -23,7 +23,7 @@ export type PlazaFormProps =
     };
 
 const TEXTAREA_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
+  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-brand/60 focus-visible:ring-brand/30 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
 
 function readSortOrder(formData: FormData) {
   const raw = formData.get("sortOrder");
@@ -75,7 +75,10 @@ export function PlazaForm(props: PlazaFormProps) {
   const formSuccess = props.mode === "edit" && state?.ok ? "Plaza updated." : null;
 
   return (
-    <form action={formAction} className="mt-6 flex max-w-2xl flex-col gap-5">
+    <form
+      action={formAction}
+      className="border-border bg-bg-raised mt-6 flex max-w-2xl flex-col gap-5 rounded-lg border p-4 sm:p-5"
+    >
       <TextInput
         id="plaza-slug"
         name="slug"
@@ -85,6 +88,7 @@ export function PlazaForm(props: PlazaFormProps) {
         maxLength={48}
         error={fieldErrors.slug}
         description="Lowercase words separated by hyphens. Used in the Plaza's URL."
+        className="focus-visible:ring-brand/30 has-focus-visible:border-brand/60"
       />
 
       <TextInput
@@ -95,6 +99,7 @@ export function PlazaForm(props: PlazaFormProps) {
         required
         maxLength={80}
         error={fieldErrors.name}
+        className="focus-visible:ring-brand/30 has-focus-visible:border-brand/60"
       />
 
       <div className="flex flex-col gap-2">
@@ -167,6 +172,7 @@ export function PlazaForm(props: PlazaFormProps) {
           max={10_000}
           error={fieldErrors.sortOrder}
           fieldClassName="sm:max-w-32"
+          className="focus-visible:ring-brand/30 has-focus-visible:border-brand/60"
         />
       </div>
 

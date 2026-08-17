@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { PostList } from "@/components/system/post-list";
+import { plazaHue } from "@/components/system/plaza-chip";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getPlaza, listPosts, parsePostOrder } from "@/lib/content/queries";
@@ -65,14 +66,29 @@ export default async function PlazaPage({ params, searchParams }: PlazaPageProps
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-fg text-2xl font-semibold">{plaza.name}</h1>
-          {plaza.description ? (
-            <p className="text-fg-muted mt-1 text-sm">{plaza.description}</p>
-          ) : null}
-          {plaza.status === "archived" ? (
-            <p className="text-fg-subtle mt-1 text-xs">Archived — read only, no new posts.</p>
-          ) : null}
+        <div className="flex min-w-0 items-start gap-3">
+          <span
+            aria-hidden="true"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg text-lg font-semibold"
+            style={{
+              backgroundColor: `hsl(${plazaHue(plaza.slug)} 26% 19%)`,
+              color: `hsl(${plazaHue(plaza.slug)} 42% 78%)`,
+              boxShadow: `inset 0 0 0 1px hsl(${plazaHue(plaza.slug)} 42% 38% / 0.35)`,
+            }}
+          >
+            {plaza.name.trim().charAt(0).toLocaleUpperCase() || "?"}
+          </span>
+          <div className="min-w-0">
+            <h1 className="font-display text-fg text-2xl leading-tight font-semibold tracking-tight">
+              {plaza.name}
+            </h1>
+            {plaza.description ? (
+              <p className="text-fg-muted mt-1 text-sm">{plaza.description}</p>
+            ) : null}
+            {plaza.status === "archived" ? (
+              <p className="text-fg-subtle mt-1 text-xs">Archived — read only, no new posts.</p>
+            ) : null}
+          </div>
         </div>
         {plaza.can_post ? (
           <Button asChild size="sm" className="shrink-0">

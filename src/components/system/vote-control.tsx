@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { ThumbsDownIcon, ThumbsUpIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { Button } from "@/components/ui/button";
@@ -20,10 +21,16 @@ export interface VoteControlProps {
 }
 
 /**
- * Like/dislike control for a post or a comment. Vote/reaction/bookmark are the
- * cheap, reversible mutations the design brief allows to be optimistic: the
- * count updates immediately, then is corrected from the server's answer, or
- * rolled back with an inline error if the request is refused.
+ * A tactile up/down vote group. The two directions stack vertically, like a
+ * physical lever: each button carries its own count, warms to the brand on
+ * hover, and presses down a pixel when clicked. The active vote fills its icon
+ * and pops once, so the change is felt, not just read. Reduced-motion users get
+ * the colour/fill change without the pop.
+ *
+ * Vote/reaction/bookmark are the cheap, reversible mutations the design brief
+ * allows to be optimistic: the count updates immediately, then is corrected
+ * from the server's answer, or rolled back with an inline error if the request
+ * is refused.
  *
  * The pressed vote is never colour-only: it also sets `aria-pressed`, swaps
  * the icon to its filled weight, and changes background/foreground together.
@@ -36,6 +43,7 @@ export function VoteControl({
   onVote,
   size = "md",
 }: VoteControlProps) {
+  const reduced = useReducedMotion();
   const [likes, setLikes] = useState(initialLikes);
   const [dislikes, setDislikes] = useState(initialDislikes);
   const [vote, setVote] = useState<VoteValue>((initialVote as VoteValue) || 0);
@@ -67,44 +75,68 @@ export function VoteControl({
     });
   }
 
+  function VoteGlyph({ active, direction }: { active: boolean; direction: 1 | -1 }) {
+    const Icon = direction === 1 ? ThumbsUpIcon : ThumbsDownIcon;
+    return (
+      <motion.span
+        aria-hidden="true"
+        animate={!reduced && active ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="inline-flex"
+      >
+        <Icon weight={active ? "fill" : "regular"} className="h-4 w-4" />
+      </motion.span>
+    );
+  }
+
+  const compact = size === "sm";
+  const buttonClass = cn(
+    "gap-1.5 transition-all active:scale-95",
+    compact ? "h-7 px-2 text-xs" : "h-8 px-2.5 text-sm",
+  );
+
   return (
-    <div className="flex items-center gap-1">
+    <div className="border-border bg-surface/40 flex flex-col items-stretch gap-px overflow-hidden rounded-lg border p-0.5">
       <Button
         type="button"
         variant="ghost"
-        size={size}
+        size="sm"
         aria-pressed={vote === 1}
         aria-label={`Like this ${targetLabel}`}
         disabled={isPending}
         onClick={() => cast(1)}
-        className={cn(vote === 1 && "bg-brand/10 text-brand hover:bg-brand/15")}
+        className={cn(
+          buttonClass,
+          "rounded-md",
+          vote === 1
+            ? "bg-brand/10 text-brand hover:bg-brand/15"
+            : "hover:bg-brand/5 hover:text-brand",
+        )}
       >
-        <ThumbsUpIcon
-          aria-hidden="true"
-          weight={vote === 1 ? "fill" : "regular"}
-          className="h-4 w-4"
-        />
+        <VoteGlyph active={vote === 1} direction={1} />
         <span className="tabular-nums">{likes}</span>
       </Button>
       <Button
         type="button"
         variant="ghost"
-        size={size}
+        size="sm"
         aria-pressed={vote === -1}
         aria-label={`Dislike this ${targetLabel}`}
         disabled={isPending}
         onClick={() => cast(-1)}
-        className={cn(vote === -1 && "bg-error/10 text-error hover:bg-error/15")}
+        className={cn(
+          buttonClass,
+          "rounded-md",
+          vote === -1
+            ? "bg-error/10 text-error hover:bg-error/15"
+            : "hover:bg-error/5 hover:text-error",
+        )}
       >
-        <ThumbsDownIcon
-          aria-hidden="true"
-          weight={vote === -1 ? "fill" : "regular"}
-          className="h-4 w-4"
-        />
+        <VoteGlyph active={vote === -1} direction={-1} />
         <span className="tabular-nums">{dislikes}</span>
       </Button>
       {error ? (
-        <span role="alert" className="text-error text-xs">
+        <span role="alert" className="text-error px-1 pt-1 text-xs">
           {error}
         </span>
       ) : null}

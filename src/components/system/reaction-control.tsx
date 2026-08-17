@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
@@ -25,9 +26,13 @@ interface LocalReaction {
 /**
  * Renders whatever reaction catalog the administrator configured — never a
  * fixed set. Toggling is optimistic and reversible; the total badge only
- * appears once the server has actually reported one for that key.
+ * appears once the server has actually reported one for that key. The emoji
+ * pops once when the reaction lands, so the toggle is felt as a small burst
+ * rather than a silent colour change; reduced-motion users still get the
+ * pressed state and fill.
  */
 export function ReactionControl({ targetLabel, reactionTypes, onToggle }: ReactionControlProps) {
+  const reduced = useReducedMotion();
   const [state, setState] = useState<Record<string, LocalReaction>>({});
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -69,9 +74,19 @@ export function ReactionControl({ targetLabel, reactionTypes, onToggle }: Reacti
             aria-label={`React with ${reaction.label} to this ${targetLabel}`}
             disabled={isPending}
             onClick={() => toggle(reaction.key)}
-            className={cn(reacted && "bg-brand/10 text-brand hover:bg-brand/15 font-medium")}
+            className={cn(
+              "gap-1.5 transition-all active:scale-95",
+              reacted && "bg-brand/10 text-brand hover:bg-brand/15 font-medium",
+            )}
           >
-            <span aria-hidden="true">{reaction.emoji}</span>
+            <motion.span
+              aria-hidden="true"
+              animate={!reduced && reacted ? { scale: [1, 1.45, 1] } : { scale: 1 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="inline-flex"
+            >
+              {reaction.emoji}
+            </motion.span>
             <span>{reaction.label}</span>
             {entry?.total !== undefined ? (
               <span className="text-fg-subtle tabular-nums">{entry.total}</span>

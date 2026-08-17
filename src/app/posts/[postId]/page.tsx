@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/ssr";
+import { ChatCircleIcon, PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { getCouncilReportAccess } from "@/app/council/access";
 import { Button } from "@/components/ui/button";
+import { AuthorMark } from "@/components/system/author-mark";
 import { CopyLinkButton } from "@/components/system/copy-link-button";
 import { ReportControl } from "@/components/system/report-control";
 import { renderMarkdown } from "@/lib/content/markdown";
@@ -92,9 +93,16 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
         </Link>
       </p>
 
-      <h1 className="text-fg mt-1 text-2xl font-semibold">{post.title}</h1>
-      <p className="text-fg-subtle mt-1 text-sm">
-        {post.author_display_name} · {formatRelativeTime(post.created_at)}
+      <h1 className="font-display text-fg from-brand wrap-balance mt-1 bg-gradient-to-r to-amber-400 bg-clip-text text-[1.7rem] leading-tight font-semibold tracking-tight text-transparent sm:text-3xl">
+        {post.title}
+      </h1>
+      <p className="text-fg-subtle mt-2 flex items-center gap-1.5 text-sm">
+        <AuthorMark name={post.author_display_name} />
+        <span className="truncate">{post.author_display_name}</span>
+        <span aria-hidden="true" className="text-fg-subtle/60">
+          ·
+        </span>
+        <time dateTime={post.created_at}>{formatRelativeTime(post.created_at)}</time>
       </p>
 
       {removed ? (
@@ -108,7 +116,7 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
         // Safe by construction: `renderMarkdown` escapes the author's text before
         // emitting its own closed set of tags. See `src/lib/content/markdown.ts`.
         <div
-          className="text-fg [&_a]:text-brand mt-4 max-w-none text-sm leading-relaxed [&_a]:underline-offset-4 [&_a:hover]:underline [&_p]:mt-3 [&_p:first-child]:mt-0"
+          className="text-fg [&_a]:text-brand mt-5 max-w-[65ch] text-[0.95rem] leading-[1.7] [&_a]:underline-offset-4 [&_a:hover]:underline [&_p]:mt-3 [&_p:first-child]:mt-0"
           dangerouslySetInnerHTML={{ __html: renderMarkdown(post.body ?? "") }}
         />
       )}
@@ -128,19 +136,33 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
         </ul>
       ) : null}
 
-      <div className="border-border mt-5 border-t pt-4">
-        <PostEngagement
-          postId={post.id}
-          initialLikes={post.likes_count}
-          initialDislikes={post.dislikes_count}
-          initialVote={post.caller_vote}
-          initialBookmarked={post.caller_bookmarked}
-          reactionTypes={reactionTypes}
-        />
+      <div className="border-border bg-bg sticky bottom-0 -mx-4 mt-5 border-t px-4 pt-3 pb-2 sm:static sm:mx-0 sm:border-t sm:bg-transparent sm:px-0 sm:pt-4 sm:pb-0">
+        <div className="flex items-start gap-2">
+          <PostEngagement
+            postId={post.id}
+            initialLikes={post.likes_count}
+            initialDislikes={post.dislikes_count}
+            initialVote={post.caller_vote}
+            initialBookmarked={post.caller_bookmarked}
+            reactionTypes={reactionTypes}
+          />
+          <div className="ml-auto flex shrink-0 flex-col items-stretch gap-1">
+            <a
+              href="#comments"
+              aria-label={`${post.comments_count} ${
+                post.comments_count === 1 ? "comment" : "comments"
+              }`}
+              className="text-fg-muted hover:text-fg focus-visible:ring-border-focus inline-flex h-8 items-center justify-center gap-1.5 rounded-md px-2.5 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
+            >
+              <ChatCircleIcon aria-hidden="true" className="h-4 w-4" />
+              <span className="tabular-nums">{post.comments_count}</span>
+            </a>
+            <CopyLinkButton path={`/posts/${post.id}`} />
+          </div>
+        </div>
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <CopyLinkButton path={`/posts/${post.id}`} />
         {!removed ? (
           <Button asChild size="sm" variant="ghost">
             <Link href={`/codex/propose?post=${post.id}`}>
@@ -173,7 +195,7 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
         />
       ) : null}
 
-      <div className="border-border mt-8 border-t pt-6">
+      <div id="comments" className="border-border mt-8 border-t pt-6">
         <h2 className="text-fg text-lg font-semibold">Comments ({post.comments_count})</h2>
 
         <CommentThread
