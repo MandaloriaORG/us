@@ -89,6 +89,7 @@ export function MobileNav({ className, items, triggerLabel = "Open navigation" }
                         isCurrent && "bg-brand-muted text-fg font-medium",
                       )}
                       href={item.href}
+                      prefetch
                     >
                       <span className="truncate">{item.label}</span>
                     </Link>

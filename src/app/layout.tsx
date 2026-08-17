@@ -105,6 +105,7 @@ export default async function RootLayout({
           <div className="mx-auto flex min-h-12 max-w-7xl flex-wrap items-center justify-between px-4 py-0.5 md:px-6">
             <Link
               href="/"
+              prefetch
               aria-label="Mandaloria home"
               className="duration-fast group focus-visible:ring-border-focus focus-visible:ring-offset-bg flex min-h-11 items-center gap-2 rounded-md text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
             >

@@ -39,6 +39,7 @@ export function NavLinks({ items, className }: NavLinksProps) {
           <Link
             key={item.href}
             href={item.href}
+            prefetch
             aria-current={isActive ? "page" : undefined}
             className={cn(
               "duration-fast focus-visible:ring-border-focus relative flex min-h-11 items-center rounded-md px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden sm:inline-flex",
