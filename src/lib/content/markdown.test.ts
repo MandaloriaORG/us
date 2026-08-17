@@ -143,6 +143,12 @@ describe("markdown subset", () => {
     expect(renderMarkdown("")).toBe("");
     expect(renderMarkdown("   \n\n  ")).toBe("");
   });
+
+  it("renders strikethrough as <del>", () => {
+    expect(renderMarkdown("this is ~~wrong~~ now corrected")).toBe(
+      "<p>this is <del>wrong</del> now corrected</p>",
+    );
+  });
 });
 
 describe("plain text reduction", () => {

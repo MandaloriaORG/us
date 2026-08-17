@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   listPostComments: vi.fn(),
   listReactionTypes: vi.fn(),
   listPlazas: vi.fn(),
+  listPosts: vi.fn(),
   getCouncilReportAccess: vi.fn(),
   notFound: vi.fn(),
 }));
@@ -15,6 +16,7 @@ vi.mock("@/lib/content/queries", () => ({
   listPostComments: mocks.listPostComments,
   listReactionTypes: mocks.listReactionTypes,
   listPlazas: mocks.listPlazas,
+  listPosts: mocks.listPosts,
   // Same tree-building rule as the real module, duplicated here so this test
   // does not import `queries.ts` itself, which is guarded by `server-only`.
   buildCommentTree: (comments: { id: string; parent_id: string | null }[]) => {
@@ -100,6 +102,7 @@ beforeEach(() => {
   mocks.listReactionTypes.mockResolvedValue([]);
   mocks.listPostComments.mockResolvedValue({ items: [], nextCursor: null });
   mocks.listPlazas.mockResolvedValue([]);
+  mocks.listPosts.mockResolvedValue({ items: [], nextCursor: null });
   mocks.getCouncilReportAccess.mockResolvedValue({ allowed: false, reason: "missing_permission" });
 });
 

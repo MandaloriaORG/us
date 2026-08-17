@@ -78,6 +78,7 @@ function renderInline(escaped: string): string {
   text = text.replace(/\*\*([^\n*]+)\*\*/g, "<strong>$1</strong>");
   text = text.replace(/(^|[^*])\*([^\n*]+)\*/g, "$1<em>$2</em>");
   text = text.replace(/(^|[^_])_([^\n_]+)_/g, "$1<em>$2</em>");
+  text = text.replace(/~~([^\n~]+)~~/g, "<del>$1</del>");
 
   return text.replace(/\u0000CODE(\d+)\u0000/g, (_match, index: string) => {
     return `<code>${codeFragments[Number(index)]}</code>`;

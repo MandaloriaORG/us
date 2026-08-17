@@ -8,6 +8,7 @@ import { AuthorMark } from "@/components/system/author-mark";
 import { CopyLinkButton } from "@/components/system/copy-link-button";
 import { ReportControl } from "@/components/system/report-control";
 import { renderMarkdown } from "@/lib/content/markdown";
+import { listPosts } from "@/lib/content/queries";
 import {
   buildCommentTree,
   getPost,
@@ -73,10 +74,14 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
 
   // `moderation.hide` is what every flag, move and lock RPC re-checks, so it is
   // also what decides whether the controls are worth rendering at all.
-  const [comments, reactionTypes, moderationAccess] = await Promise.all([
+  const [comments, reactionTypes, moderationAccess, related] = await Promise.all([
     listPostComments(postId, { cursor: cursor ?? null }),
     listReactionTypes(),
     getCouncilReportAccess(),
+    listPosts({ plazaId: post.plaza_id, pageSize: 6 }).then((page) => ({
+      items: page.items.filter((item) => item.id !== post.id).slice(0, 5),
+      nextCursor: page.nextCursor,
+    })),
   ]);
 
   const canModerate = moderationAccess.allowed;
@@ -116,7 +121,26 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
         // Safe by construction: `renderMarkdown` escapes the author's text before
         // emitting its own closed set of tags. See `src/lib/content/markdown.ts`.
         <div
-          className="text-fg [&_a]:text-brand mt-5 max-w-[65ch] text-[0.95rem] leading-[1.7] [&_a]:underline-offset-4 [&_a:hover]:underline [&_p]:mt-3 [&_p:first-child]:mt-0"
+          className="text-fg mt-5 max-w-[68ch] text-[0.95rem] leading-[1.7]
+            [&_a]:text-brand [&_a]:underline-offset-4 [&_a:hover]:underline
+            [&_p]:mt-3 [&_p:first-child]:mt-0
+            [&_h2]:font-serif [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight
+            [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-semibold
+            [&_ul]:my-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-1
+            [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:space-y-1
+            [&_li]:my-0.5
+            [&_blockquote]:border-l-2 [&_blockquote]:border-brand/40 [&_blockquote]:bg-brand-muted/5
+              [&_blockquote]:my-4 [&_blockquote]:rounded-r-md [&_blockquote]:py-2 [&_blockquote]:pr-3 [&_blockquote]:pl-4
+              [&_blockquote]:text-fg-muted [&_blockquote]:italic
+              [&_blockquote>p]:my-0
+            [&_code]:bg-surface/70 [&_code]:border [&_code]:border-border [&_code]:rounded
+              [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.85em] [&_code]:font-mono
+            [&_pre]:bg-bg-raised [&_pre]:border [&_pre]:border-border [&_pre]:rounded-lg
+              [&_pre]:my-4 [&_pre]:overflow-x-auto [&_pre]:p-4 [&_pre]:text-[0.85rem]
+              [&_pre_code]:bg-transparent [&_pre_code]:border-0 [&_pre_code]:p-0
+            [&_strong]:font-semibold [&_strong]:text-fg
+            [&_em]:italic [&_em]:text-fg
+            [&_del]:text-fg-subtle [&_del]:line-through"
           dangerouslySetInnerHTML={{ __html: renderMarkdown(post.body ?? "") }}
         />
       )}
@@ -207,6 +231,42 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
           canModerate={canModerate}
         />
       </div>
+
+      {related.items.length > 0 ? (
+        <section className="border-border mt-8 border-t pt-6" aria-labelledby="related-posts">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <h2 id="related-posts" className="text-fg text-base font-semibold">
+              More in {post.plaza_name}
+            </h2>
+            <Link
+              href={`/plazas/${post.plaza_slug}`}
+              className="text-brand focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex min-h-11 items-center text-xs font-medium hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+            >
+              See all →
+            </Link>
+          </div>
+          <ul className="space-y-3">
+            {related.items.map((item) => (
+              <li
+                key={item.id}
+                className="border-border bg-surface/40 hover:bg-surface/70 rounded-lg border px-4 py-3 transition-colors"
+              >
+                <Link
+                  href={`/posts/${item.id}`}
+                  className="text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg block rounded font-medium hover:text-brand focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+                >
+                  {item.title}
+                </Link>
+                <div className="text-fg-muted mt-1 flex items-center gap-3 text-xs">
+                  <span>{item.comments_count} comments</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{item.likes_count - item.dislikes_count} score</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </main>
   );
 }
