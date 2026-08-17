@@ -48,10 +48,19 @@ export function SuggestionForm({ articleId }: { articleId: string }) {
 
   if (!open) {
     return (
-      <Button onClick={() => setOpen(true)} type="button" variant="ghost">
-        <SealQuestionIcon aria-hidden="true" className="h-4 w-4" />
-        Suggest a correction
-      </Button>
+      <div className="flex flex-col items-start gap-2">
+        <p className="text-fg-muted text-sm">
+          Spotted an error or a gap? Send the Archivists a correction.
+        </p>
+        <Button
+          className="shadow-[0_1px_2px_var(--color-black/20%),0_0_18px_var(--color-brand/20%)]"
+          onClick={() => setOpen(true)}
+          type="button"
+        >
+          <SealQuestionIcon aria-hidden="true" className="h-4 w-4" />
+          Suggest a correction
+        </Button>
+      </div>
     );
   }
 

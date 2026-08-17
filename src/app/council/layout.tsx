@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeftIcon, ShieldWarningIcon } from "@phosphor-icons/react/dist/ssr";
+import { Button } from "@/components/ui/button";
 import { getCouncilShellAccess } from "./access";
 import { CouncilNavigation } from "./council-navigation";
 
@@ -35,20 +36,15 @@ export default async function CouncilLayout({ children }: { children: React.Reac
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             {verificationFailed && (
-              <Link
-                href="/council"
-                prefetch={false}
-                className="bg-brand text-brand-fg duration-fast focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
-              >
-                Try again
-              </Link>
+              <Button asChild>
+                <Link href="/council" prefetch={false}>
+                  Try again
+                </Link>
+              </Button>
             )}
-            <Link
-              href="/"
-              className="border-border text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 items-center justify-center rounded-md border px-4 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
-            >
-              Go home
-            </Link>
+            <Button asChild variant="secondary">
+              <Link href="/">Go home</Link>
+            </Button>
           </div>
         </div>
       </main>
@@ -61,7 +57,7 @@ export default async function CouncilLayout({ children }: { children: React.Reac
         <div className="flex h-12 items-center gap-3 px-4">
           <Link
             href="/"
-            className="text-fg-muted duration-fast hover:bg-bg-raised hover:text-fg focus-visible:ring-border-focus -ml-2 inline-flex h-11 w-11 items-center justify-center rounded-md transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
+            className="text-fg-muted duration-fast hover:bg-bg-raised hover:text-fg focus-visible:ring-border-focus -ml-2 inline-flex h-11 w-11 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
             aria-label="Return to Mandaloria"
           >
             <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
@@ -87,7 +83,7 @@ export default async function CouncilLayout({ children }: { children: React.Reac
       >
         <Link
           href="/"
-          className="text-fg-muted duration-fast hover:bg-bg-raised hover:text-fg focus-visible:ring-border-focus -ml-3 inline-flex h-11 items-center gap-2 self-start rounded-md px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
+          className="text-fg-muted duration-fast hover:bg-bg-raised hover:text-fg focus-visible:ring-border-focus -ml-3 inline-flex h-11 items-center gap-2 self-start rounded-lg px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
         >
           <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
           Mandaloria

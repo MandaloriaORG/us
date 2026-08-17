@@ -5,6 +5,7 @@ import { MagnifyingGlassIcon, BooksIcon } from "@phosphor-icons/react/dist/ssr";
 import { createClient } from "@/lib/supabase/server";
 import { CodexHeader } from "@/app/codex/codex-header";
 import { ArticleRow } from "@/app/codex/article-row";
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/cn";
 import { listArticles, listCodexCategories } from "@/lib/codex/queries";
@@ -67,7 +68,7 @@ export default async function CodexLibraryPage({ searchParams }: CodexLibraryPag
             className="text-fg-muted pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2"
           />
           <input
-            className="border-border bg-bg text-fg placeholder:text-fg-subtle focus-visible:ring-border-focus h-11 w-full rounded-md border ps-10 pe-3 text-sm outline-hidden transition-colors focus-visible:ring-2"
+            className="border-border bg-bg text-fg placeholder:text-fg-subtle focus-visible:ring-border-focus h-11 w-full rounded-lg border ps-10 pe-3 text-sm shadow-[0_1px_0_var(--color-white/4%)] outline-hidden transition-colors focus-visible:ring-2"
             defaultValue={q}
             id="codex-search"
             name="q"
@@ -76,12 +77,9 @@ export default async function CodexLibraryPage({ searchParams }: CodexLibraryPag
           />
         </div>
         {category ? <input name="category" type="hidden" value={category} /> : null}
-        <button
-          className="bg-brand text-brand-fg duration-fast focus-visible:ring-border-focus inline-flex h-11 items-center justify-center rounded-md px-5 text-sm font-medium transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:outline-hidden"
-          type="submit"
-        >
+        <Button type="submit" size="md">
           Search
-        </button>
+        </Button>
       </form>
 
       <nav aria-label="Categories" className="mt-4 flex flex-wrap gap-2">
@@ -147,8 +145,9 @@ function CategoryChip({ active, href, label }: { active: boolean; href: string; 
     <Link
       aria-current={active ? "page" : undefined}
       className={cn(
-        "border-border text-fg-muted duration-fast hover:bg-bg-raised hover:text-fg focus-visible:ring-border-focus inline-flex min-h-11 items-center rounded-full border px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-hidden",
-        active && "bg-bg-raised border-border-raised text-fg",
+        "border-border text-fg-muted duration-fast hover:border-brand/30 hover:bg-brand/5 hover:text-fg focus-visible:ring-border-focus inline-flex min-h-11 items-center rounded-full border px-3 text-sm transition-all hover:-translate-y-px focus-visible:ring-2 focus-visible:outline-hidden",
+        active &&
+          "border-brand/30 from-brand/15 to-brand/5 text-fg bg-linear-to-b shadow-[inset_0_1px_0_var(--color-white/6%)]",
       )}
       href={href}
     >

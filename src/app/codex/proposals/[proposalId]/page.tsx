@@ -4,10 +4,10 @@ import type { Metadata } from "next";
 import { ArrowSquareOutIcon, EyeSlashIcon, LinkSimpleIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { createClient } from "@/lib/supabase/server";
-import { Badge } from "@/components/origin/badge";
 import { CodexHeader } from "@/app/codex/codex-header";
+import { ProposalStatusPill } from "@/app/codex/proposal-status-pill";
 import { ProposalWorkbench } from "@/app/codex/proposals/[proposalId]/proposal-workbench";
-import { PROPOSAL_STATUS_LABELS, SOURCE_TYPE_LABELS } from "@/lib/codex/states";
+import { SOURCE_TYPE_LABELS } from "@/lib/codex/states";
 import {
   getProposal,
   listProposalContributors,
@@ -66,7 +66,7 @@ export default async function ProposalPage({ params }: ProposalPageProps) {
         <h1 className="text-fg text-2xl font-semibold">
           {proposal.working_title || "Untitled proposal"}
         </h1>
-        <Badge variant="outline">{PROPOSAL_STATUS_LABELS[proposal.status]}</Badge>
+        <ProposalStatusPill status={proposal.status} />
       </div>
       <p className="text-fg-subtle mt-1 text-sm">
         Proposed by {proposal.proposer_display_name} · {formatRelativeTime(proposal.created_at)}

@@ -3,10 +3,9 @@ import type { Metadata } from "next";
 import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { createClient } from "@/lib/supabase/server";
-import { Badge } from "@/components/origin/badge";
 import { CodexHeader } from "@/app/codex/codex-header";
+import { ProposalStatusPill } from "@/app/codex/proposal-status-pill";
 import { EmptyState } from "@/components/ui/empty-state";
-import { PROPOSAL_STATUS_LABELS } from "@/lib/codex/states";
 import { listOwnCodexProposals } from "@/lib/codex/queries";
 import { formatRelativeTime } from "@/lib/time";
 
@@ -64,7 +63,7 @@ export default async function MyProposalsPage() {
                 >
                   {proposal.working_title || "Untitled proposal"}
                 </Link>
-                <Badge variant="outline">{PROPOSAL_STATUS_LABELS[proposal.status]}</Badge>
+                <ProposalStatusPill status={proposal.status} />
                 <span className="text-fg-subtle text-xs">
                   {formatRelativeTime(proposal.created_at)}
                 </span>

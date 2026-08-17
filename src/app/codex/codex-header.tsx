@@ -9,12 +9,16 @@ export function CodexHeader({ signedIn }: { signedIn: boolean }) {
       <div>
         <Link
           href="/codex"
-          className="text-fg hover:text-brand focus-visible:ring-border-focus inline-flex items-center gap-2 text-xl font-semibold focus-visible:ring-2 focus-visible:outline-hidden"
+          className="text-fg hover:text-brand focus-visible:ring-border-focus focus-visible:ring-2 focus-visible:outline-hidden inline-flex items-center gap-2.5"
         >
-          <BookOpenIcon aria-hidden="true" className="h-5 w-5" />
-          Codex Libre
+          <span className="border-brand/25 bg-brand/5 text-brand flex h-9 w-9 items-center justify-center rounded-lg border shadow-[0_1px_0_var(--color-white/8%)]">
+            <BookOpenIcon aria-hidden="true" className="h-5 w-5" />
+          </span>
+          <span className="font-display bg-linear-to-r from-brand to-amber-200 bg-clip-text text-2xl font-semibold tracking-tight text-transparent">
+            Codex Libre
+          </span>
         </Link>
-        <p className="text-fg-muted mt-1 text-sm">
+        <p className="text-fg-muted mt-1.5 text-sm leading-6">
           Reviewed, versioned knowledge distilled from Mandaloria&apos;s conversations.
         </p>
       </div>

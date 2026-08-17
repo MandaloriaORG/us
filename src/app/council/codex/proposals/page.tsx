@@ -2,7 +2,7 @@ import Link from "next/link";
 import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { getCodexCouncilAccess } from "@/app/council/codex/codex-access";
-import { Badge } from "@/components/origin/badge";
+import { ProposalStatusPill } from "@/app/codex/proposal-status-pill";
 import { NativeSelect } from "@/components/origin/native-select";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -122,7 +122,7 @@ function ProposalQueueRow({ proposal }: { proposal: ProposalQueueRow }) {
           {proposal.reason.slice(0, 120)}
           {proposal.reason.length > 120 ? "…" : ""}
         </Link>
-        <Badge variant="outline">{PROPOSAL_STATUS_LABELS[proposal.status]}</Badge>
+        <ProposalStatusPill status={proposal.status} />
         <span className="text-fg-subtle text-xs">
           {proposal.proposer_display_name} · {formatRelativeTime(proposal.created_at)}
         </span>

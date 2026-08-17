@@ -6,12 +6,11 @@ import {
   LinkSimpleIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
-import { Badge } from "@/components/origin/badge";
+import { ProposalStatusPill } from "@/app/codex/proposal-status-pill";
 import {
   ATTRIBUTION_LABELS,
   CONTRIBUTION_STATUS_LABELS,
   CONTRIBUTION_TYPE_LABELS,
-  PROPOSAL_STATUS_LABELS,
 } from "@/lib/codex/states";
 import type { ArticleProvenance } from "@/lib/codex/queries";
 import { isSafeExternalUrl } from "@/lib/codex/url";
@@ -27,11 +26,19 @@ export function ProvenancePanel({ provenance }: { provenance: ArticleProvenance[
   if (provenance.length === 0) return null;
 
   return (
-    <section aria-labelledby="provenance-heading" className="border-border mt-8 border-t pt-6">
-      <h2 className="text-fg text-lg font-semibold" id="provenance-heading">
-        Provenance
-      </h2>
-      <p className="text-fg-muted mt-1 text-sm">
+    <section aria-labelledby="provenance-heading" className="border-border mt-10 border-t pt-7">
+      <div className="flex items-center gap-2">
+        <span className="border-brand/25 bg-brand/5 text-brand flex h-6 w-6 items-center justify-center rounded border">
+          <ArrowsClockwiseIcon aria-hidden="true" className="h-3.5 w-3.5" />
+        </span>
+        <h2
+          className="text-fg font-display text-lg font-semibold tracking-tight"
+          id="provenance-heading"
+        >
+          Provenance
+        </h2>
+      </div>
+      <p className="text-fg-muted mt-1.5 text-sm">
         How this article was distilled from conversation, with the sources and people credited
         behind it.
       </p>
@@ -39,7 +46,7 @@ export function ProvenancePanel({ provenance }: { provenance: ArticleProvenance[
       <ul className="mt-4 flex flex-col gap-4">
         {provenance.map(({ proposal, sources, contributors }) => (
           <li key={proposal.proposal_id}>
-            <div className="border-border rounded-md border p-4">
+            <div className="border-border bg-bg-raised/40 rounded-lg border p-4 shadow-[0_1px_0_var(--color-white/4%)]">
               <div className="flex flex-wrap items-center gap-2">
                 <Link
                   href={`/codex/proposals/${proposal.proposal_id}`}
@@ -47,7 +54,7 @@ export function ProvenancePanel({ provenance }: { provenance: ArticleProvenance[
                 >
                   {proposal.working_title || "Distillation proposal"}
                 </Link>
-                <Badge variant="outline">{PROPOSAL_STATUS_LABELS[proposal.status]}</Badge>
+                <ProposalStatusPill status={proposal.status} />
                 {proposal.assignee_display_name ? (
                   <span className="text-fg-subtle text-xs">
                     Assigned to {proposal.assignee_display_name}

@@ -56,18 +56,34 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-6">
-      <p className="text-fg-muted text-sm">
-        <Link href="/codex" className="hover:text-fg">
-          Codex Libre
-        </Link>
-        {" · "}
-        <Link href={`/codex?category=${article.category_slug}`} className="hover:text-fg">
-          {article.category_name}
-        </Link>
-      </p>
+      <nav aria-label="Breadcrumb" className="text-fg-muted text-sm">
+        <ol className="flex items-center gap-1.5">
+          <li>
+            <Link
+              href="/codex"
+              className="inline-flex min-h-6 items-center underline-offset-4 transition-colors hover:text-fg"
+            >
+              Codex Libre
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-fg-subtle">
+            /
+          </li>
+          <li>
+            <Link
+              href={`/codex?category=${article.category_slug}`}
+              className="inline-flex min-h-6 items-center underline-offset-4 transition-colors hover:text-fg"
+            >
+              {article.category_name}
+            </Link>
+          </li>
+        </ol>
+      </nav>
 
-      <div className="mt-2 flex flex-wrap items-center gap-2">
-        <h1 className="text-fg text-2xl font-semibold">{article.title}</h1>
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <h1 className="text-fg font-display text-3xl font-semibold tracking-tight">
+          {article.title}
+        </h1>
         {!isPublic ? (
           <Badge variant="warning">{ARTICLE_STATUS_LABELS[article.status]}</Badge>
         ) : article.status === "locked" ? (
@@ -77,7 +93,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </Badge>
         ) : null}
       </div>
-      <p className="text-fg-subtle mt-1 text-sm">
+      <p className="text-fg-subtle mt-2 text-sm">
         {article.author_display_name} ·{" "}
         {article.published_at ? `${formatRelativeTime(article.published_at)} · ` : ""}v
         {article.version}
@@ -95,11 +111,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       {/* Safe by construction: renderMarkdown escapes author text before emitting
           its own closed tag set. See src/lib/content/markdown.ts. */}
       <div
-        className="text-fg [&_a]:text-brand mt-5 max-w-none text-sm leading-relaxed [&_a]:underline-offset-4 [&_a:hover]:underline [&_p]:mt-3 [&_p:first-child]:mt-0"
+        className="text-fg mt-7 max-w-[68ch] text-[15px] leading-7 [&_a]:text-brand [&_a]:underline-offset-4 [&_a:hover]:underline [&_h2]:mt-7 [&_h2]:mb-3 [&_h2]:font-display [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:tracking-tight [&_p]:mt-4 [&_p:first-child]:mt-0 [&_blockquote]:border-s-2 [&_blockquote]:border-brand/30 [&_blockquote]:ps-4 [&_blockquote]:text-fg-muted [&_blockquote]:italic [&_ul]:mt-4 [&_ul]:list-disc [&_ul]:ps-5 [&_ol]:mt-4 [&_ol]:list-decimal [&_ol]:ps-5 [&_li]:mt-1 [&_code]:rounded [&_code]:bg-bg-raised [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em] [&_pre]:mt-4 [&_pre]:overflow-x-auto [&_pre]:rounded-md [&_pre]:border [&_pre]:border-border [&_pre]:bg-bg-raised [&_pre]:p-4 [&_pre]:font-mono [&_pre]:text-sm [&_pre]:leading-6 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_hr]:my-6 [&_hr]:border-border [&_strong]:font-semibold [&_em]:italic"
         dangerouslySetInnerHTML={{ __html: renderMarkdown(article.body, { maxLength: 100_000 }) }}
       />
 
-      <div className="border-border mt-6 flex flex-wrap items-center gap-3 border-t pt-4">
+      <div className="border-border mt-8 flex flex-wrap items-center gap-3 border-t pt-4">
         {signedIn && isPublic ? (
           <BookmarkButton articleId={article.id} initialBookmarked={article.caller_bookmarked} />
         ) : null}

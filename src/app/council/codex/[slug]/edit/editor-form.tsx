@@ -5,10 +5,18 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import {
   ArrowsClockwiseIcon,
+  CodeIcon,
   EyeIcon,
+  LinkSimpleIcon,
+  ListBulletsIcon,
   LockSimpleIcon,
   PencilLineIcon,
+  QuotesIcon,
+  TextBolderIcon,
+  TextHOneIcon,
+  TextItalicIcon,
 } from "@phosphor-icons/react/dist/ssr";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 import { Badge } from "@/components/origin/badge";
 import { Button } from "@/components/ui/button";
@@ -162,6 +170,57 @@ export function EditorForm({ article, canPublish, versions }: EditorFormProps) {
               )}
             </Button>
           </div>
+          {!preview ? (
+            <div
+              className="border-border bg-bg-raised/60 flex flex-wrap items-center gap-0.5 rounded-t-md border border-b-0 p-1"
+              role="toolbar"
+              aria-label="Markdown formatting"
+            >
+              <ToolbarItem
+                disabled={article.status === "locked"}
+                label="Bold"
+                onInsert={() => applyMarkdown(body, setBody, "**", "**")}
+                Icon={TextBolderIcon}
+              />
+              <ToolbarItem
+                disabled={article.status === "locked"}
+                label="Italic"
+                onInsert={() => applyMarkdown(body, setBody, "_", "_")}
+                Icon={TextItalicIcon}
+              />
+              <span aria-hidden="true" className="border-border bg-border mx-1 h-4 w-px" />
+              <ToolbarItem
+                disabled={article.status === "locked"}
+                label="Heading"
+                onInsert={() => applyMarkdown(body, setBody, "## ", "\n")}
+                Icon={TextHOneIcon}
+              />
+              <ToolbarItem
+                disabled={article.status === "locked"}
+                label="Link"
+                onInsert={() => applyMarkdown(body, setBody, "[", "](https://)")}
+                Icon={LinkSimpleIcon}
+              />
+              <ToolbarItem
+                disabled={article.status === "locked"}
+                label="Bulleted list"
+                onInsert={() => applyMarkdown(body, setBody, "\n- ", "\n")}
+                Icon={ListBulletsIcon}
+              />
+              <ToolbarItem
+                disabled={article.status === "locked"}
+                label="Quote"
+                onInsert={() => applyMarkdown(body, setBody, "\n> ", "\n")}
+                Icon={QuotesIcon}
+              />
+              <ToolbarItem
+                disabled={article.status === "locked"}
+                label="Code"
+                onInsert={() => applyMarkdown(body, setBody, "`", "`")}
+                Icon={CodeIcon}
+              />
+            </div>
+          ) : null}
           {preview ? (
             <div
               className="text-fg border-border [&_a]:text-brand min-h-40 rounded-md border p-4 text-sm leading-relaxed [&_a]:underline-offset-4 [&_a:hover]:underline [&_p]:mt-3 [&_p:first-child]:mt-0"
@@ -396,5 +455,57 @@ function VersionHistory({
         ))}
       </ul>
     </section>
+  );
+}
+
+/**
+ * Wraps the current selection with Markdown delimiters (or drops the caret
+ * between an empty pair), then restores focus and selection to the editor.
+ * The toolbar only renders while the textarea exists, so `#edit-body` is
+ * always reachable when this runs.
+ */
+function applyMarkdown(
+  body: string,
+  setBody: (next: string) => void,
+  before: string,
+  after: string,
+) {
+  const textarea = document.getElementById("edit-body") as HTMLTextAreaElement | null;
+  const start = textarea?.selectionStart ?? body.length;
+  const end = textarea?.selectionEnd ?? body.length;
+  const selected = body.slice(start, end);
+
+  setBody(body.slice(0, start) + before + selected + after + body.slice(end));
+
+  requestAnimationFrame(() => {
+    if (!textarea) return;
+    textarea.focus();
+    const contentStart = start + before.length;
+    textarea.setSelectionRange(contentStart, contentStart + selected.length);
+  });
+}
+
+function ToolbarItem({
+  Icon,
+  label,
+  onInsert,
+  disabled,
+}: {
+  Icon: PhosphorIcon;
+  label: string;
+  onInsert: () => void;
+  disabled?: boolean;
+}) {
+  return (
+    <button
+      aria-label={label}
+      className="text-fg-muted hover:bg-bg-raised hover:text-fg focus-visible:ring-border-focus inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors focus-visible:ring-2 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+      disabled={disabled}
+      onClick={onInsert}
+      title={label}
+      type="button"
+    >
+      <Icon aria-hidden="true" className="h-4 w-4" />
+    </button>
   );
 }
