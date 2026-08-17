@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Cinzel, JetBrains_Mono } from "next/font/google";
 import Link from "next/link";
-import { getLocale, getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
 
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { NavLinks } from "@/components/layout/nav-links";
@@ -92,6 +93,7 @@ export default async function RootLayout({
 
   const t = await getTranslations("nav");
   const currentLocale = await getLocale();
+  const messages = await getMessages();
   const translatedNavItems = mobileNavigationItems.map((item) => ({
     ...item,
     label: t(item.href.replace("/", "") as "plazas"),
@@ -103,6 +105,7 @@ export default async function RootLayout({
       className={`dark ${inter.variable} ${cinzel.variable} ${jetbrainsMono.variable}`}
     >
       <body className="bg-bg text-fg min-h-screen font-sans antialiased">
+        <NextIntlClientProvider locale={currentLocale} messages={messages}>
         <a
           href="#main-content"
           className="z-toast bg-brand text-brand-fg focus:ring-border-focus focus:ring-offset-bg fixed top-3 left-3 -translate-y-20 rounded-md px-4 py-2 text-sm font-medium transition-transform focus:translate-y-0 focus:ring-2 focus:ring-offset-2 focus:outline-hidden"
@@ -153,6 +156,7 @@ export default async function RootLayout({
         <div id="main-content" tabIndex={-1}>
           {children}
         </div>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -71,6 +71,7 @@ vi.mock("next-intl/server", async (importOriginal) => {
     ...original,
     getLocale: vi.fn().mockResolvedValue("en"),
     getTranslations: vi.fn().mockImplementation(async (namespace: string) => makeT(namespace)),
+    getMessages: vi.fn().mockResolvedValue(loadMessages()),
     getRequestConfig: vi.fn(),
   };
 });
