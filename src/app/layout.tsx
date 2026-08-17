@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Inter, Cinzel, JetBrains_Mono } from "next/font/google";
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { NavLinks } from "@/components/layout/nav-links";
 import { MandaloriaLogo } from "@/components/layout/mandaloria-logo";
+import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { canAny } from "@/lib/permissions";
 import { createClient } from "@/lib/supabase/server";
 import { NavAuth } from "./NavAuth";
@@ -88,9 +90,16 @@ export default async function RootLayout({
     ...(canOpenCouncil ? [{ href: "/council", label: "Council" }] : []),
   ];
 
+  const t = await getTranslations("nav");
+  const currentLocale = await getLocale();
+  const translatedNavItems = mobileNavigationItems.map((item) => ({
+    ...item,
+    label: t(item.href.replace("/", "") as "plazas"),
+  }));
+
   return (
     <html
-      lang="en"
+      lang={currentLocale}
       className={`dark ${inter.variable} ${cinzel.variable} ${jetbrainsMono.variable}`}
     >
       <body className="bg-bg text-fg min-h-screen font-sans antialiased">
@@ -98,7 +107,7 @@ export default async function RootLayout({
           href="#main-content"
           className="z-toast bg-brand text-brand-fg focus:ring-border-focus focus:ring-offset-bg fixed top-3 left-3 -translate-y-20 rounded-md px-4 py-2 text-sm font-medium transition-transform focus:translate-y-0 focus:ring-2 focus:ring-offset-2 focus:outline-hidden"
         >
-          Skip to content
+          {t("skipToContent")}
         </a>
 
         <header className="z-raised border-border bg-bg/70 supports-[backdrop-filter]:bg-bg/70 sticky top-0 border-b shadow-[0_1px_0_hsl(210_10%_18%/0.6),0_8px_24px_-16px_hsl(0_0%_0%/0.8)] backdrop-blur-md">
@@ -124,22 +133,18 @@ export default async function RootLayout({
             >
               <MobileNav
                 className="sm:hidden"
-                items={mobileNavigationItems}
+                items={translatedNavItems}
                 triggerLabel="Open main navigation"
               />
               <NavLinks
                 className="hidden sm:flex"
-                items={[
-                  { href: "/plazas", label: "Plazas" },
-                  { href: "/holochat", label: "Holochat" },
-                  { href: "/codex", label: "Codex" },
-                  { href: "/clans", label: "Clans" },
-                  { href: "/members", label: "Members" },
-                  ...(canOpenCouncil
-                    ? [{ href: "/council", label: "Council", warning: true }]
-                    : []),
-                ]}
+                items={translatedNavItems.map((item) => ({
+                  href: item.href,
+                  label: item.label,
+                  ...(item.href === "/council" ? { warning: true } : {}),
+                }))}
               />
+              <LocaleSwitcher />
               <NavAuth user={user} profile={profile} />
             </nav>
           </div>

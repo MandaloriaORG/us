@@ -1,0 +1,37 @@
+{
+  "nav": {
+    "plazas": "Plazas",
+    "holochat": "Holochat",
+    "codex": "Códice Libre",
+    "clans": "Clanes y Casas",
+    "members": "Miembros",
+    "council": "Consejo",
+    "search": "Buscar",
+    "signIn": "Iniciar sesión",
+    "skipToContent": "Saltar al contenido",
+    "home": "Inicio Mandaloria",
+    "editProfile": "Editar perfil",
+    "settings": "Ajustes de la cuenta",
+    "signOut": "Cerrar sesión",
+    "openUserMenu": "Abrir menú de usuario"
+  },
+  "auth": {
+    "signInHeading": "Inicia sesión en Mandaloria"
+  },
+  "holochat": {
+    "channelFormLabel": "Canales",
+    "joinPrompt": "Únete a un canal para participar en la conversación.",
+    "readOnly": "Los canales se pueden leer sin sesión; inicia sesión para enviar mensajes.",
+    "noChannels": "Ahora mismo no hay canales abiertos.",
+    "startConversation": "Empieza la conversación.",
+    "firstToPost": "Sé el primero en publicar en {channel}.",
+    "sendDisabled": "Inicia sesión para enviar mensajes."
+  },
+  "common": {
+    "loading": "Cargando",
+    "error": "Algo salió mal.",
+    "retry": "Reintentar",
+    "back": "Volver",
+    "seeAll": "Ver todo"
+  }
+}

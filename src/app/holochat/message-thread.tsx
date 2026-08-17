@@ -2,6 +2,7 @@
 
 import { Fragment, useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowClockwiseIcon,
@@ -77,6 +78,7 @@ export function MessageThread({
   canModerate,
   canManage,
 }: MessageThreadProps) {
+  const t = useTranslations("holochat");
   // Newest-first, matching the RPC; rendering reverses so the oldest shows first.
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [olderCursor, setOlderCursor] = useState<string | null>(nextCursor);
@@ -91,7 +93,7 @@ export function MessageThread({
   const notice = !canSend
     ? channel.kind === "announcements"
       ? "Only the Council can post to this channel."
-      : "Sign in to send messages."
+      : t("sendDisabled")
     : null;
 
   const displayed = pinnedOnly ? pinnedMessages : [...messages].reverse();
@@ -342,8 +344,10 @@ export function MessageThread({
           ) : (
             <div className="text-fg-muted flex flex-col items-center gap-2 px-4 py-12 text-center">
               <ChatCircleIcon aria-hidden="true" className="text-fg-subtle h-6 w-6" />
-              <p className="text-sm">Start the conversation.</p>
-              <p className="text-fg-subtle text-xs">Be the first to post in #{channel.name}.</p>
+              <p className="text-sm">{t("startConversation")}</p>
+              <p className="text-fg-subtle text-xs">
+                {t("firstToPost", { channel: channel.name })}
+              </p>
             </div>
           )
         ) : (

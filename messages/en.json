@@ -1,0 +1,37 @@
+{
+  "nav": {
+    "plazas": "Plazas",
+    "holochat": "Holochat",
+    "codex": "Codex Libre",
+    "clans": "Clans and Casas",
+    "members": "Members",
+    "council": "Council",
+    "search": "Search",
+    "signIn": "Sign in",
+    "skipToContent": "Skip to content",
+    "home": "Mandaloria home",
+    "editProfile": "Edit profile",
+    "settings": "Account settings",
+    "signOut": "Sign out",
+    "openUserMenu": "Open user menu"
+  },
+  "auth": {
+    "signInHeading": "Sign in to Mandaloria"
+  },
+  "holochat": {
+    "channelFormLabel": "Channels",
+    "joinPrompt": "Join a channel to take part in the conversation.",
+    "readOnly": "Channels are open to read; sign in to send messages.",
+    "noChannels": "No channels are open right now.",
+    "startConversation": "Start the conversation.",
+    "firstToPost": "Be the first to post in {channel}.",
+    "sendDisabled": "Sign in to send messages."
+  },
+  "common": {
+    "loading": "Loading",
+    "error": "Something went wrong.",
+    "retry": "Try again",
+    "back": "Back",
+    "seeAll": "See all"
+  }
+}

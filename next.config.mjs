@@ -1,3 +1,7 @@
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+
 const storageOrigin = (() => {
   const configuredUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!configuredUrl) return null;
@@ -31,4 +35,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

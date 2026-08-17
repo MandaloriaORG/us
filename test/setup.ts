@@ -38,3 +38,48 @@ class IntersectionObserverMock {
 globalThis.IntersectionObserver =
   globalThis.IntersectionObserver ??
   (IntersectionObserverMock as unknown as typeof IntersectionObserver);
+
+// ── next-intl (i18n) test shim ──
+// Tests render locale-aware components without a request context. These mocks
+// resolve to the English dictionary so assertions keep seeing the same copy as
+// production (default locale). The key `t` helper also interpolates {params}.
+import { vi } from "vitest";
+
+function loadMessages() {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const en = require("../messages/en.json") as Record<string, Record<string, string>>;
+  return en;
+}
+
+function makeT(namespace: string) {
+  const messages = loadMessages();
+  const dict = messages[namespace] ?? {};
+  return (key: string, values?: Record<string, string | number>) => {
+    let out = dict[key] ?? key;
+    if (values) {
+      for (const [k, v] of Object.entries(values)) {
+        out = out.replace(`{${k}}`, String(v));
+      }
+    }
+    return out;
+  };
+}
+
+vi.mock("next-intl/server", async (importOriginal) => {
+  const original = await importOriginal<typeof import("next-intl/server")>();
+  return {
+    ...original,
+    getLocale: vi.fn().mockResolvedValue("en"),
+    getTranslations: vi.fn().mockImplementation(async (namespace: string) => makeT(namespace)),
+    getRequestConfig: vi.fn(),
+  };
+});
+
+vi.mock("next-intl", async (importOriginal) => {
+  const original = await importOriginal<typeof import("next-intl")>();
+  return {
+    ...original,
+    useLocale: vi.fn().mockReturnValue("en"),
+    useTranslations: vi.fn().mockImplementation((namespace: string) => makeT(namespace)),
+  };
+});

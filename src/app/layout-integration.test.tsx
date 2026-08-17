@@ -15,6 +15,13 @@ vi.mock("next/font/google", () => ({
   Inter: () => ({ variable: "font-sans" }),
   JetBrains_Mono: () => ({ variable: "font-mono" }),
 }));
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ refresh: vi.fn() }),
+  usePathname: () => "/",
+}));
+vi.mock("@/components/layout/locale-switcher", () => ({
+  LocaleSwitcher: () => <span data-testid="locale-switcher" />,
+}));
 vi.mock("@/components/layout/mobile-nav", () => ({
   MobileNav: ({ items }: { items: Array<{ href: string; label: string }> }) => (
     <ul aria-label="Mobile navigation items">

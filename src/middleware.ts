@@ -16,6 +16,21 @@ function redirectWithCookies(response: NextResponse, url: URL) {
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
 
+  // ── Locale detection (i18n) ──
+  // Sets a stable `NEXT_LOCALE` cookie on first visit from Accept-Language,
+  // keeps an explicit user choice. Served before the Supabase work so the
+  // cookie exists on responses even when auth redirects later.
+  const localeCookie = request.cookies.get("NEXT_LOCALE")?.value;
+  if (localeCookie !== "en" && localeCookie !== "es") {
+    const accept = request.headers.get("accept-language") ?? "en";
+    const detected = /(^|,)\s*es([-,;]|$)/i.test(accept) ? "es" : "en";
+    response.cookies.set("NEXT_LOCALE", detected, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
+  }
+
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
