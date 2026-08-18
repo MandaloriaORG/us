@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ThumbsDownIcon, ThumbsUpIcon } from "@phosphor-icons/react/dist/ssr";
+import { ArrowDownIcon, ArrowUpIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
@@ -76,7 +76,7 @@ export function VoteControl({
   }
 
   function VoteGlyph({ active, direction }: { active: boolean; direction: 1 | -1 }) {
-    const Icon = direction === 1 ? ThumbsUpIcon : ThumbsDownIcon;
+    const Icon = direction === 1 ? ArrowUpIcon : ArrowDownIcon;
     return (
       <motion.span
         aria-hidden="true"
