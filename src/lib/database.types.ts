@@ -3167,6 +3167,7 @@ export type Database = {
           caller_is_member: boolean;
           caller_role: Database["public"]["Enums"]["clan_member_role"];
           description: string;
+          emblem_path: string;
           id: string;
           leader_display_name: string;
           leader_id: string;

@@ -39,12 +39,23 @@ async function signedEmblemUrls(
   );
 }
 
-export async function loadClanList(): Promise<LoadResult<ClanSummary[]>> {
+export async function loadClanList(): Promise<LoadResult<(ClanSummary & { emblemUrl: string | null })[]>> {
   try {
     const supabase = await createClient();
     const { data, error } = await supabase.rpc("list_clans");
     if (error || !data) return { status: "error" };
-    return { status: "ok", data };
+
+    const emblemUrls = await signedEmblemUrls(
+      supabase,
+      data.map((clan) => clan.emblem_path),
+    );
+
+    const clans = data.map((clan) => ({
+      ...clan,
+      emblemUrl: clan.emblem_path ? (emblemUrls.get(clan.emblem_path) ?? null) : null,
+    }));
+
+    return { status: "ok", data: clans };
   } catch {
     return { status: "error" };
   }

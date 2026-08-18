@@ -113,14 +113,23 @@ export default async function ClansPage() {
                 className="from-brand/70 via-brand-muted/40 to-brand-light/25 h-1 w-full bg-linear-to-r"
               />
               <div className="flex items-start gap-4 p-5">
-                <div
-                  aria-hidden="true"
-                  className="border-brand/30 bg-brand-muted/15 text-brand ring-brand/40 ring-offset-bg flex h-11 w-11 shrink-0 items-center justify-center rounded-md border shadow-[0_0_0_1px_hsl(42_40%_55%/0.14),0_0_18px_-6px_hsl(42_40%_55%/0.5)] ring-1 ring-offset-2"
-                >
-                  <span className="font-display text-base font-semibold">
-                    {clan.name.charAt(0).toUpperCase()}
-                  </span>
-                </div>
+                {clan.emblemUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={clan.emblemUrl}
+                    alt={`${clan.name} emblem`}
+                    className="border-brand/30 bg-bg ring-brand/40 ring-offset-bg h-11 w-11 shrink-0 rounded-md border object-cover ring-1 ring-offset-2"
+                  />
+                ) : (
+                  <div
+                    aria-hidden="true"
+                    className="border-brand/30 bg-brand-muted/15 text-brand ring-brand/40 ring-offset-bg flex h-11 w-11 shrink-0 items-center justify-center rounded-md border shadow-[0_0_0_1px_hsl(42_40%_55%/0.14),0_0_18px_-6px_hsl(42_40%_55%/0.5)] ring-1 ring-offset-2"
+                  >
+                    <span className="font-display text-base font-semibold">
+                      {clan.name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                )}
                 <div className="min-w-0 flex-1">
                   <span className="text-fg font-display flex items-center gap-2 text-base font-semibold wrap-break-word">
                     {clan.name}
