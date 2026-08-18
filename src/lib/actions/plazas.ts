@@ -60,12 +60,20 @@ const visibilitySchema = z.enum(["public", "members", "private"], {
 
 const statusSchema = z.enum(["active", "archived"]);
 
+const permissionSchema = z
+  .string()
+  .trim()
+  .max(60, "Posting permission is not valid")
+  .nullable()
+  .default(null);
+
 const createPlazaSchema = z.object({
   slug: slugSchema,
   name: nameSchema,
   description: optionalText(500, "Description"),
   visibility: visibilitySchema.default("public"),
   sortOrder: z.number().int().min(0).max(10_000).default(0),
+  requiredPostPermission: permissionSchema,
 });
 
 const updatePlazaSchema = z.object({
@@ -76,6 +84,7 @@ const updatePlazaSchema = z.object({
   rules: optionalText(4000, "Rules"),
   visibility: visibilitySchema,
   sortOrder: z.number().int().min(0).max(10_000),
+  requiredPostPermission: permissionSchema,
 });
 
 const setStatusSchema = z.object({
@@ -172,6 +181,7 @@ export async function createPlaza(input: unknown): Promise<PlazaActionResult> {
       p_description: parsed.data.description ?? undefined,
       p_visibility: parsed.data.visibility,
       p_sort_order: parsed.data.sortOrder,
+      p_required_post_permission: parsed.data.requiredPostPermission ?? undefined,
     });
 
     if (error) return databaseFailure(error);
@@ -203,6 +213,8 @@ export async function updatePlaza(input: unknown): Promise<PlazaActionResult> {
       p_rules: parsed.data.rules as string,
       p_visibility: parsed.data.visibility,
       p_sort_order: parsed.data.sortOrder,
+      p_required_post_permission: parsed.data.requiredPostPermission ?? undefined,
+      p_clear_post_permission: parsed.data.requiredPostPermission === null,
     });
 
     if (error) return databaseFailure(error);

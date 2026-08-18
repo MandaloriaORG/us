@@ -37,7 +37,7 @@ beforeEach(() => {
 
 describe("PlazaForm", () => {
   it("create mode has no rules field and defaults visibility to public", () => {
-    render(<PlazaForm mode="create" />);
+    render(<PlazaForm mode="create" candidatePermissions={[]} />);
 
     expect(screen.getByLabelText(/Slug/)).toHaveValue("");
     expect(screen.getByLabelText(/Name/)).toHaveValue("");
@@ -58,6 +58,8 @@ describe("PlazaForm", () => {
         initialRules="Be precise."
         initialVisibility="members"
         initialSortOrder={3}
+        initialRequiredPostPermission={null}
+        candidatePermissions={[]}
       />,
     );
 
@@ -77,7 +79,7 @@ describe("PlazaForm", () => {
       message: "Check the highlighted fields and try again.",
       fieldErrors: { slug: "Use lowercase words separated by hyphens" },
     };
-    render(<PlazaForm mode="create" />);
+    render(<PlazaForm mode="create" candidatePermissions={[]} />);
 
     expect(screen.getByText("Use lowercase words separated by hyphens")).toBeInTheDocument();
     expect(screen.getByText("Check the highlighted fields and try again.")).toBeInTheDocument();
@@ -86,7 +88,7 @@ describe("PlazaForm", () => {
 
   it("navigates to the new Plaza's edit screen once creation succeeds", () => {
     mocks.state = { ok: true, plazaId };
-    render(<PlazaForm mode="create" />);
+    render(<PlazaForm mode="create" candidatePermissions={[]} />);
 
     expect(mocks.push).toHaveBeenCalledWith(`/council/plazas/${plazaId}`);
   });
@@ -103,6 +105,8 @@ describe("PlazaForm", () => {
         initialRules={null}
         initialVisibility="public"
         initialSortOrder={0}
+        initialRequiredPostPermission={null}
+        candidatePermissions={[]}
       />,
     );
 
@@ -126,6 +130,8 @@ describe("PlazaForm", () => {
         initialRules={null}
         initialVisibility="public"
         initialSortOrder={0}
+        initialRequiredPostPermission={null}
+        candidatePermissions={[]}
       />,
     );
 
@@ -138,7 +144,7 @@ describe("PlazaForm", () => {
 
   it("shows a pending submit label while the mutation is in flight", () => {
     mocks.pending = true;
-    render(<PlazaForm mode="create" />);
+    render(<PlazaForm mode="create" candidatePermissions={[]} />);
 
     expect(screen.getByRole("button", { name: "Creating…" })).toBeDisabled();
   });

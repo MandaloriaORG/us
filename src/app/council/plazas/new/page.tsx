@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getCouncilPlazaAccess } from "@/app/council/access";
 import { PlazaForm } from "@/components/system/plaza-form";
 import { EmptyState } from "@/components/ui/empty-state";
+import { listPermissions } from "@/lib/content/queries";
 
 // Authorization is request-bound and must never run at build time.
 export const dynamic = "force-dynamic";
@@ -34,7 +35,7 @@ export default async function NewPlazaPage() {
         </Link>
       </p>
       <h1 className="text-fg mt-1 text-2xl font-semibold">New Plaza</h1>
-      <PlazaForm mode="create" />
+      <PlazaForm candidatePermissions={await listPermissions()} mode="create" />
     </div>
   );
 }

@@ -3,9 +3,12 @@ import { GearIcon, ShieldWarningIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { EmptyState } from "@/components/ui/empty-state";
 import { can } from "@/lib/permissions";
+import type { FailedOutboxEvent } from "@/lib/holochat/types";
 import { createClient } from "@/lib/supabase/server";
 
+import { FailedEvents } from "./failed-events";
 import { normalizeSettingsRows, type SiteSettingDto } from "./settings-dto";
+import { ReactionTypeManager, type AdminReactionType } from "./reaction-type-manager";
 import { SettingRow } from "./setting-row";
 
 export const dynamic = "force-dynamic";
@@ -109,6 +112,21 @@ export default async function CouncilSettingsPage() {
 
   const settings = normalizeSettingsRows(data);
 
+  const { data: reactionTypes, error: reactionTypesError } = await supabase.rpc(
+    "admin_list_reaction_types",
+  );
+  if (reactionTypesError) {
+    throw new Error("Reaction types could not be loaded");
+  }
+
+  const { data: failedEvents, error: failedEventsError } = await supabase.rpc(
+    "outbox_list_failed",
+    { p_limit: 50 },
+  );
+  if (failedEventsError) {
+    throw new Error("Failed events could not be loaded");
+  }
+
   if (settings.length === 0) {
     return (
       <div className="mx-auto w-full max-w-4xl">
@@ -162,6 +180,10 @@ export default async function CouncilSettingsPage() {
           </div>
         </section>
       ) : null}
+
+      <ReactionTypeManager types={reactionTypes as AdminReactionType[]} />
+
+      <FailedEvents events={(failedEvents ?? []) as FailedOutboxEvent[]} />
     </div>
   );
 }

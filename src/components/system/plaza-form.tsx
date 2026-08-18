@@ -10,9 +10,16 @@ import { SubmitButton } from "@/components/ui/submit-button";
 import { createPlaza, updatePlaza, type PlazaActionResult } from "@/lib/actions/plazas";
 import { Textarea } from "@/components/ui/textarea";
 
+export interface PostingPermissionOption {
+  name: string;
+  description: string | null;
+}
 
 export type PlazaFormProps =
-  | { mode: "create" }
+  | {
+      mode: "create";
+      candidatePermissions: PostingPermissionOption[];
+    }
   | {
       mode: "edit";
       plazaId: string;
@@ -22,6 +29,8 @@ export type PlazaFormProps =
       initialRules: string | null;
       initialVisibility: "public" | "members" | "private";
       initialSortOrder: number;
+      initialRequiredPostPermission: string | null;
+      candidatePermissions: PostingPermissionOption[];
     };
 
 const TEXTAREA_CLASS =
@@ -31,6 +40,11 @@ function readSortOrder(formData: FormData) {
   const raw = formData.get("sortOrder");
   const parsed = raw ? Number(raw) : 0;
   return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function readPermission(formData: FormData) {
+  const raw = String(formData.get("requiredPostPermission") ?? "");
+  return raw.trim() === "" ? null : raw.trim();
 }
 
 /**
@@ -53,6 +67,7 @@ export function PlazaForm(props: PlazaFormProps) {
       description: String(formData.get("description") ?? ""),
       visibility: String(formData.get("visibility") ?? "public"),
       sortOrder: readSortOrder(formData),
+      requiredPostPermission: readPermission(formData),
     };
 
     if (props.mode === "create") return createPlaza(shared);
@@ -176,6 +191,27 @@ export function PlazaForm(props: PlazaFormProps) {
           fieldClassName="sm:max-w-32"
           className="focus-visible:ring-brand/30 has-focus-visible:border-brand/60"
         />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <NativeSelect
+          id="plaza-post-permission"
+          name="requiredPostPermission"
+          label="Who can post here"
+          defaultValue={props.mode === "edit" ? (props.initialRequiredPostPermission ?? "") : ""}
+          error={fieldErrors.requiredPostPermission}
+          fieldClassName="sm:max-w-md"
+        >
+          <option value="">Anyone</option>
+          {props.candidatePermissions.map((permission) => (
+            <option key={permission.name} value={permission.name}>
+              {permission.name}
+            </option>
+          ))}
+        </NativeSelect>
+        <p className="text-fg-muted text-xs">
+          When set, only members holding this permission can post in this Plaza.
+        </p>
       </div>
 
       {formError ? (

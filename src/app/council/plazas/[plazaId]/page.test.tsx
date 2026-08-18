@@ -5,6 +5,8 @@ const mocks = vi.hoisted(() => ({
   getCouncilPlazaAccess: vi.fn(),
   getPlaza: vi.fn(),
   listPlazas: vi.fn(),
+  listPermissions: vi.fn(),
+  getPlazaPostPermission: vi.fn(),
   notFound: vi.fn(),
 }));
 
@@ -12,6 +14,8 @@ vi.mock("@/app/council/access", () => ({ getCouncilPlazaAccess: mocks.getCouncil
 vi.mock("@/lib/content/queries", () => ({
   getPlaza: mocks.getPlaza,
   listPlazas: mocks.listPlazas,
+  listPermissions: mocks.listPermissions,
+  getPlazaPostPermission: mocks.getPlazaPostPermission,
 }));
 vi.mock("@/lib/actions/plazas", () => ({ setPlazaStatus: vi.fn() }));
 vi.mock("next/navigation", () => ({ notFound: mocks.notFound }));
@@ -55,6 +59,8 @@ beforeEach(() => {
   });
   mocks.listPlazas.mockResolvedValue([summary]);
   mocks.getPlaza.mockResolvedValue(detail);
+  mocks.listPermissions.mockResolvedValue([]);
+  mocks.getPlazaPostPermission.mockResolvedValue(null);
 });
 
 describe("CouncilPlazaDetailPage", () => {

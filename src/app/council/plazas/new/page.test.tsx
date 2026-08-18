@@ -1,9 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ getCouncilPlazaAccess: vi.fn() }));
+const mocks = vi.hoisted(() => ({
+  getCouncilPlazaAccess: vi.fn(),
+  listPermissions: vi.fn(),
+}));
 
 vi.mock("@/app/council/access", () => ({ getCouncilPlazaAccess: mocks.getCouncilPlazaAccess }));
+vi.mock("@/lib/content/queries", () => ({ listPermissions: mocks.listPermissions }));
 vi.mock("@/components/system/plaza-form", () => ({
   PlazaForm: (props: Record<string, unknown>) => (
     <div data-testid="plaza-form">{JSON.stringify(props)}</div>
@@ -14,6 +18,7 @@ import NewPlazaPage from "./page";
 
 beforeEach(() => {
   vi.clearAllMocks();
+  mocks.listPermissions.mockResolvedValue([]);
 });
 
 describe("NewPlazaPage", () => {

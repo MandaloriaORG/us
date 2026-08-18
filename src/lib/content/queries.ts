@@ -32,7 +32,10 @@ export type PlazaDetail = Nullable<
   "description" | "rules"
 >;
 export type PostSummary = Nullable<Functions["list_posts"]["Returns"][number], "excerpt">;
-export type PostByAuthor = Nullable<Functions["list_posts_by_author"]["Returns"][number], "excerpt">;
+export type PostByAuthor = Nullable<
+  Functions["list_posts_by_author"]["Returns"][number],
+  "excerpt"
+>;
 export type PostDetail = Nullable<Functions["get_post"]["Returns"][number], "body">;
 export type PostComment = Nullable<
   Functions["list_post_comments"]["Returns"][number],
@@ -82,6 +85,37 @@ export async function listPlazas(): Promise<PlazaSummary[]> {
   const { data, error } = await supabase.rpc("list_plazas");
   if (error) return [];
   return data ?? [];
+}
+
+export interface PermissionOption {
+  name: string;
+  description: string | null;
+}
+
+/** All permissions, for the Council Plaza posting-permission selector. */
+export async function listPermissions(): Promise<PermissionOption[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("permissions")
+    .select("name, description")
+    .order("name", { ascending: true });
+  if (error) return [];
+  return (data ?? []).map((permission) => ({
+    name: permission.name,
+    description: permission.description,
+  }));
+}
+
+/** The current posting-permission gate of a Plaza, for the Council edit form. */
+export async function getPlazaPostPermission(plazaId: string): Promise<string | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("plazas")
+    .select("required_post_permission")
+    .eq("id", plazaId)
+    .maybeSingle();
+  if (error) return null;
+  return data?.required_post_permission ?? null;
 }
 
 export async function getPlaza(slug: string): Promise<PlazaDetail | null> {
@@ -237,7 +271,9 @@ export async function listPostsByAuthor(
   if (error) return emptyPage();
 
   return toPage(
-    data as Array<Database["public"]["Functions"]["list_posts_by_author"]["Returns"][number]> | null,
+    data as Array<
+      Database["public"]["Functions"]["list_posts_by_author"]["Returns"][number]
+    > | null,
     pageSize,
     (row) => ({ createdAt: row.created_at, id: row.id }),
   );

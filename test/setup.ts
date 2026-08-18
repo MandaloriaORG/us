@@ -39,6 +39,18 @@ globalThis.IntersectionObserver =
   globalThis.IntersectionObserver ??
   (IntersectionObserverMock as unknown as typeof IntersectionObserver);
 
+// jsdom also has no ResizeObserver, which Radix's use-size hook requires (used
+// by dropdown/popover and checkbox bubbles). Report a zero-size box so layout
+// effects that gate rendering behave as if the element fits.
+class ResizeObserverMock {
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
+}
+
+globalThis.ResizeObserver =
+  globalThis.ResizeObserver ?? (ResizeObserverMock as unknown as typeof ResizeObserver);
+
 // ── next-intl (i18n) test shim ──
 // Tests render locale-aware components without a request context. These mocks
 // resolve to the English dictionary so assertions keep seeing the same copy as

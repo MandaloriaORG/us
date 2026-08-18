@@ -4,7 +4,12 @@ import { notFound } from "next/navigation";
 import { getCouncilPlazaAccess } from "@/app/council/access";
 import { PlazaForm } from "@/components/system/plaza-form";
 import { EmptyState } from "@/components/ui/empty-state";
-import { getPlaza, listPlazas } from "@/lib/content/queries";
+import {
+  getPlaza,
+  getPlazaPostPermission,
+  listPermissions,
+  listPlazas,
+} from "@/lib/content/queries";
 import { PlazaStatusControl } from "./plaza-status-control";
 
 // Authorization and Plaza data are request-bound and must never run at build time.
@@ -61,6 +66,8 @@ export default async function CouncilPlazaDetailPage({ params }: CouncilPlazaDet
       <h1 className="text-fg mt-1 text-2xl font-semibold">{plaza.name}</h1>
 
       <PlazaForm
+        candidatePermissions={await listPermissions()}
+        initialRequiredPostPermission={await getPlazaPostPermission(plazaId)}
         mode="edit"
         plazaId={plazaId}
         initialSlug={plaza.slug}
