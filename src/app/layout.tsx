@@ -7,7 +7,6 @@ import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { NavLinks } from "@/components/layout/nav-links";
 import { MandaloriaLogo } from "@/components/layout/mandaloria-logo";
-import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { canAny } from "@/lib/permissions";
 import { createClient } from "@/lib/supabase/server";
 import { NavAuth } from "./NavAuth";
@@ -147,7 +146,6 @@ export default async function RootLayout({
                   ...(item.href === "/council" ? { warning: true } : {}),
                 }))}
               />
-              <LocaleSwitcher />
               <NavAuth user={user} profile={profile} />
             </nav>
           </div>
