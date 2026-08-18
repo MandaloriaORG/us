@@ -4,14 +4,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   listChannels: vi.fn(),
   getAuthorizationSnapshot: vi.fn(),
+  redirect: vi.fn(),
 }));
 
+vi.mock("next/navigation", () => ({ redirect: mocks.redirect }));
 vi.mock("@/lib/holochat/queries", () => ({ listChannels: mocks.listChannels }));
 vi.mock("@/lib/permissions", () => ({
   getAuthorizationSnapshot: mocks.getAuthorizationSnapshot,
-}));
-vi.mock("@/components/system/notification-bell", () => ({
-  NotificationBell: () => null,
 }));
 
 import HolochatPage from "./page";
@@ -52,36 +51,21 @@ async function renderPage() {
 }
 
 describe("HolochatPage", () => {
-  it("lists every visible channel as a navigation row", async () => {
+  it("redirects straight into the announcements channel when one exists", async () => {
     await renderPage();
-    expect(screen.getByRole("link", { name: /General/ })).toHaveAttribute(
-      "href",
-      "/holochat/general",
-    );
-    expect(screen.getByRole("link", { name: /Announcements/ })).toHaveAttribute(
-      "href",
-      "/holochat/announcements",
-    );
+    expect(mocks.redirect).toHaveBeenCalledWith("/holochat/announcements");
   });
 
-  it("marks the announcements channel with its kind", async () => {
+  it("redirects to the first channel when there is no announcements channel", async () => {
+    mocks.listChannels.mockResolvedValue([general]);
     await renderPage();
-    expect(screen.getAllByText("Announcements").length).toBeGreaterThanOrEqual(1);
+    expect(mocks.redirect).toHaveBeenCalledWith("/holochat/general");
   });
 
   it("shows the empty state when no channels are open", async () => {
     mocks.listChannels.mockResolvedValue([]);
     await renderPage();
     expect(screen.getByText("No channels yet")).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: /Sign in/ })).not.toBeInTheDocument();
-  });
-
-  it("invites signed-out visitors to sign in, and not signed-in members", async () => {
-    mocks.getAuthorizationSnapshot.mockResolvedValue({
-      allowed: false,
-      reason: "not_authenticated",
-    });
-    await renderPage();
-    expect(screen.getByRole("link", { name: "Sign in" })).toHaveAttribute("href", "/auth/login");
+    expect(mocks.redirect).not.toHaveBeenCalled();
   });
 });

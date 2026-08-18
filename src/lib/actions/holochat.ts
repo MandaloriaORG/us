@@ -96,9 +96,12 @@ function chatBodySchema() {
 const reactionKeySchema = z
   .string()
   .trim()
-  .toLowerCase()
-  .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/)
-  .max(32);
+  .min(1, "A reaction key is required")
+  .regex(
+    /^(?:[a-z0-9]+(?:-[a-z0-9]+)*|[^\x00-\x7F]+)$/,
+    "A reaction key is a slug or an emoji",
+  )
+  .max(64);
 
 const reportReasonSchema = z.enum(REPORT_REASONS, {
   invalid_type_error: "Choose a reason",

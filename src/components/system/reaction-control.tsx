@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import dynamic from "next/dynamic";
+import { Theme } from "emoji-picker-react";
 import { SmileyIcon } from "@phosphor-icons/react/dist/ssr";
 import { motion, useReducedMotion } from "framer-motion";
 
@@ -9,6 +11,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/cn";
 import type { ContentActionResult, ReactionState } from "@/lib/actions/content";
 import type { ReactionType } from "@/lib/content/queries";
+
+/**
+ * The Discord picker, lazy-loaded so it only downloads when opened; it ships
+ * search + categories + a dark theme.
+ */
+const EmojiPicker = dynamic(() => import("emoji-picker-react").then((m) => m.default), {
+  ssr: false,
+});
 
 export interface ReactionControlProps {
   /** Names the target in the accessible label, e.g. "post" or "comment". */
@@ -63,42 +73,52 @@ export function ReactionControl({ targetLabel, reactionTypes, onToggle }: Reacti
     });
   }
 
+  /** Resolve a picked emoji to a reaction key: curated catalog match first
+   *  (reputation rules apply), otherwise the raw emoji as a free key (Discord
+   *  style, upserted server-side). */
+  function pick(emoji: string) {
+    const key = reactionTypes.find((r) => r.emoji === emoji)?.key ?? emoji;
+    toggle(key);
+  }
+
   return (
     <div className="flex flex-wrap items-center gap-1.5">
-      {reactionTypes.map((reaction) => {
-        const entry = state[reaction.key];
-        const reacted = entry?.reacted ?? false;
-        const visible = reacted || (entry?.total !== undefined && entry.total > 0);
-        if (!visible) return null;
-        return (
-          <Button
-            key={reaction.key}
-            type="button"
-            variant="ghost"
-            size="sm"
-            aria-pressed={reacted}
-            aria-label={`React with ${reaction.label} to this ${targetLabel}`}
-            disabled={isPending}
-            onClick={() => toggle(reaction.key)}
-            className={cn(
-              "gap-1 transition-all active:scale-95",
-              reacted && "bg-brand/10 text-brand hover:bg-brand/15 font-medium",
-            )}
-          >
-            <motion.span
-              aria-hidden="true"
-              animate={!reduced && reacted ? { scale: [1, 1.45, 1] } : { scale: 1 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-              className="inline-flex"
+      {Object.entries(state)
+        .filter(([, entry]) => entry.reacted || (entry.total !== undefined && entry.total > 0))
+        .map(([key, entry]) => {
+          const reacted = entry.reacted;
+          const catalog = reactionTypes.find((r) => r.key === key);
+          const emoji = catalog?.emoji ?? key;
+          const label = catalog?.label ?? key;
+          return (
+            <Button
+              key={key}
+              type="button"
+              variant="ghost"
+              size="sm"
+              aria-pressed={reacted}
+              aria-label={`React with ${label} to this ${targetLabel}`}
+              disabled={isPending}
+              onClick={() => toggle(key)}
+              className={cn(
+                "gap-1 transition-all active:scale-95",
+                reacted && "bg-brand/10 text-brand hover:bg-brand/15 font-medium",
+              )}
             >
-              {reaction.emoji}
-            </motion.span>
-            {entry?.total !== undefined ? (
-              <span className="text-fg-subtle tabular-nums">{entry.total}</span>
-            ) : null}
-          </Button>
-        );
-      })}
+              <motion.span
+                aria-hidden="true"
+                animate={!reduced && reacted ? { scale: [1, 1.45, 1] } : { scale: 1 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="inline-flex"
+              >
+                {emoji}
+              </motion.span>
+              {entry.total !== undefined ? (
+                <span className="text-fg-subtle tabular-nums">{entry.total}</span>
+              ) : null}
+            </Button>
+          );
+        })}
 
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
@@ -112,31 +132,19 @@ export function ReactionControl({ targetLabel, reactionTypes, onToggle }: Reacti
             <SmileyIcon aria-hidden="true" className="h-4 w-4" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent align="start" className="w-auto p-2">
-          <div className="grid grid-cols-6 gap-1">
-            {reactionTypes.map((reaction) => {
-              const reacted = state[reaction.key]?.reacted ?? false;
-              return (
-                <button
-                  key={reaction.key}
-                  type="button"
-                  aria-label={reaction.label}
-                  aria-pressed={reacted}
-                  disabled={isPending}
-                  onClick={() => {
-                    setOpen(false);
-                    toggle(reaction.key);
-                  }}
-                  className={cn(
-                    "hover:bg-surface focus-visible:ring-border-focus/24 focus-visible:ring-offset-bg flex h-10 w-10 items-center justify-center rounded-md text-[22px] leading-none transition-colors focus-visible:ring-[3px] focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 disabled:opacity-50",
-                    reacted && "bg-brand/10",
-                  )}
-                >
-                  <span aria-hidden="true">{reaction.emoji}</span>
-                </button>
-              );
-            })}
-          </div>
+        <PopoverContent align="start" className="w-auto border-0 p-0 shadow-none">
+          <EmojiPicker
+            theme={Theme.DARK}
+            skinTonesDisabled
+            searchDisabled={false}
+            width="360px"
+            height={420}
+            previewConfig={{ showPreview: false }}
+            onEmojiClick={(emoji) => {
+              setOpen(false);
+              pick(emoji.emoji);
+            }}
+          />
         </PopoverContent>
       </Popover>
 
