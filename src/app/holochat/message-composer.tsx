@@ -2,7 +2,12 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { ArrowBendUpLeftIcon, LockKeyIcon, PencilSimpleIcon, XIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  ArrowBendUpLeftIcon,
+  LockKeyIcon,
+  PencilSimpleIcon,
+  XIcon,
+} from "@phosphor-icons/react/dist/ssr";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -54,7 +59,7 @@ export function MessageComposer({
   if (!canSend) {
     return (
       <div className="border-border bg-bg-raised border-t px-3 py-3 md:px-4">
-        <div className="mx-auto flex w-full max-w-3xl items-center gap-3 rounded-lg border border-dashed border-border px-4 py-3">
+        <div className="border-border mx-auto flex w-full max-w-3xl items-center gap-3 rounded-lg border border-dashed px-4 py-3">
           <LockKeyIcon aria-hidden="true" className="text-fg-subtle h-4 w-4 shrink-0" />
           <p className="text-fg-muted min-w-0 flex-1 truncate text-sm">{notice}</p>
           <Button asChild size="sm" variant="secondary">
@@ -142,7 +147,7 @@ export function MessageComposer({
           onChange={(event) => setBody(event.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Write a message…"
-          className="min-h-24 resize-y focus-visible:ring-brand/25 focus-visible:border-brand/50"
+          className="min-h-24 resize-y"
         />
         {error ? (
           <p role="alert" className="text-error mt-2 text-xs">

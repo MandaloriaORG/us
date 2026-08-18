@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { addUserNote, deleteUserNote, warnUser } from "@/lib/actions/user-moderation";
 import { Textarea } from "@/components/ui/textarea";
 
-
 export interface CouncilUserNote {
   noteId: string;
   body: string;
@@ -24,9 +23,6 @@ export interface UserModerationPanelProps {
   /** Only a note's own author may remove it, which the RPC also enforces. */
   viewerId: string | null;
 }
-
-const TEXTAREA_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-20 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
 
 /**
  * Warning a member and keeping Council notes about them.
@@ -155,7 +151,7 @@ export function UserModerationPanel({
               maxLength={1000}
               disabled={warningPending}
               onChange={(event) => setWarning(event.target.value)}
-              className={TEXTAREA_CLASS}
+              className="min-h-20 resize-y"
               placeholder="Explain what must change"
             />
             <p className="text-fg-muted text-xs">3–1000 characters.</p>
@@ -237,7 +233,7 @@ export function UserModerationPanel({
             maxLength={2000}
             disabled={notePending}
             onChange={(event) => setNote(event.target.value)}
-            className={TEXTAREA_CLASS}
+            className="min-h-20 resize-y"
             placeholder="Context for other moderators"
           />
           <p className="text-fg-muted text-xs">3–2000 characters.</p>

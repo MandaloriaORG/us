@@ -11,10 +11,6 @@ import { createClan } from "@/lib/actions/clans";
 import type { ClanActionResult } from "@/lib/clans/errors";
 import { Textarea } from "@/components/ui/textarea";
 
-
-const TEXTAREA_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
-
 interface ClanCreateFormProps {
   leaderId: string;
   leaderName: string;
@@ -83,7 +79,7 @@ export function ClanCreateForm({ leaderId, leaderName }: ClanCreateFormProps) {
           rows={3}
           maxLength={1000}
           aria-invalid={fieldErrors.description ? true : undefined}
-          className={TEXTAREA_CLASS}
+          className="min-h-24 resize-y"
           placeholder="What this Casa stands for"
         />
         {fieldErrors.description ? (
@@ -103,7 +99,7 @@ export function ClanCreateForm({ leaderId, leaderName }: ClanCreateFormProps) {
           rows={4}
           maxLength={2000}
           aria-invalid={fieldErrors.mission ? true : undefined}
-          className={TEXTAREA_CLASS}
+          className="min-h-24 resize-y"
           placeholder="The knowledge this Casa takes responsibility for"
         />
         {fieldErrors.mission ? (

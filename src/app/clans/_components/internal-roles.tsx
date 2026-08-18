@@ -13,11 +13,6 @@ import { KNOWN_CLAN_INTERNAL_PERMISSIONS } from "@/lib/clans/labels";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-
-
-const TEXTAREA_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-20 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
-
 export interface InternalRoleView {
   internalRoleId: string;
   name: string;
@@ -171,7 +166,7 @@ export function InternalRoles({ clanId, slug, roles, members }: InternalRolesPro
               onChange={(event) => setDescription(event.target.value)}
               rows={2}
               maxLength={500}
-              className={TEXTAREA_CLASS}
+              className="min-h-20 resize-y"
             />
           </div>
           <fieldset>

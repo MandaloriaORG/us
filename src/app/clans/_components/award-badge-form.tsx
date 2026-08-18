@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { awardBadge } from "@/lib/actions/clans";
 import { Textarea } from "@/components/ui/textarea";
 
-
 interface AwardBadgeFormProps {
   userId: string;
   userName: string;
@@ -83,7 +82,7 @@ export function AwardBadgeForm({ userId, userName }: AwardBadgeFormProps) {
           disabled={isPending}
           maxLength={500}
           onChange={(event) => setReason(event.target.value)}
-          className="border-border bg-bg text-fg focus-visible:border-border-focus focus-visible:ring-border-focus/40 min-h-20 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden focus-visible:ring-2"
+          className="min-h-20 resize-y"
         />
       </div>
 

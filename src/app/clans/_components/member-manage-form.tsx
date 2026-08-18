@@ -11,11 +11,6 @@ import type { ClanActionResult } from "@/lib/clans/errors";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-
-
-const TEXTAREA_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-20 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
-
 interface ManageableMember {
   memberId: string;
   displayName: string;
@@ -121,7 +116,7 @@ export function MemberManageForm({ clanId, slug, members }: MemberManageFormProp
           disabled={isPending}
           maxLength={500}
           onChange={(event) => setReason(event.target.value)}
-          className={TEXTAREA_CLASS}
+          className="min-h-20 resize-y"
           placeholder="This is written to the audit log."
         />
       </div>

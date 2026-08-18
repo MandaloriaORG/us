@@ -7,6 +7,7 @@ import { CodexHeader } from "@/app/codex/codex-header";
 import { ArticleRow } from "@/app/codex/article-row";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
 import { listArticles, listCodexCategories } from "@/lib/codex/queries";
 import { formatRelativeTime } from "@/lib/time";
@@ -67,8 +68,8 @@ export default async function CodexLibraryPage({ searchParams }: CodexLibraryPag
             aria-hidden="true"
             className="text-fg-muted pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2"
           />
-          <input
-            className="border-border bg-bg text-fg placeholder:text-fg-subtle focus-visible:ring-border-focus h-11 w-full rounded-lg border ps-10 pe-3 text-sm shadow-[0_1px_0_var(--color-white/4%)] outline-hidden transition-colors focus-visible:ring-2"
+          <Input
+            className="h-11 ps-10 pe-3"
             defaultValue={q}
             id="codex-search"
             name="q"

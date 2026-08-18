@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import type { ChatMessageStatus } from "@/lib/holochat/types";
 import { Textarea } from "@/components/ui/textarea";
 
-
 export type ModerationAction = "hide" | "restore" | "delete";
 
 const MODERATION_LABELS: Record<ModerationAction, string> = {
@@ -67,7 +66,7 @@ export function MessageModerationControl({
         aria-invalid={error ? true : undefined}
         onChange={(event) => setReason(event.target.value)}
         placeholder="Short reason for the audit log"
-        className="border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error min-h-20 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+        className="min-h-20 resize-y"
       />
       {error ? (
         <p role="alert" className="text-error text-xs">

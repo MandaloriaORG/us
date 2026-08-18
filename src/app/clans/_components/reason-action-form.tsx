@@ -9,8 +9,6 @@ import type { ClanActionResult } from "@/lib/clans/errors";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-
-
 export interface ReasonActionField {
   name: string;
   label: string;
@@ -132,7 +130,7 @@ export function ReasonActionForm({
               disabled={isPending}
               value={values[field.name]}
               onChange={(event) => setValues((v) => ({ ...v, [field.name]: event.target.value }))}
-              className="border-border bg-bg text-fg focus-visible:border-border-focus focus-visible:ring-border-focus/40 min-h-11 rounded-md border px-3 text-sm outline-hidden focus-visible:ring-2"
+              className="min-h-11"
             />
           </div>
         ),
@@ -151,7 +149,7 @@ export function ReasonActionForm({
             rows={2}
             maxLength={500}
             onChange={(event) => setReason(event.target.value)}
-            className="border-border bg-bg text-fg focus-visible:border-border-focus focus-visible:ring-border-focus/40 min-h-16 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden focus-visible:ring-2"
+            className="min-h-16 resize-y"
           />
         </div>
       ) : null}

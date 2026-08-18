@@ -33,9 +33,6 @@ export type PlazaFormProps =
       candidatePermissions: PostingPermissionOption[];
     };
 
-const TEXTAREA_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-brand/60 focus-visible:ring-brand/30 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
-
 function readSortOrder(formData: FormData) {
   const raw = formData.get("sortOrder");
   const parsed = raw ? Number(raw) : 0;
@@ -131,7 +128,7 @@ export function PlazaForm(props: PlazaFormProps) {
           defaultValue={props.mode === "edit" ? (props.initialDescription ?? "") : ""}
           aria-invalid={fieldErrors.description ? true : undefined}
           aria-describedby={fieldErrors.description ? "plaza-description-error" : undefined}
-          className={TEXTAREA_CLASS}
+          className="min-h-24 resize-y"
           placeholder="What this Plaza is for"
         />
         {fieldErrors.description ? (
@@ -154,7 +151,7 @@ export function PlazaForm(props: PlazaFormProps) {
             defaultValue={props.initialRules ?? ""}
             aria-invalid={fieldErrors.rules ? true : undefined}
             aria-describedby={fieldErrors.rules ? "plaza-rules-error" : undefined}
-            className={TEXTAREA_CLASS}
+            className="min-h-24 resize-y"
             placeholder="Posting guidelines specific to this Plaza"
           />
           {fieldErrors.rules ? (

@@ -6,18 +6,11 @@ import { CheckIcon, WarningCircleIcon } from "@phosphor-icons/react/dist/ssr";
 import { Input } from "@/components/origin/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  updateSiteSetting,
-  type SettingActionResult,
-} from "@/lib/actions/settings";
+import { updateSiteSetting, type SettingActionResult } from "@/lib/actions/settings";
 import type { SettingValueType } from "./settings-dto";
 import type { Json } from "@/lib/database.types";
 import { cn } from "@/lib/cn";
 import { Textarea } from "@/components/ui/textarea";
-
-
-const TEXTAREA_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
 
 export interface SettingRowProps {
   description: string | null;
@@ -143,7 +136,7 @@ export function SettingRow({
         aria-label={label}
         aria-invalid={localError ? true : undefined}
         aria-describedby={localError ? `${controlId}-error` : undefined}
-        className={cn(TEXTAREA_CLASS, "sm:w-96")}
+        className={cn("min-h-24 resize-y", "sm:w-96")}
         id={controlId}
         onChange={(event) => setDraft(event.currentTarget.value)}
         rows={5}

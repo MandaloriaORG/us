@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { createPost, setPostTags, updatePost } from "@/lib/actions/content";
 import { Textarea } from "@/components/ui/textarea";
 
-
 export type PostFormProps =
   | { mode: "create"; plazaId: string }
   | {
@@ -18,9 +17,6 @@ export type PostFormProps =
       initialBody: string;
       initialTagSlugs: string[];
     };
-
-const TEXTAREA_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-brand/60 focus-visible:ring-brand/30 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-64 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
 
 /** Comma- or whitespace-separated; deduped case-insensitively, empties dropped. */
 function parseTagsInput(value: string): string[] {
@@ -130,7 +126,7 @@ export function PostForm(props: PostFormProps) {
           aria-invalid={fieldErrors.body ? true : undefined}
           aria-describedby={fieldErrors.body ? "post-body-error" : "post-body-hint"}
           onChange={(event) => setBody(event.target.value)}
-          className={TEXTAREA_CLASS}
+          className="min-h-64 resize-y"
           placeholder="Write in Markdown: headings, bold, italic, links, lists, quotes and code."
         />
         {fieldErrors.body ? (

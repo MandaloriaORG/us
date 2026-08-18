@@ -6,10 +6,6 @@ import { Button } from "@/components/ui/button";
 import type { ContentActionResult } from "@/lib/actions/content";
 import { Textarea } from "@/components/ui/textarea";
 
-
-const TEXTAREA_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-20 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
-
 export interface CommentComposerProps {
   id: string;
   label: string;
@@ -73,7 +69,7 @@ export function CommentComposer({
         placeholder={placeholder ?? "Write a comment…"}
         aria-invalid={error ? true : undefined}
         onChange={(event) => setValue(event.target.value)}
-        className={TEXTAREA_CLASS}
+        className="min-h-20 resize-y"
       />
       {error ? (
         <p role="alert" className="text-error text-xs">
