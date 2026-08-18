@@ -16,35 +16,46 @@ describe("ReactionControl", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("renders every configured reaction, not a hardcoded set", () => {
+  it("keeps the catalog compact: no pills until a total exists, only the picker trigger", () => {
     render(<ReactionControl targetLabel="post" reactionTypes={reactionTypes} onToggle={vi.fn()} />);
 
+    // Before any toggle the empty reactions are NOT shown as pills; the smiley
+    // trigger is what opens the full catalog.
+    expect(screen.queryByRole("button", { name: "React with Heart to this post" })).toBeNull();
     expect(
-      screen.getByRole("button", { name: "React with Heart to this post" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "React with Laugh to this post" }),
+      screen.getByRole("button", { name: "Add reaction" }),
     ).toBeInTheDocument();
   });
 
-  it("shows no total until the server has answered, then shows the returned total", async () => {
+  it("opens the picker grid from the smiley trigger and shows every catalog entry", () => {
+    render(<ReactionControl targetLabel="post" reactionTypes={reactionTypes} onToggle={vi.fn()} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Add reaction" }));
+
+    expect(screen.getByRole("button", { name: "Heart" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Laugh" })).toBeInTheDocument();
+  });
+
+  it("renders a pill only after the server reports a positive total, with that total", async () => {
     const onToggle = vi
       .fn()
-      .mockResolvedValue({ ok: true, reactionKey: "heart", total: 4, callerReacted: true });
+      .mockResolvedValue({ ok: true, reactionKey: "heart", total: 4, callerReacted: false });
     render(
       <ReactionControl targetLabel="post" reactionTypes={reactionTypes} onToggle={onToggle} />,
     );
 
-    const heart = screen.getByRole("button", { name: "React with Heart to this post" });
-    expect(heart).not.toHaveTextContent("4");
+    // Toggle from the picker grid (typical interaction: open the picker).
+    fireEvent.click(screen.getByRole("button", { name: "Add reaction" }));
+    fireEvent.click(screen.getByRole("button", { name: "Heart" }));
 
-    fireEvent.click(heart);
-
-    await waitFor(() => expect(heart).toHaveTextContent("4"));
-    expect(heart).toHaveAttribute("aria-pressed", "true");
+    // The picker closes and the pill appears with the returned total. A caller
+    // that did not react keeps the pill but not the pressed state.
+    const pill = await screen.findByRole("button", { name: "React with Heart to this post" });
+    expect(pill).toHaveTextContent("4");
+    expect(pill).toHaveAttribute("aria-pressed", "false");
   });
 
-  it("reverts the pressed state and shows an error when the toggle is refused", async () => {
+  it("reverts the press and shows an error when the toggle is refused", async () => {
     const onToggle = vi
       .fn()
       .mockResolvedValue({ ok: false, code: "access_denied", message: "Sign in to react." });
@@ -52,12 +63,12 @@ describe("ReactionControl", () => {
       <ReactionControl targetLabel="post" reactionTypes={reactionTypes} onToggle={onToggle} />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "React with Heart to this post" }));
+    fireEvent.click(screen.getByRole("button", { name: "Add reaction" }));
+    fireEvent.click(screen.getByRole("button", { name: "Heart" }));
 
+    // The optimistic press rolled back: no pill (visible=false) and the error
+    // message is announced.
     expect(await screen.findByText("Sign in to react.")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "React with Heart to this post" })).toHaveAttribute(
-      "aria-pressed",
-      "false",
-    );
+    expect(screen.queryByRole("button", { name: "React with Heart to this post" })).toBeNull();
   });
 });

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { SmileyIcon } from "@phosphor-icons/react/dist/ssr";
 import { motion, useReducedMotion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/cn";
 import type { ContentActionResult, ReactionState } from "@/lib/actions/content";
 import type { ReactionType } from "@/lib/content/queries";
@@ -24,18 +26,20 @@ interface LocalReaction {
 }
 
 /**
- * Renders whatever reaction catalog the administrator configured — never a
- * fixed set. Toggling is optimistic and reversible; the total badge only
- * appears once the server has actually reported one for that key. The emoji
- * pops once when the reaction lands, so the toggle is felt as a small burst
- * rather than a silent colour change; reduced-motion users still get the
- * pressed state and fill.
+ * Discord-style reaction row. Only reactions with a known positive total (or
+ * the caller's own) render as inline pills; the full catalog lives behind a
+ * smiley trigger that opens a grid picker, so a 29-entry catalog stays compact.
+ * Toggling is optimistic and reversible; the total badge only appears once the
+ * server has actually reported one for that key. The emoji pops once when the
+ * reaction lands, so the toggle is felt as a small burst rather than a silent
+ * colour change; reduced-motion users still get the pressed state and fill.
  */
 export function ReactionControl({ targetLabel, reactionTypes, onToggle }: ReactionControlProps) {
   const reduced = useReducedMotion();
   const [state, setState] = useState<Record<string, LocalReaction>>({});
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   if (reactionTypes.length === 0) return null;
 
@@ -64,6 +68,8 @@ export function ReactionControl({ targetLabel, reactionTypes, onToggle }: Reacti
       {reactionTypes.map((reaction) => {
         const entry = state[reaction.key];
         const reacted = entry?.reacted ?? false;
+        const visible = reacted || (entry?.total !== undefined && entry.total > 0);
+        if (!visible) return null;
         return (
           <Button
             key={reaction.key}
@@ -75,7 +81,7 @@ export function ReactionControl({ targetLabel, reactionTypes, onToggle }: Reacti
             disabled={isPending}
             onClick={() => toggle(reaction.key)}
             className={cn(
-              "gap-1.5 transition-all active:scale-95",
+              "gap-1 transition-all active:scale-95",
               reacted && "bg-brand/10 text-brand hover:bg-brand/15 font-medium",
             )}
           >
@@ -87,13 +93,53 @@ export function ReactionControl({ targetLabel, reactionTypes, onToggle }: Reacti
             >
               {reaction.emoji}
             </motion.span>
-            <span>{reaction.label}</span>
             {entry?.total !== undefined ? (
               <span className="text-fg-subtle tabular-nums">{entry.total}</span>
             ) : null}
           </Button>
         );
       })}
+
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            aria-label="Add reaction"
+            disabled={isPending}
+          >
+            <SmileyIcon aria-hidden="true" className="h-4 w-4" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent align="start" className="w-auto p-2">
+          <div className="grid grid-cols-6 gap-1">
+            {reactionTypes.map((reaction) => {
+              const reacted = state[reaction.key]?.reacted ?? false;
+              return (
+                <button
+                  key={reaction.key}
+                  type="button"
+                  aria-label={reaction.label}
+                  aria-pressed={reacted}
+                  disabled={isPending}
+                  onClick={() => {
+                    setOpen(false);
+                    toggle(reaction.key);
+                  }}
+                  className={cn(
+                    "hover:bg-surface focus-visible:ring-border-focus/24 focus-visible:ring-offset-bg flex h-10 w-10 items-center justify-center rounded-md text-[22px] leading-none transition-colors focus-visible:ring-[3px] focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 disabled:opacity-50",
+                    reacted && "bg-brand/10",
+                  )}
+                >
+                  <span aria-hidden="true">{reaction.emoji}</span>
+                </button>
+              );
+            })}
+          </div>
+        </PopoverContent>
+      </Popover>
+
       {error ? (
         <span role="alert" className="text-error text-xs">
           {error}
