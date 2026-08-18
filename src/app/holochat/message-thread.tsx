@@ -378,6 +378,7 @@ export function MessageThread({
         <MessageComposer
           canSend={canSend}
           notice={notice}
+          channelName={channel.name}
           replyTo={replyTo}
           editing={editing}
           onCancelReply={() => setReplyTo(null)}

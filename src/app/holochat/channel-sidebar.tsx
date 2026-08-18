@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import { HashIcon, LockKeyIcon, MegaphoneIcon, ShieldIcon } from "@phosphor-icons/react/dist/ssr";
 
@@ -17,7 +18,9 @@ const KIND_ICONS = {
 
 export interface ChannelSidebarProps {
   channels: ChatChannelSummary[];
-  /** The slug of the open channel, for `aria-current`. */
+  /** The slug of the open channel, for `aria-current`. When omitted the
+   *  component derives it from the current pathname (`/holochat/<slug>`), so
+   *  it can live in a shared layout that does not receive the child's slug. */
   activeSlug?: string;
   className?: string;
 }
@@ -30,13 +33,19 @@ export interface ChannelSidebarProps {
  */
 export function ChannelSidebar({ channels, activeSlug, className }: ChannelSidebarProps) {
   const reduceMotion = useReducedMotion();
+  const pathname = usePathname();
+
+  // The layout does not know which child slug is open, so derive it from the
+  // URL. Explicit `activeSlug` still wins when provided by a page-scoped use.
+  const effectiveSlug =
+    activeSlug ?? (pathname ? pathname.split("/").filter(Boolean)[1] : undefined);
 
   return (
     <nav aria-label="Channels" className={cn("border-border bg-bg-raised", className)}>
       <ul className="flex gap-1 overflow-x-auto px-3 py-2 md:flex-col md:overflow-visible md:px-2 md:py-3">
         {channels.map((channel) => {
           const Icon = KIND_ICONS[channel.kind];
-          const active = channel.slug === activeSlug;
+          const active = channel.slug === effectiveSlug;
           return (
             <li key={channel.id} className="relative shrink-0 md:shrink">
               <Link

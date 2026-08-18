@@ -104,12 +104,14 @@ describe("ChannelPage", () => {
     );
   });
 
-  it("shows the channel name, description and the sidebar rail", async () => {
+  it("shows the channel name, description and the message feed", async () => {
     await renderPage();
     expect(screen.getByRole("heading", { name: "General" })).toBeInTheDocument();
     expect(screen.getByText("Everyday conversation.")).toBeInTheDocument();
-    expect(screen.getByRole("navigation", { name: "Channels" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "General" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByText("Hello everyone")).toBeInTheDocument();
+    // The channel rail is rendered by the shared (channel) layout, not the
+    // page — it must NOT appear here, only the message thread does.
+    expect(screen.queryByRole("navigation", { name: "Channels" })).not.toBeInTheDocument();
   });
 
   it("renders the loaded messages with their authors", async () => {

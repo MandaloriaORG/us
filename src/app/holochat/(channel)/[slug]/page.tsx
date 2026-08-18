@@ -4,13 +4,11 @@ import { getAuthorizationSnapshot } from "@/lib/permissions";
 import {
   getChannel,
   getCurrentMember,
-  listChannels,
   listMessages,
   listReactionTypes,
 } from "@/lib/holochat/queries";
-import { ChannelSidebar } from "../channel-sidebar";
-import { MessageThread } from "../message-thread";
-import { HolochatRealtimeBridge } from "../realtime-bridge";
+import { MessageThread } from "../../message-thread";
+import { HolochatRealtimeBridge } from "../../realtime-bridge";
 
 interface ChannelPageProps {
   params: Promise<{ slug: string }>;
@@ -28,8 +26,7 @@ export default async function ChannelPage({ params }: ChannelPageProps) {
   const channel = await getChannel(slug);
   if (!channel) notFound();
 
-  const [channels, page, pinned, reactionTypes, currentMember, snapshot] = await Promise.all([
-    listChannels(),
+  const [page, pinned, reactionTypes, currentMember, snapshot] = await Promise.all([
     listMessages(channel.id, {}),
     listMessages(channel.id, { pinnedOnly: true, pageSize: 25 }),
     listReactionTypes(),
@@ -40,14 +37,12 @@ export default async function ChannelPage({ params }: ChannelPageProps) {
   const canModerate = snapshot.allowed && snapshot.permissionNames.includes("chat.moderate");
   const canManage = snapshot.allowed && snapshot.permissionNames.includes("chat.manage");
 
+  // The channel rail and shell live in the shared (channel) layout; only the
+  // message feed re-renders here, so switching channels never remounts the
+  // sidebar or flashes a full-page skeleton.
   return (
-    <div className="flex h-svh flex-col md:flex-row">
+    <>
       <HolochatRealtimeBridge channelId={channel.id} enabled={currentMember !== null} />
-      <ChannelSidebar
-        channels={channels}
-        activeSlug={slug}
-        className="shrink-0 md:w-60 md:border-r"
-      />
       <MessageThread
         key={channel.id}
         channel={channel}
@@ -61,6 +56,6 @@ export default async function ChannelPage({ params }: ChannelPageProps) {
         canModerate={canModerate}
         canManage={canManage}
       />
-    </div>
+    </>
   );
 }
