@@ -387,3 +387,5 @@ When the local ports are occupied, a disposable PostgreSQL 16 with stub `auth`, 
 The identity suite is therefore verified only against a real Supabase stack; all four suites pass there (405/405, section 1).
 
 **Adding a system.** A new system is not done until it has a row in section 2 naming the evidence. "It works" is not evidence; a named test or a named manual walk is.
+
+**Ronda polish UIX (2026-08-18) — gap de contrato detectado (handoff DB pendiente, migraciones congeladas).** Los RPC de lectura no devuelven avatar del autor: `list_posts`, `get_post` y `list_post_comments` no traen campo avatar del autor; `list_clans` no trae `emblem_path`; `list_chat_messages` y `list_clan_members` tampoco. Consecuencia: posts/comentarios/listado de clans no pueden mostrar foto (solo fallback iniciales). Fix (próxima ronda DB): añadir `avatar_url` del autor a `list_posts`/`get_post`/`list_post_comments`, `emblem_path` resolvido a URL firmada en `list_clans`, y resolver `avatar_path`→URL en `council/users`. Verificado E2E por lane U2 (2026-08-18).
