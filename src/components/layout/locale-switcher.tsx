@@ -30,7 +30,7 @@ export function LocaleSwitcher() {
     <div
       role="group"
       aria-label="Language"
-      className="flex items-center overflow-hidden rounded-lg border border-border bg-bg-raised/60"
+      className="border-border bg-bg-raised/60 flex items-center overflow-hidden rounded-lg border"
     >
       <TranslateIcon aria-hidden="true" className="text-fg-subtle ml-2 h-3.5 w-3.5" />
       {locales.map((locale) => {
@@ -41,10 +41,8 @@ export function LocaleSwitcher() {
             type="button"
             onClick={() => switchLocale(locale)}
             aria-pressed={active}
-            className={`flex h-8 min-w-9 cursor-pointer items-center justify-center px-1.5 text-xs font-semibold uppercase transition-colors focus-visible:ring-2 focus-visible:outline-hidden ${
-              active
-                ? "bg-brand/15 text-brand"
-                : "text-fg-muted hover:bg-surface hover:text-fg"
+            className={`focus-visible:ring-border-focus/24 flex h-8 min-w-9 cursor-pointer items-center justify-center px-1.5 text-xs font-semibold uppercase transition-colors focus-visible:ring-[3px] focus-visible:outline-hidden active:scale-[0.98] ${
+              active ? "bg-brand/15 text-brand" : "text-fg-muted hover:bg-surface hover:text-fg"
             }`}
           >
             {locale}

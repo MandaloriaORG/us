@@ -3,14 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
 
+import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
+
 import { Button } from "@/components/ui/button";
 import { NativeSelect } from "@/components/origin/native-select";
 import { movePost, setPostFlags, setPostStatus } from "@/lib/actions/moderation";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
-
-
 export interface PostModerationPanelPlaza {
   id: string;
   name: string;
@@ -156,9 +155,13 @@ export function PostModerationPanel({
   }
 
   return (
-    <details className="border-border mt-4 border-t pt-4">
-      <summary className="text-fg-muted hover:text-fg focus-visible:ring-border-focus flex min-h-11 cursor-pointer items-center text-sm focus-visible:ring-2 focus-visible:outline-hidden">
+    <details className="border-border group mt-4 border-t pt-4">
+      <summary className="text-fg-muted hover:text-fg active:text-fg duration-fast focus-visible:ring-border-focus/24 flex min-h-11 cursor-pointer items-center gap-2 text-sm transition-colors marker:hidden focus-visible:ring-[3px] focus-visible:outline-hidden">
         Moderation
+        <CaretDownIcon
+          aria-hidden="true"
+          className="text-fg-subtle h-4 w-4 transition-transform group-open:rotate-180"
+        />
       </summary>
 
       <div className="mt-2 flex max-w-xl flex-col gap-2">
@@ -180,7 +183,7 @@ export function PostModerationPanel({
           aria-invalid={reasonInvalid ? true : undefined}
           onBlur={() => setTouched(true)}
           onChange={(event) => setReason(event.target.value)}
-          className="border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-16 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-16 resize-y"
           placeholder="Explain the action"
         />
         {reasonInvalid ? (

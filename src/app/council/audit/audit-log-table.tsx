@@ -1,3 +1,5 @@
+import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
+
 import { DataTable, type DataTableColumn } from "@/components/ui/data-table";
 import { EmptyState } from "@/components/ui/empty-state";
 
@@ -34,8 +36,12 @@ function AuditDetails({ auditLog }: { auditLog: AuditLogDto }) {
 
   return (
     <details className="group max-w-md">
-      <summary className="text-fg-muted hover:text-fg focus-visible:ring-border-focus min-h-11 cursor-pointer content-center rounded-xs underline-offset-4 hover:underline focus:outline-hidden focus-visible:ring-2">
+      <summary className="text-fg-muted hover:text-fg active:text-fg duration-fast focus-visible:ring-border-focus/24 inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-xs underline-offset-4 transition-colors marker:hidden hover:underline focus:outline-hidden focus-visible:ring-[3px]">
         View details
+        <CaretDownIcon
+          aria-hidden="true"
+          className="text-fg-subtle h-4 w-4 transition-transform group-open:rotate-180"
+        />
       </summary>
       <dl className="border-border mt-1 space-y-2 border-l pl-3 text-sm">
         {actionDetail && (

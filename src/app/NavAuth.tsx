@@ -40,7 +40,7 @@ function LogoutButton() {
       disabled={pending}
       aria-busy={pending || undefined}
       aria-label={pending ? t("signingOut") : t("signOut")}
-      className="text-fg-muted hover:text-error hover:bg-error/10 duration-fast flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors focus-visible:ring-border-focus focus-visible:ring-offset-bg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:cursor-wait disabled:opacity-60"
+      className="text-fg-muted hover:text-error hover:bg-error/10 active:bg-error/20 duration-fast focus-visible:ring-border-focus focus-visible:ring-offset-bg flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:cursor-wait disabled:opacity-60"
     >
       {pending ? (
         <CircleNotchIcon aria-hidden="true" className="h-4 w-4 animate-spin" />
@@ -61,7 +61,7 @@ export function NavAuth({ user, profile }: NavAuthProps) {
         href="/search"
         prefetch
         aria-label={t("search")}
-        className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 w-11 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+        className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 w-11 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-[0.98]"
       >
         <MagnifyingGlassIcon aria-hidden="true" className="h-5 w-5" />
       </Link>
@@ -70,7 +70,7 @@ export function NavAuth({ user, profile }: NavAuthProps) {
         <Link
           href="/auth/login"
           prefetch
-          className="border-border text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 items-center rounded-lg border px-3 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+          className="border-border text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg inline-flex h-11 items-center rounded-lg border px-3 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-[0.98]"
         >
           {t("signIn")}
         </Link>
@@ -83,16 +83,14 @@ export function NavAuth({ user, profile }: NavAuthProps) {
               <button
                 type="button"
                 aria-label={t("openUserMenu")}
-                className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg ring-brand/0 hover:ring-brand/30 flex min-h-11 cursor-pointer items-center gap-2 rounded-lg px-2 py-1 text-sm transition-all hover:ring-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+                className="text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg ring-brand/0 hover:ring-brand/30 flex min-h-11 cursor-pointer items-center gap-2 rounded-lg px-2 py-1 text-sm transition-all hover:ring-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-[0.98]"
               >
                 <Avatar
                   name={profile?.display_name ?? "Profile"}
                   src={profile?.avatar_url}
                   className="ring-brand/0 h-6 w-6 transition-shadow hover:shadow-[0_0_0_1px_hsl(42_40%_55%/0.4)]"
                 />
-                <span className="hidden sm:inline">
-                  {profile?.display_name ?? "Profile"}
-                </span>
+                <span className="hidden sm:inline">{profile?.display_name ?? "Profile"}</span>
                 <CaretDownIcon
                   aria-hidden="true"
                   className="text-fg-subtle hidden h-3 w-3 sm:inline"

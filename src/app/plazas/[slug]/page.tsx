@@ -99,7 +99,7 @@ export default async function PlazaPage({ params, searchParams }: PlazaPageProps
 
       {plaza.rules ? (
         <details className="border-border group mt-5 rounded-md border">
-          <summary className="text-fg focus-visible:ring-border-focus flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 text-sm font-medium marker:hidden focus-visible:ring-2 focus-visible:outline-hidden">
+          <summary className="text-fg-muted hover:text-fg active:text-fg duration-fast focus-visible:ring-border-focus/24 flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 text-sm font-medium transition-colors marker:hidden focus-visible:ring-[3px] focus-visible:outline-hidden">
             Plaza rules
             <CaretDownIcon
               aria-hidden="true"

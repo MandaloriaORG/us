@@ -1,3 +1,5 @@
+import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
+
 import { renderMarkdown } from "@/lib/content/markdown";
 import { listCommentRevisions, listPostRevisions } from "@/lib/content/revisions";
 import { formatRelativeTime } from "@/lib/time";
@@ -38,10 +40,14 @@ export async function RevisionHistory({ targetType, targetId }: RevisionHistoryP
   if (revisions.length === 0) return null;
 
   return (
-    <details className="border-border mt-4 border-t pt-4">
-      <summary className="text-fg-muted hover:text-fg focus-visible:ring-border-focus flex min-h-11 cursor-pointer items-center text-sm focus-visible:ring-2 focus-visible:outline-hidden">
+    <details className="border-border group mt-4 border-t pt-4">
+      <summary className="text-fg-muted hover:text-fg active:text-fg duration-fast focus-visible:ring-border-focus/24 flex min-h-11 cursor-pointer items-center gap-2 text-sm transition-colors marker:hidden focus-visible:ring-[3px] focus-visible:outline-hidden">
         Edit history ({revisions.length}
         {revisions.length === 1 ? " earlier version" : " earlier versions"})
+        <CaretDownIcon
+          aria-hidden="true"
+          className="text-fg-subtle h-4 w-4 transition-transform group-open:rotate-180"
+        />
       </summary>
 
       <ol className="mt-2">

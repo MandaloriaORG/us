@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { CheckCircleIcon } from "@phosphor-icons/react/dist/ssr";
+import { CaretDownIcon, CheckCircleIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { Button } from "@/components/ui/button";
 import type { ClanActionResult } from "@/lib/clans/errors";
@@ -101,21 +101,27 @@ export function ReasonActionForm({
             <label htmlFor={field.name} className="text-fg text-xs font-medium">
               {field.label}
             </label>
-            <select
-              id={field.name}
-              name={field.name}
-              required={field.required}
-              disabled={isPending}
-              value={values[field.name]}
-              onChange={(event) => setValues((v) => ({ ...v, [field.name]: event.target.value }))}
-              className="border-input bg-background text-fg focus-visible:ring-ring/24 duration-fast hover:border-border-raised min-h-10 w-full rounded-lg border px-3 text-sm shadow-[var(--shadow-xs),inset_0_1px_0_var(--color-black/4%)] transition-[border-color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-none dark:shadow-[var(--shadow-xs),inset_0_-1px_0_var(--color-white/6%)]"
-            >
-              {field.options?.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                id={field.name}
+                name={field.name}
+                required={field.required}
+                disabled={isPending}
+                value={values[field.name]}
+                onChange={(event) => setValues((v) => ({ ...v, [field.name]: event.target.value }))}
+                className="border-input bg-background text-fg focus-visible:ring-ring/24 duration-fast hover:border-border-raised min-h-11 w-full appearance-none rounded-lg border px-3 pr-10 text-sm shadow-[var(--shadow-xs),inset_0_1px_0_var(--color-black/4%)] transition-[border-color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-none dark:shadow-[var(--shadow-xs),inset_0_-1px_0_var(--color-white/6%)]"
+              >
+                {field.options?.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <CaretDownIcon
+                aria-hidden="true"
+                className="text-fg-subtle pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2"
+              />
+            </div>
           </div>
         ) : (
           <div key={field.name} className="flex flex-col gap-1.5">
