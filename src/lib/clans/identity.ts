@@ -76,6 +76,24 @@ export type ConnectionsState =
     }
   | { status: "error" };
 
+async function signedAvatarUrls(
+  client: Awaited<ReturnType<typeof createClient>>,
+  paths: Array<string | null>,
+): Promise<Map<string, string>> {
+  const uniquePaths = Array.from(new Set(paths.filter((path): path is string => Boolean(path))));
+  if (uniquePaths.length === 0) return new Map();
+
+  const { data, error } = await client.storage.from("avatars").createSignedUrls(uniquePaths, 300);
+
+  if (error || !data) return new Map();
+
+  return new Map(
+    data.flatMap((item) =>
+      item.path && item.signedUrl && !item.error ? [[item.path, item.signedUrl]] : [],
+    ),
+  );
+}
+
 /** The viewer's own friends, pending requests and blocks — the connections
  * center data. */
 export async function loadConnections(): Promise<ConnectionsState> {
@@ -87,6 +105,12 @@ export async function loadConnections(): Promise<ConnectionsState> {
       supabase.rpc("list_own_blocks"),
     ]);
 
+    const friendRows = (friends.data ?? []) as FriendRow[];
+    const avatarUrls = await signedAvatarUrls(
+      supabase,
+      friendRows.map((row) => row.avatar_path),
+    );
+
     return {
       status: "ok",
       requests: (requests.data ?? []).map((row: FriendRequestRow) => ({
@@ -96,10 +120,11 @@ export async function loadConnections(): Promise<ConnectionsState> {
         direction: row.direction === "incoming" ? ("incoming" as const) : ("outgoing" as const),
         createdAt: row.created_at,
       })),
-      friends: (friends.data ?? []).map((row: FriendRow) => ({
+      friends: friendRows.map((row: FriendRow) => ({
         friendId: row.friend_id,
         displayName: row.display_name,
         avatarPath: row.avatar_path,
+        avatarUrl: row.avatar_path ? (avatarUrls.get(row.avatar_path) ?? null) : null,
         friendsSince: row.friends_since,
       })),
       blocks: (blocks.data ?? []).map((row: BlockRow) => ({
@@ -164,7 +189,17 @@ export async function loadSocialState(
 
 /** Public friend list of a user, gated by profile visibility. Empty array if the
  * target is hidden from the viewer or unauthenticated. */
-export async function listFriendsOf(userId: string): Promise<Array<{ friendId: string; displayName: string; avatarPath: string | null; avatarUrl: string | null; friendsSince: string }>> {
+export async function listFriendsOf(
+  userId: string,
+): Promise<
+  Array<{
+    friendId: string;
+    displayName: string;
+    avatarPath: string | null;
+    avatarUrl: string | null;
+    friendsSince: string;
+  }>
+> {
   if (!userId) return [];
   try {
     const supabase = await createClient();

@@ -207,6 +207,47 @@ describe("loadConnections", () => {
     }
   });
 
+  it("resolves friend avatar paths to signed URLs", async () => {
+    mocks.createClient.mockResolvedValue({
+      rpc: mocks.rpc,
+      storage: {
+        from: vi.fn().mockReturnValue({
+          createSignedUrls: vi.fn().mockResolvedValue({
+            data: [
+              {
+                path: "bo/avatar.webp",
+                signedUrl: "https://cdn.test/bo.webp",
+                error: null,
+              },
+            ],
+            error: null,
+          }),
+        }),
+      },
+    });
+    queueRpc([]);
+    queueRpc([
+      {
+        friend_id: "30000000-0000-4000-8000-000000000001",
+        display_name: "Bo",
+        avatar_path: "bo/avatar.webp",
+        friends_since: "2025-01-01",
+      },
+    ]);
+    queueRpc([]);
+
+    const connections = await loadConnections();
+
+    expect(connections.status).toBe("ok");
+    if (connections.status === "ok") {
+      expect(connections.friends[0]).toMatchObject({
+        friendId: "30000000-0000-4000-8000-000000000001",
+        avatarPath: "bo/avatar.webp",
+        avatarUrl: "https://cdn.test/bo.webp",
+      });
+    }
+  });
+
   it("degrades to an error state", async () => {
     mocks.rpc.mockRejectedValue(new Error("db down"));
 

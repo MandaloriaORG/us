@@ -44,6 +44,8 @@ export interface FriendEntry {
   friendId: string;
   displayName: string;
   avatarPath: string | null;
+  /** Short-lived signed URL for the friend's avatar, resolved by the loader. */
+  avatarUrl: string | null;
   friendsSince: string;
 }
 

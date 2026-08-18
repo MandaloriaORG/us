@@ -2,6 +2,7 @@ import { ArrowLeftIcon, UserListIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { loadConnections } from "@/lib/clans/identity";
@@ -97,14 +98,12 @@ export default async function ConnectionsPage({ searchParams }: Props) {
                       href={`/members/${friend.friendId}`}
                       className="duration-fast hover:bg-surface focus-visible:ring-border-focus flex min-h-12 items-center gap-3 px-4 py-2.5 transition-colors focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-inset"
                     >
-                      <span
-                        aria-hidden="true"
-                        className="border-brand/30 bg-brand-muted/15 text-brand ring-brand/40 ring-offset-bg flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ring-1 ring-offset-2"
-                      >
-                        <span className="font-display text-xs font-semibold">
-                          {friend.displayName.charAt(0).toUpperCase()}
-                        </span>
-                      </span>
+                      <Avatar
+                        name={friend.displayName}
+                        src={friend.avatarUrl}
+                        className="h-8 w-8 shrink-0"
+                        alt=""
+                      />
                       <span className="text-fg min-w-0 flex-1 truncate text-sm">
                         {friend.displayName}
                       </span>
