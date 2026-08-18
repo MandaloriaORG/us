@@ -1,6 +1,11 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.5";
+  };
   public: {
     Tables: {
       audit_logs: {
@@ -363,6 +368,48 @@ export type Database = {
             columns: ["parent_id"];
             isOneToOne: false;
             referencedRelation: "chat_messages";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      chat_mutes: {
+        Row: {
+          created_at: string;
+          expires_at: string | null;
+          id: string;
+          muted_by: string | null;
+          reason: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          expires_at?: string | null;
+          id?: string;
+          muted_by?: string | null;
+          reason: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          expires_at?: string | null;
+          id?: string;
+          muted_by?: string | null;
+          reason?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "chat_mutes_muted_by_fkey";
+            columns: ["muted_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "chat_mutes_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
         ];
@@ -2301,6 +2348,16 @@ export type Database = {
           warning_id: string;
         }[];
       };
+      add_chat_codex_proposal_source: {
+        Args: {
+          p_chat_message_id: string;
+          p_note?: string;
+          p_proposal_id: string;
+        };
+        Returns: {
+          source_id: string;
+        }[];
+      };
       add_codex_proposal_source: {
         Args: {
           p_comment_id?: string;
@@ -2372,6 +2429,31 @@ export type Database = {
           updated_by_display_name: string;
           value: Json;
           value_type: string;
+        }[];
+      };
+      admin_list_chat_channels: {
+        Args: never;
+        Returns: {
+          clan_id: string;
+          description: string;
+          id: string;
+          kind: Database["public"]["Enums"]["chat_channel_kind"];
+          name: string;
+          slug: string;
+          sort_order: number;
+          status: Database["public"]["Enums"]["chat_channel_status"];
+        }[];
+      };
+      admin_list_reaction_types: {
+        Args: never;
+        Returns: {
+          affects_reputation: boolean;
+          created_at: string;
+          emoji: string;
+          is_active: boolean;
+          key: string;
+          label: string;
+          sort_order: number;
         }[];
       };
       admin_set_badge_status: {
@@ -2485,21 +2567,38 @@ export type Database = {
           clan_id: string;
         }[];
       };
-      admin_update_plaza: {
-        Args: {
-          p_description: string;
-          p_name: string;
-          p_plaza_id: string;
-          p_required_post_permission?: string;
-          p_rules: string;
-          p_slug: string;
-          p_sort_order: number;
-          p_visibility: Database["public"]["Enums"]["plaza_visibility"];
-        };
-        Returns: {
-          plaza_id: string;
-        }[];
-      };
+      admin_update_plaza:
+        | {
+            Args: {
+              p_description: string;
+              p_name: string;
+              p_plaza_id: string;
+              p_required_post_permission?: string;
+              p_rules: string;
+              p_slug: string;
+              p_sort_order: number;
+              p_visibility: Database["public"]["Enums"]["plaza_visibility"];
+            };
+            Returns: {
+              plaza_id: string;
+            }[];
+          }
+        | {
+            Args: {
+              p_clear_post_permission?: boolean;
+              p_description: string;
+              p_name: string;
+              p_plaza_id: string;
+              p_required_post_permission?: string;
+              p_rules: string;
+              p_slug: string;
+              p_sort_order: number;
+              p_visibility: Database["public"]["Enums"]["plaza_visibility"];
+            };
+            Returns: {
+              plaza_id: string;
+            }[];
+          };
       admin_upsert_badge: {
         Args: {
           p_description?: string;
@@ -2687,15 +2786,21 @@ export type Database = {
         Args: { p_reason: string; p_role_id: string; p_user_id: string };
         Returns: string;
       };
-      council_set_user_status: {
-        Args: {
-          p_expected_status: string;
-          p_reason: string;
-          p_status: string;
-          p_user_id: string;
-        };
-        Returns: string;
-      };
+      council_set_user_status:
+        | {
+            Args: {
+              p_expected_status: string;
+              p_reason: string;
+              p_status: string;
+              p_user_id: string;
+            };
+            Returns: string;
+          }
+        | {
+            Args: { p_reason: string; p_status: string; p_user_id: string };
+            Returns: string;
+          };
+      count_author_posts: { Args: { p_author_id: string }; Returns: number };
       create_appeal: {
         Args: { p_audit_log_id: string; p_body: string };
         Returns: {
@@ -2719,6 +2824,16 @@ export type Database = {
           p_comment_id?: string;
           p_external_url?: string;
           p_post_id?: string;
+          p_reason: string;
+          p_working_title?: string;
+        };
+        Returns: {
+          proposal_id: string;
+        }[];
+      };
+      create_codex_proposal_from_chat: {
+        Args: {
+          p_chat_message_id: string;
           p_reason: string;
           p_working_title?: string;
         };
@@ -2789,6 +2904,23 @@ export type Database = {
         Args: { p_clan_id: string; p_member_id: string; p_reason: string };
         Returns: {
           membership_id: string;
+        }[];
+      };
+      get_article_provenance: {
+        Args: { p_article_id: string };
+        Returns: {
+          added_at: string;
+          attribution: Database["public"]["Enums"]["codex_attribution"];
+          contribution_type: Database["public"]["Enums"]["codex_contribution_type"];
+          contributor_id: string;
+          kind: string;
+          member_display_name: string;
+          member_id: string;
+          source_id: string;
+          source_is_visible: boolean;
+          source_label: string;
+          source_note: string;
+          source_type: Database["public"]["Enums"]["codex_source_type"];
         }[];
       };
       get_chat_channel: {
@@ -2958,6 +3090,14 @@ export type Database = {
           membership_id: string;
         }[];
       };
+      list_chat_channel_members: {
+        Args: { p_channel_id: string };
+        Returns: {
+          added_at: string;
+          display_name: string;
+          member_id: string;
+        }[];
+      };
       list_chat_channels: {
         Args: never;
         Returns: {
@@ -3058,16 +3198,50 @@ export type Database = {
           version: number;
         }[];
       };
-      list_codex_categories: {
-        Args: never;
+      list_codex_articles_for_review: {
+        Args: {
+          p_cursor_created_at?: string;
+          p_cursor_id?: string;
+          p_limit?: number;
+          p_status?: Database["public"]["Enums"]["codex_article_status"];
+        };
         Returns: {
-          description: string;
+          author_display_name: string;
+          author_id: string;
+          category_name: string;
+          category_slug: string;
+          created_at: string;
+          excerpt: string;
           id: string;
-          name: string;
+          published_at: string;
           slug: string;
-          sort_order: number;
+          status: Database["public"]["Enums"]["codex_article_status"];
+          title: string;
+          version: number;
         }[];
       };
+      list_codex_categories:
+        | {
+            Args: never;
+            Returns: {
+              description: string;
+              id: string;
+              name: string;
+              slug: string;
+              sort_order: number;
+            }[];
+          }
+        | {
+            Args: { p_include_archived: boolean };
+            Returns: {
+              description: string;
+              id: string;
+              name: string;
+              slug: string;
+              sort_order: number;
+              status: string;
+            }[];
+          };
       list_codex_proposal_contributors: {
         Args: { p_limit?: number; p_proposal_id: string };
         Returns: {
@@ -3314,16 +3488,15 @@ export type Database = {
           updated_at: string;
         }[];
       };
-      count_author_posts: {
-        Args: { p_author_id: string };
-        Returns: number;
-      };
-      list_posts_by_author: {
+      list_posts: {
         Args: {
-          p_author_id: string;
           p_cursor_created_at?: string;
           p_cursor_id?: string;
+          p_cursor_score?: number;
           p_limit?: number;
+          p_order?: string;
+          p_plaza_id?: string;
+          p_tag_slug?: string;
         };
         Returns: {
           author_display_name: string;
@@ -3344,15 +3517,12 @@ export type Database = {
           title: string;
         }[];
       };
-      list_posts: {
+      list_posts_by_author: {
         Args: {
+          p_author_id: string;
           p_cursor_created_at?: string;
           p_cursor_id?: string;
-          p_cursor_score?: number;
           p_limit?: number;
-          p_order?: string;
-          p_plaza_id?: string;
-          p_tag_slug?: string;
         };
         Returns: {
           author_display_name: string;
@@ -3561,6 +3731,17 @@ export type Database = {
           post_id: string;
         }[];
       };
+      moderation_mute_chat_user: {
+        Args: {
+          p_duration_minutes?: number;
+          p_reason: string;
+          p_user_id: string;
+        };
+        Returns: {
+          expires_at: string;
+          mute_id: string;
+        }[];
+      };
       moderation_resolve_appeal: {
         Args: {
           p_appeal_id: string;
@@ -3647,6 +3828,12 @@ export type Database = {
         };
         Returns: {
           message_id: string;
+        }[];
+      };
+      moderation_unmute_chat_user: {
+        Args: { p_reason: string; p_user_id: string };
+        Returns: {
+          mute_id: string;
         }[];
       };
       moderation_warn_user: {
@@ -4087,7 +4274,8 @@ export type Database = {
         | "friend_request"
         | "clan_invite"
         | "warning"
-        | "announcement";
+        | "announcement"
+        | "report_resolved";
       outbox_status: "pending" | "delivered" | "failed";
       plaza_status: "active" | "archived";
       plaza_visibility: "public" | "members" | "private";
@@ -4286,6 +4474,7 @@ export const Constants = {
         "clan_invite",
         "warning",
         "announcement",
+        "report_resolved",
       ],
       outbox_status: ["pending", "delivered", "failed"],
       plaza_status: ["active", "archived"],
