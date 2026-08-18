@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Database } from "@/lib/database.types";
 import { createClient } from "@/lib/supabase/server";
+import { avatarUrlFor, signedAvatarUrls } from "@/lib/storage/avatar-urls";
 import { decodeCursor, encodeCursor, type ContentCursor } from "@/lib/content/cursor";
 import { listReactionTypes } from "@/lib/content/queries";
 import { getAuthorizationSnapshot } from "@/lib/permissions";
@@ -79,6 +80,7 @@ export function shapeChatMessage(
     ...row,
     reaction_counts: parseReactionCounts(row.reaction_counts),
     caller_reacted: parseCallerReactions(row.caller_reacted),
+    authorAvatarUrl: null,
   };
 }
 
@@ -132,7 +134,22 @@ export async function listMessages(
 
   if (error) return emptyPage();
 
-  const items = (data ?? []).map(shapeChatMessage);
+  const rows = (data ?? []).map((row) => ({
+    ...row,
+    reaction_counts: parseReactionCounts(row.reaction_counts),
+    caller_reacted: parseCallerReactions(row.caller_reacted),
+  }));
+
+  const urls = await signedAvatarUrls(
+    supabase,
+    rows.map((row) => row.author_avatar_path),
+  );
+
+  const items: ChatMessage[] = rows.map((row) => ({
+    ...row,
+    authorAvatarUrl: avatarUrlFor(urls, row.author_avatar_path),
+  }));
+
   return toPage(items, pageSize, (row) => ({ createdAt: row.created_at, id: row.id }));
 }
 

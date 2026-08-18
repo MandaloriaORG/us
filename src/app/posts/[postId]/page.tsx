@@ -4,7 +4,7 @@ import { ChatCircleIcon, PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/s
 
 import { getCouncilReportAccess } from "@/app/council/access";
 import { Button } from "@/components/ui/button";
-import { AuthorMark } from "@/components/system/author-mark";
+import { Avatar } from "@/components/ui/avatar";
 import { CopyLinkButton } from "@/components/system/copy-link-button";
 import { ReportControl } from "@/components/system/report-control";
 import { renderMarkdown } from "@/lib/content/markdown";
@@ -102,7 +102,12 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
         {post.title}
       </h1>
       <p className="text-fg-subtle mt-2 flex items-center gap-1.5 text-sm">
-        <AuthorMark name={post.author_display_name} />
+        <Avatar
+          name={post.author_display_name}
+          src={post.authorAvatarUrl}
+          className="h-7 w-7 text-[11px]"
+          alt=""
+        />
         <span className="truncate">{post.author_display_name}</span>
         <span aria-hidden="true" className="text-fg-subtle/60">
           ·

@@ -162,6 +162,8 @@ export function MessageThread({
       parent_id: parentId,
       author_id: currentUser.id,
       author_display_name: currentUser.displayName,
+      author_avatar_path: "",
+      authorAvatarUrl: null,
       body,
       status: "visible",
       is_pinned: false,

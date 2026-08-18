@@ -3,10 +3,18 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   createClient: vi.fn(),
   rpc: vi.fn(),
+  createSignedUrls: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
 vi.mock("@/lib/supabase/server", () => ({ createClient: mocks.createClient }));
+
+const clientWithStorage = () => ({
+  rpc: mocks.rpc,
+  storage: {
+    from: () => ({ createSignedUrls: mocks.createSignedUrls }),
+  },
+});
 
 import {
   buildCommentTree,
@@ -23,7 +31,8 @@ const plazaId = "10000000-0000-4000-8000-000000000001";
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mocks.createClient.mockResolvedValue({ rpc: mocks.rpc });
+  mocks.createClient.mockResolvedValue(clientWithStorage());
+  mocks.createSignedUrls.mockResolvedValue({ data: [], error: null });
 });
 
 function postRow(index: number): PostSummary {
@@ -34,6 +43,8 @@ function postRow(index: number): PostSummary {
     plaza_name: "Central Plaza",
     author_id: "30000000-0000-4000-8000-000000000001",
     author_display_name: "Member A",
+    author_avatar_path: "",
+    authorAvatarUrl: null,
     title: `Post ${index}`,
     excerpt: "Body",
     status: "published",
@@ -54,6 +65,8 @@ function commentRow(id: string, parentId: string | null): PostComment {
     parent_id: parentId,
     author_id: "30000000-0000-4000-8000-000000000001",
     author_display_name: "Member A",
+    author_avatar_path: "",
+    authorAvatarUrl: null,
     body: "text",
     status: "published",
     depth: parentId ? 1 : 0,

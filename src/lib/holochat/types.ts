@@ -58,6 +58,7 @@ export type ChatMessage = Omit<
 > & {
   reaction_counts: ReactionCounts;
   caller_reacted: CallerReactions;
+  authorAvatarUrl: string | null;
 };
 
 export type ChatMessageEdit = Nullable<

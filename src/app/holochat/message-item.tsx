@@ -121,6 +121,7 @@ export function MessageItem({
       {message.author_id ? (
         <Avatar
           name={authorName}
+          src={message.authorAvatarUrl}
           className="ring-border-raised h-8 w-8 text-[10px] ring-1"
           alt=""
         />

@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Database } from "@/lib/database.types";
 import { createClient } from "@/lib/supabase/server";
+import { avatarUrlFor, signedAvatarUrls } from "@/lib/storage/avatar-urls";
 import { decodeCursor, encodeCursor, type ContentCursor } from "@/lib/content/cursor";
 
 /**
@@ -31,16 +32,21 @@ export type PlazaDetail = Nullable<
   Functions["get_plaza"]["Returns"][number],
   "description" | "rules"
 >;
-export type PostSummary = Nullable<Functions["list_posts"]["Returns"][number], "excerpt">;
+export type PostSummary = Nullable<Functions["list_posts"]["Returns"][number], "excerpt"> & {
+  authorAvatarUrl: string | null;
+};
 export type PostByAuthor = Nullable<
   Functions["list_posts_by_author"]["Returns"][number],
   "excerpt"
->;
-export type PostDetail = Nullable<Functions["get_post"]["Returns"][number], "body">;
+> &
+  { authorAvatarUrl: string | null };
+export type PostDetail = Nullable<Functions["get_post"]["Returns"][number], "body"> & {
+  authorAvatarUrl: string | null;
+};
 export type PostComment = Nullable<
   Functions["list_post_comments"]["Returns"][number],
   "author_id" | "author_display_name" | "body" | "parent_id"
->;
+> & { authorAvatarUrl: string | null };
 export type BookmarkSummary = Functions["list_own_bookmarks"]["Returns"][number];
 export type ReactionType = Functions["list_reaction_types"]["Returns"][number];
 
@@ -151,18 +157,40 @@ export async function listPosts(options: ListPostsOptions = {}): Promise<Page<Po
 
   if (error) return emptyPage();
 
-  return toPage(data, pageSize, (row) => ({
-    createdAt: row.created_at,
-    id: row.id,
-    score: order === "popular" ? row.score : undefined,
+  const rows = data ?? [];
+  const urls = await signedAvatarUrls(
+    supabase,
+    rows.map((row) => row.author_avatar_path),
+  );
+  const items: PostSummary[] = rows.map((row) => ({
+    ...row,
+    authorAvatarUrl: avatarUrlFor(urls, row.author_avatar_path),
   }));
+
+  if (items.length < pageSize) return { items, nextCursor: null };
+  const last = items[items.length - 1];
+  return {
+    items,
+    nextCursor: encodeCursor({
+      createdAt: last.created_at,
+      id: last.id,
+      score: order === "popular" ? last.score : undefined,
+    }),
+  };
 }
 
 export async function getPost(postId: string): Promise<PostDetail | null> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("get_post", { p_post_id: postId });
   if (error) return null;
-  return data?.[0] ?? null;
+  const row = data?.[0];
+  if (!row) return null;
+
+  const urls = await signedAvatarUrls(supabase, [row.author_avatar_path]);
+  return {
+    ...row,
+    authorAvatarUrl: avatarUrlFor(urls, row.author_avatar_path),
+  } satisfies PostDetail;
 }
 
 export interface ListCommentsOptions {
@@ -187,7 +215,22 @@ export async function listPostComments(
 
   if (error) return emptyPage();
 
-  return toPage(data, pageSize, (row) => ({ createdAt: row.created_at, id: row.id }));
+  const rows = data ?? [];
+  const urls = await signedAvatarUrls(
+    supabase,
+    rows.map((row) => row.author_avatar_path),
+  );
+  const items: PostComment[] = rows.map((row) => ({
+    ...row,
+    authorAvatarUrl: avatarUrlFor(urls, row.author_avatar_path),
+  }));
+
+  if (items.length < pageSize) return { items, nextCursor: null };
+  const last = items[items.length - 1];
+  return {
+    items,
+    nextCursor: encodeCursor({ createdAt: last.created_at, id: last.id }),
+  };
 }
 
 export async function listOwnBookmarks(
@@ -270,13 +313,24 @@ export async function listPostsByAuthor(
 
   if (error) return emptyPage();
 
-  return toPage(
-    data as Array<
-      Database["public"]["Functions"]["list_posts_by_author"]["Returns"][number]
-    > | null,
-    pageSize,
-    (row) => ({ createdAt: row.created_at, id: row.id }),
+  const rows = (data ?? []) as Array<
+    Database["public"]["Functions"]["list_posts_by_author"]["Returns"][number]
+  >;
+  const urls = await signedAvatarUrls(
+    supabase,
+    rows.map((row) => row.author_avatar_path),
   );
+  const items: PostByAuthor[] = rows.map((row) => ({
+    ...row,
+    authorAvatarUrl: avatarUrlFor(urls, row.author_avatar_path),
+  }));
+
+  if (items.length < pageSize) return { items, nextCursor: null };
+  const last = items[items.length - 1];
+  return {
+    items,
+    nextCursor: encodeCursor({ createdAt: last.created_at, id: last.id }),
+  };
 }
 
 export async function countAuthorPosts(authorId: string): Promise<number> {

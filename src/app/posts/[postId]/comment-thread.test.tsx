@@ -21,6 +21,8 @@ function node(): CommentNode {
     parent_id: null,
     author_id: "40000000-0000-4000-8000-000000000001",
     author_display_name: "Ada",
+    author_avatar_path: "",
+    authorAvatarUrl: null,
     body: "Hello",
     status: "published",
     is_pinned: false,

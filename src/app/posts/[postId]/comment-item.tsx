@@ -9,6 +9,7 @@ import { CopyLinkButton } from "@/components/system/copy-link-button";
 import { ReactionControl } from "@/components/system/reaction-control";
 import { ReportControl } from "@/components/system/report-control";
 import { VoteControl } from "@/components/system/vote-control";
+import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   createComment,
@@ -81,8 +82,16 @@ export function CommentItem({
         </div>
       ) : (
         <div className="space-y-1.5">
-          <div className="flex flex-wrap items-baseline gap-x-2">
-            <span className="text-fg text-sm font-medium">{node.author_display_name}</span>
+          <div className="flex flex-wrap items-center gap-x-2">
+            <span className="inline-flex items-center gap-1.5">
+              <Avatar
+                name={node.author_display_name ?? "Member"}
+                src={node.authorAvatarUrl}
+                className="h-5 w-5 text-[10px]"
+                alt=""
+              />
+              <span className="text-fg text-sm font-medium">{node.author_display_name}</span>
+            </span>
             <span className="text-fg-subtle text-xs">{formatRelativeTime(node.created_at)}</span>
           </div>
 

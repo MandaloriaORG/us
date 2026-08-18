@@ -4,7 +4,7 @@ import { CaretRightIcon, PushPinSimpleIcon } from "@phosphor-icons/react/dist/ss
 import type { PostSummary } from "@/lib/content/queries";
 import { formatRelativeTime } from "@/lib/time";
 
-import { AuthorMark } from "./author-mark";
+import { Avatar } from "@/components/ui/avatar";
 import { PlazaChip } from "./plaza-chip";
 
 export interface PostListProps {
@@ -60,7 +60,12 @@ export function PostList({ posts, showPlazaName = false, nextHref }: PostListPro
                     <PlazaChip slug={post.plaza_slug} name={post.plaza_name} />
                   ) : null}
                   <span className="inline-flex min-w-0 items-center gap-1.5">
-                    <AuthorMark name={post.author_display_name} />
+                    <Avatar
+                      name={post.author_display_name}
+                      src={post.authorAvatarUrl}
+                      className="h-5 w-5 text-[10px]"
+                      alt=""
+                    />
                     <span className="truncate">{post.author_display_name}</span>
                   </span>
                   <span aria-hidden="true" className="text-fg-subtle/60">
