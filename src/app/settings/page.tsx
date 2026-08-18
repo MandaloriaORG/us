@@ -20,7 +20,9 @@ export default async function SettingsPage() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
       <div className="mb-6">
-        <h1 className="text-fg text-2xl font-bold font-serif sm:text-3xl">Account Settings</h1>
+        <h1 className="text-fg font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+          Account Settings
+        </h1>
         <p className="text-fg-muted mt-1 text-sm">
           Manage your account preferences, notification rules, and security.
         </p>

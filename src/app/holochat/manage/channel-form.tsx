@@ -10,9 +10,7 @@ import { adminCreateChatChannel, adminUpdateChatChannel } from "@/lib/actions/ho
 import type { ChatChannelSummary } from "@/lib/holochat/types";
 import { Textarea } from "@/components/ui/textarea";
 
-
-const INPUT_CLASS =
-  "border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/30 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 h-11 w-full rounded-md border px-3 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50";
+const INPUT_CLASS = "aria-invalid:border-error aria-invalid:focus-visible:ring-error/30";
 
 export interface ChannelFormProps {
   mode: "create" | "edit";
@@ -148,7 +146,7 @@ export function ChannelForm({ mode, channel, onSaved }: ChannelFormProps) {
           aria-invalid={fieldErrors.description ? true : undefined}
           onChange={(event) => setDescription(event.target.value)}
           placeholder="What is this channel for?"
-          className="border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error min-h-16 w-full resize-y rounded-md border px-3 py-2 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="aria-invalid:border-error min-h-16 resize-y"
         />
         {fieldErrors.description ? (
           <p role="alert" className="text-error text-xs">

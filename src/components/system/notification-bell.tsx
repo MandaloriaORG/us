@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState, useTransition } from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
 import {
   AtIcon,
   BellIcon,
@@ -62,7 +61,6 @@ export function NotificationBell({ className }: { className?: string }) {
   const [recent, setRecent] = useState<NotificationItem[]>([]);
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const reduced = useReducedMotion();
 
   const refresh = useCallback(async () => {
     const state = await getNotificationBellState(8);
@@ -100,7 +98,7 @@ export function NotificationBell({ className }: { className?: string }) {
           aria-label={badge ? `Notifications, ${unreadCount} unread` : "Notifications"}
           aria-haspopup="dialog"
           className={cn(
-            "text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg relative flex h-11 w-11 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden",
+            "text-fg-muted duration-fast hover:bg-surface hover:text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg relative flex h-11 w-11 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-[0.98]",
             className,
           )}
         >
@@ -113,18 +111,7 @@ export function NotificationBell({ className }: { className?: string }) {
             <span className="bg-error text-error-fg absolute -top-0.5 -right-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-semibold tabular-nums">
               {badge}
             </span>
-          ) : (
-            unreadCount > 0 && (
-              <motion.span
-                aria-hidden="true"
-                className="bg-brand absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full"
-                animate={reduced ? { opacity: 0.9 } : { opacity: [0.9, 0.4, 0.9] }}
-                transition={
-                  reduced ? { duration: 0 } : { duration: 2.2, repeat: Infinity, ease: "easeInOut" }
-                }
-              />
-            )
-          )}
+          ) : null}
         </button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-80 p-0">

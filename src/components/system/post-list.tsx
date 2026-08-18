@@ -85,7 +85,7 @@ export function PostList({ posts, showPlazaName = false, nextHref }: PostListPro
       {nextHref ? (
         <Link
           href={nextHref}
-          className="group border-border bg-bg-raised text-fg-muted hover:text-fg hover:border-border-raised focus-visible:ring-border-focus mt-4 inline-flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-hidden"
+          className="group border-border bg-bg-raised text-fg-muted hover:text-fg hover:border-border-raised focus-visible:ring-border-focus mt-4 inline-flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-hidden active:scale-[0.98]"
         >
           Next
           <CaretRightIcon

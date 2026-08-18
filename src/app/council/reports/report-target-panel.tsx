@@ -7,7 +7,6 @@ import { setCommentStatus, setPostStatus } from "@/lib/actions/moderation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-
 type TargetStatus =
   | "draft"
   | "pending_review"
@@ -204,7 +203,7 @@ export function ReportTargetPanel({
           aria-invalid={reasonInvalid ? true : undefined}
           onBlur={() => setTouched(true)}
           onChange={(event) => setReason(event.target.value)}
-          className="border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-16 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-16 resize-y"
           placeholder="Explain the action"
         />
         {reasonInvalid ? (

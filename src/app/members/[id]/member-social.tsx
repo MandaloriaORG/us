@@ -16,7 +16,6 @@ import type { SocialState } from "@/lib/clans/types";
 import type { ClanActionResult } from "@/lib/clans/errors";
 import { Textarea } from "@/components/ui/textarea";
 
-
 interface MemberSocialProps {
   targetUserId: string;
   social: SocialState;
@@ -155,7 +154,7 @@ export function MemberSocial({ targetUserId, social }: MemberSocialProps) {
                 disabled={isPending}
                 onChange={(event) => setBlockReason(event.target.value)}
                 rows={2}
-                className="border-border bg-bg text-fg focus-visible:border-border-focus focus-visible:ring-border-focus/40 min-h-16 w-64 resize-y rounded-md border px-3 py-2 text-sm outline-hidden focus-visible:ring-2"
+                className="min-h-16 w-64 resize-y"
               />
               <div className="flex gap-2">
                 <Button

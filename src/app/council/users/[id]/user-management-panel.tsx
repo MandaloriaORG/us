@@ -13,7 +13,6 @@ import { Badge } from "@/components/origin/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-
 export interface CouncilRoleOption {
   id: string;
   name: string;
@@ -314,7 +313,7 @@ export function UserManagementPanel({
             setReason(event.target.value);
             if (reasonTouched) setReasonTouched(true);
           }}
-          className="border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 resize-y"
           placeholder="Explain why this change is needed"
         />
         {reasonError ? (

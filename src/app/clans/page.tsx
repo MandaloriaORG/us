@@ -110,7 +110,7 @@ export default async function ClansPage() {
             >
               <div
                 aria-hidden="true"
-                className="from-brand/70 via-brand-muted/40 h-1 w-full bg-gradient-to-r to-amber-500/25"
+                className="from-brand/70 via-brand-muted/40 to-brand-light/25 h-1 w-full bg-linear-to-r"
               />
               <div className="flex items-start gap-4 p-5">
                 <div

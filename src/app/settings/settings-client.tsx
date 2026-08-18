@@ -12,6 +12,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { setNotificationPreferences } from "@/lib/actions/holochat";
 
 interface SettingsClientProps {
@@ -21,11 +22,31 @@ interface SettingsClientProps {
 }
 
 const NOTIFICATION_TYPES = [
-  { id: "mention", label: "Mentions (@you)", description: "Notify when someone mentions you in chat or posts" },
-  { id: "friend_request", label: "Friend requests", description: "Notify when a clan member adds you" },
-  { id: "codex_proposal", label: "Codex proposals", description: "Notify on proposals to your subscribed categories" },
-  { id: "clan_announcement", label: "Clan announcements", description: "Important announcements from your clan leaders" },
-  { id: "system", label: "System notices", description: "Security, moderation and platform announcements" },
+  {
+    id: "mention",
+    label: "Mentions (@you)",
+    description: "Notify when someone mentions you in chat or posts",
+  },
+  {
+    id: "friend_request",
+    label: "Friend requests",
+    description: "Notify when a clan member adds you",
+  },
+  {
+    id: "codex_proposal",
+    label: "Codex proposals",
+    description: "Notify on proposals to your subscribed categories",
+  },
+  {
+    id: "clan_announcement",
+    label: "Clan announcements",
+    description: "Important announcements from your clan leaders",
+  },
+  {
+    id: "system",
+    label: "System notices",
+    description: "Security, moderation and platform announcements",
+  },
 ];
 
 export function SettingsClient({ user, initialPrefs, profileVisibility }: SettingsClientProps) {
@@ -61,14 +82,14 @@ export function SettingsClient({ user, initialPrefs, profileVisibility }: Settin
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-      {/* Sidebar de pestañas tipo XenForo */}
       <nav className="space-y-1 md:col-span-1" aria-label="Settings navigation">
         <button
           type="button"
+          aria-pressed={tab === "notifications"}
           onClick={() => setTab("notifications")}
-          className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${
+          className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors active:scale-[0.98] ${
             tab === "notifications"
-              ? "bg-surface text-fg ring-1 ring-brand/40"
+              ? "bg-surface text-fg ring-brand/40 ring-1"
               : "text-fg-muted hover:bg-surface/50 hover:text-fg"
           }`}
         >
@@ -78,10 +99,11 @@ export function SettingsClient({ user, initialPrefs, profileVisibility }: Settin
 
         <button
           type="button"
+          aria-pressed={tab === "privacy"}
           onClick={() => setTab("privacy")}
-          className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${
+          className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors active:scale-[0.98] ${
             tab === "privacy"
-              ? "bg-surface text-fg ring-1 ring-brand/40"
+              ? "bg-surface text-fg ring-brand/40 ring-1"
               : "text-fg-muted hover:bg-surface/50 hover:text-fg"
           }`}
         >
@@ -91,10 +113,11 @@ export function SettingsClient({ user, initialPrefs, profileVisibility }: Settin
 
         <button
           type="button"
+          aria-pressed={tab === "security"}
           onClick={() => setTab("security")}
-          className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${
+          className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors active:scale-[0.98] ${
             tab === "security"
-              ? "bg-surface text-fg ring-1 ring-brand/40"
+              ? "bg-surface text-fg ring-brand/40 ring-1"
               : "text-fg-muted hover:bg-surface/50 hover:text-fg"
           }`}
         >
@@ -102,10 +125,10 @@ export function SettingsClient({ user, initialPrefs, profileVisibility }: Settin
           Security & Password
         </button>
 
-        <div className="pt-3 border-t border-border mt-3">
+        <div className="border-border mt-3 border-t pt-3">
           <Link
             href="/profile/edit"
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-fg-muted hover:bg-surface/50 hover:text-fg transition-colors"
+            className="text-fg-muted hover:bg-surface/50 hover:text-fg flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors"
           >
             <UserCircleIcon aria-hidden="true" className="h-4 w-4" />
             Edit Profile Data →
@@ -113,34 +136,34 @@ export function SettingsClient({ user, initialPrefs, profileVisibility }: Settin
         </div>
       </nav>
 
-      {/* Contenido principal */}
-      <div className="rounded-xl border border-border bg-surface/50 p-6 md:col-span-3">
+      <div className="border-border bg-surface/50 rounded-lg border p-6 md:col-span-3">
         {tab === "notifications" && (
           <div className="space-y-6">
             <div>
               <h2 className="text-fg text-lg font-semibold">Notification Preferences</h2>
-              <p className="text-fg-muted text-xs mt-1">
+              <p className="text-fg-muted mt-1 text-xs">
                 Choose which events send in-app and outbox alerts to your account.
               </p>
             </div>
 
-            <div className="divide-y divide-border/60">
+            <div className="divide-border/60 divide-y">
               {NOTIFICATION_TYPES.map((type) => (
-                <label
+                <div
                   key={type.id}
-                  className="flex items-start justify-between py-3.5 cursor-pointer hover:bg-surface/30 px-2 rounded -mx-2 transition-colors"
+                  className="hover:bg-surface/30 -mx-2 flex items-start justify-between gap-3 px-2 py-3.5 transition-colors"
                 >
-                  <div className="pr-4">
+                  <label htmlFor={`pref-${type.id}`} className="cursor-pointer pr-4">
                     <p className="text-fg text-sm font-medium">{type.label}</p>
                     <p className="text-fg-muted text-xs">{type.description}</p>
-                  </div>
-                  <input
-                    type="checkbox"
+                  </label>
+                  <Checkbox
+                    id={`pref-${type.id}`}
                     checked={prefs[type.id] ?? false}
-                    onChange={() => togglePref(type.id)}
-                    className="h-4 w-4 rounded border-border text-brand focus:ring-brand focus:ring-offset-bg mt-1 cursor-pointer"
+                    onCheckedChange={() => togglePref(type.id)}
+                    aria-label={`Enable ${type.label}`}
+                    className="mt-1"
                   />
-                </label>
+                </div>
               ))}
             </div>
 
@@ -158,7 +181,7 @@ export function SettingsClient({ user, initialPrefs, profileVisibility }: Settin
                 )}
               </Button>
               {saved && (
-                <span className="flex items-center gap-1 text-xs text-brand font-medium">
+                <span className="text-brand flex items-center gap-1 text-xs font-medium">
                   <CheckCircleIcon aria-hidden="true" className="h-4 w-4" />
                   Saved
                 </span>
@@ -171,30 +194,36 @@ export function SettingsClient({ user, initialPrefs, profileVisibility }: Settin
           <div className="space-y-6">
             <div>
               <h2 className="text-fg text-lg font-semibold">Privacy & Visibility</h2>
-              <p className="text-fg-muted text-xs mt-1">
+              <p className="text-fg-muted mt-1 text-xs">
                 Control who can see your profile, friend list, and activity.
               </p>
             </div>
 
-            <div className="rounded-lg border border-border bg-surface p-4 space-y-3">
-              <div className="flex justify-between items-center">
+            <div className="border-border bg-surface space-y-3 rounded-lg border p-4">
+              <div className="flex items-center justify-between">
                 <div>
                   <p className="text-fg text-sm font-medium">Profile Visibility</p>
-                  <p className="text-fg-muted text-xs">Currently set to: <span className="text-fg font-semibold capitalize">{profileVisibility}</span></p>
+                  <p className="text-fg-muted text-xs">
+                    Currently set to:{" "}
+                    <span className="text-fg font-semibold capitalize">{profileVisibility}</span>
+                  </p>
                 </div>
-                <Link
-                  href="/profile/edit"
-                  className="text-xs text-brand hover:underline"
-                >
+                <Link href="/profile/edit" className="text-brand text-xs hover:underline">
                   Change in Profile Editor →
                 </Link>
               </div>
             </div>
 
-            <div className="text-xs text-fg-muted space-y-1">
-              <p>• <strong>Public</strong>: visible to all visitors</p>
-              <p>• <strong>Members</strong>: visible only to signed-in users</p>
-              <p>• <strong>Private</strong>: only visible to you and administrators</p>
+            <div className="text-fg-muted space-y-1 text-xs">
+              <p>
+                • <strong>Public</strong>: visible to all visitors
+              </p>
+              <p>
+                • <strong>Members</strong>: visible only to signed-in users
+              </p>
+              <p>
+                • <strong>Private</strong>: only visible to you and administrators
+              </p>
             </div>
           </div>
         )}
@@ -203,19 +232,19 @@ export function SettingsClient({ user, initialPrefs, profileVisibility }: Settin
           <div className="space-y-6">
             <div>
               <h2 className="text-fg text-lg font-semibold">Security & Password</h2>
-              <p className="text-fg-muted text-xs mt-1">
+              <p className="text-fg-muted mt-1 text-xs">
                 Manage your credentials and session state.
               </p>
             </div>
 
-            <div className="rounded-lg border border-border bg-surface p-4 space-y-3">
+            <div className="border-border bg-surface space-y-3 rounded-lg border p-4">
               <p className="text-fg text-sm font-medium">Password Reset</p>
               <p className="text-fg-muted text-xs">
                 To update your password, request a secure reset link to your registered email.
               </p>
               <Link
                 href="/auth/forgot-password"
-                className="inline-flex items-center gap-1.5 text-xs text-brand hover:underline font-medium"
+                className="text-brand inline-flex items-center gap-1.5 text-xs font-medium hover:underline"
               >
                 Request password reset link →
               </Link>

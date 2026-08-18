@@ -7,7 +7,6 @@ import type { ReportStatus } from "@/lib/content/report-reasons";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-
 interface ReportDecisionPanelProps {
   reportId: string;
   status: ReportStatus;
@@ -86,7 +85,7 @@ export function ReportDecisionPanel({ reportId, status }: ReportDecisionPanelPro
           aria-describedby={reasonInvalid ? `${reasonId}-error` : undefined}
           onBlur={() => setTouched(true)}
           onChange={(event) => setReason(event.target.value)}
-          className="border-border bg-bg text-fg duration-fast placeholder:text-fg-subtle focus-visible:border-border-focus focus-visible:ring-border-focus/40 aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-hidden transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="aria-invalid:border-error aria-invalid:focus-visible:ring-error/30 min-h-24 resize-y"
           placeholder="Explain the decision"
         />
         {reasonInvalid ? (

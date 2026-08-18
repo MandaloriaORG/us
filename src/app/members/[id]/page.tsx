@@ -1,5 +1,11 @@
 import { notFound } from "next/navigation";
-import { CalendarBlankIcon, GlobeIcon, ArrowLeftIcon, ChatCircleDotsIcon, UsersIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  CalendarBlankIcon,
+  GlobeIcon,
+  ArrowLeftIcon,
+  ChatCircleDotsIcon,
+  UsersIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
 import { safeExternalUrl } from "@/app/members/safe-external-url";
@@ -96,25 +102,17 @@ export default async function MemberProfilePage({ params }: Props) {
       </Link>
 
       {/* Profile header */}
-      <section className="border-border bg-bg-raised relative mt-6 overflow-hidden rounded-xl border">
-        <div
-          aria-hidden="true"
-          className="from-brand/20 via-brand-muted/10 absolute inset-x-0 top-0 h-24 bg-gradient-to-br to-transparent"
-        />
-        <div
-          aria-hidden="true"
-          className="via-brand/40 absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent to-transparent"
-        />
+      <section className="border-border bg-bg-raised relative mt-6 overflow-hidden rounded-lg border">
         <div className="relative flex flex-col gap-5 p-6 sm:flex-row sm:items-start sm:p-8">
           <Avatar
             name={profile.display_name}
             src={profile.avatarUrl}
             alt={`${profile.display_name}'s avatar`}
-            className="ring-brand/40 ring-offset-bg h-20 w-20 border-transparent shadow-[0_0_32px_-8px_hsl(42_40%_55%/0.55)] ring-2 ring-offset-2"
+            className="ring-brand/40 ring-offset-bg h-20 w-20 border-transparent ring-2 ring-offset-2"
           />
 
           <div className="min-w-0 flex-1">
-            <h1 className="text-fg from-fg via-fg to-brand/80 bg-gradient-to-br bg-clip-text text-2xl font-semibold tracking-tight wrap-break-word text-transparent">
+            <h1 className="text-fg text-2xl font-semibold tracking-tight wrap-break-word">
               {profile.display_name}
             </h1>
 
@@ -123,14 +121,7 @@ export default async function MemberProfilePage({ params }: Props) {
               <div className="mt-2.5">
                 <span
                   className="border-brand/40 bg-brand-muted/10 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
-                  style={
-                    identity.rank.color
-                      ? {
-                          color: identity.rank.color,
-                          boxShadow: `0 0 14px -4px ${identity.rank.color}`,
-                        }
-                      : undefined
-                  }
+                  style={identity.rank.color ? { color: identity.rank.color } : undefined}
                 >
                   {identity.rank.name}
                 </span>
@@ -143,7 +134,7 @@ export default async function MemberProfilePage({ params }: Props) {
                 {staffRoles.map((role) => (
                   <span
                     key={role}
-                    className="border-brand/40 bg-brand-muted/10 text-brand inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium shadow-[0_0_12px_-3px_hsl(42_40%_55%/0.4)]"
+                    className="border-brand/40 bg-brand-muted/10 text-brand inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
                   >
                     {role}
                   </span>
@@ -180,11 +171,15 @@ export default async function MemberProfilePage({ params }: Props) {
             )}
             <div className="text-fg-muted flex items-center gap-1.5 text-xs">
               <ChatCircleDotsIcon aria-hidden="true" className="h-3.5 w-3.5" />
-              <span>{postsTotal} {postsTotal === 1 ? "post" : "posts"}</span>
+              <span>
+                {postsTotal} {postsTotal === 1 ? "post" : "posts"}
+              </span>
             </div>
             <div className="text-fg-muted flex items-center gap-1.5 text-xs">
               <UsersIcon aria-hidden="true" className="h-3.5 w-3.5" />
-              <span>{friends.length} {friends.length === 1 ? "friend" : "friends"}</span>
+              <span>
+                {friends.length} {friends.length === 1 ? "friend" : "friends"}
+              </span>
             </div>
             {identity.status === "ok" && identity.badges.length > 0 ? (
               <div className="text-fg-muted flex items-center gap-1.5 text-xs">
@@ -293,7 +288,7 @@ export default async function MemberProfilePage({ params }: Props) {
               >
                 <Link
                   href={`/posts/${post.id}`}
-                  className="text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg block rounded font-medium hover:text-brand focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+                  className="text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg hover:text-brand block rounded font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
                 >
                   {post.title}
                 </Link>
@@ -331,7 +326,11 @@ export default async function MemberProfilePage({ params }: Props) {
                   href={`/members/${friend.friendId}`}
                   className="border-border bg-surface/40 hover:bg-surface/70 focus-visible:ring-border-focus focus-visible:ring-offset-bg flex items-center gap-2.5 rounded-lg border px-3 py-2 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
                 >
-                  <Avatar name={friend.displayName} src={friend.avatarUrl} className="h-8 w-8 shrink-0" />
+                  <Avatar
+                    name={friend.displayName}
+                    src={friend.avatarUrl}
+                    className="h-8 w-8 shrink-0"
+                  />
                   <span className="text-fg truncate text-xs font-medium">{friend.displayName}</span>
                 </Link>
               </li>

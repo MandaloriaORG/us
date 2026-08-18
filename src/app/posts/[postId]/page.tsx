@@ -98,7 +98,7 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
         </Link>
       </p>
 
-      <h1 className="font-display text-fg from-brand wrap-balance mt-1 bg-gradient-to-r to-amber-400 bg-clip-text text-[1.7rem] leading-tight font-semibold tracking-tight text-transparent sm:text-3xl">
+      <h1 className="font-display text-fg from-brand wrap-balance to-brand-light mt-1 bg-linear-to-r bg-clip-text text-[1.7rem] leading-tight font-semibold tracking-tight text-transparent sm:text-3xl">
         {post.title}
       </h1>
       <p className="text-fg-subtle mt-2 flex items-center gap-1.5 text-sm">
@@ -121,26 +121,7 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
         // Safe by construction: `renderMarkdown` escapes the author's text before
         // emitting its own closed set of tags. See `src/lib/content/markdown.ts`.
         <div
-          className="text-fg mt-5 max-w-[68ch] text-[0.95rem] leading-[1.7]
-            [&_a]:text-brand [&_a]:underline-offset-4 [&_a:hover]:underline
-            [&_p]:mt-3 [&_p:first-child]:mt-0
-            [&_h2]:font-serif [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight
-            [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-semibold
-            [&_ul]:my-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-1
-            [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:space-y-1
-            [&_li]:my-0.5
-            [&_blockquote]:border-l-2 [&_blockquote]:border-brand/40 [&_blockquote]:bg-brand-muted/5
-              [&_blockquote]:my-4 [&_blockquote]:rounded-r-md [&_blockquote]:py-2 [&_blockquote]:pr-3 [&_blockquote]:pl-4
-              [&_blockquote]:text-fg-muted [&_blockquote]:italic
-              [&_blockquote>p]:my-0
-            [&_code]:bg-surface/70 [&_code]:border [&_code]:border-border [&_code]:rounded
-              [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.85em] [&_code]:font-mono
-            [&_pre]:bg-bg-raised [&_pre]:border [&_pre]:border-border [&_pre]:rounded-lg
-              [&_pre]:my-4 [&_pre]:overflow-x-auto [&_pre]:p-4 [&_pre]:text-[0.85rem]
-              [&_pre_code]:bg-transparent [&_pre_code]:border-0 [&_pre_code]:p-0
-            [&_strong]:font-semibold [&_strong]:text-fg
-            [&_em]:italic [&_em]:text-fg
-            [&_del]:text-fg-subtle [&_del]:line-through"
+          className="text-fg [&_a]:text-brand [&_blockquote]:border-brand/40 [&_blockquote]:bg-brand-muted/5 [&_blockquote]:text-fg-muted [&_code]:bg-surface/70 [&_code]:border-border [&_pre]:bg-bg-raised [&_pre]:border-border [&_strong]:text-fg [&_em]:text-fg [&_del]:text-fg-subtle mt-5 max-w-[68ch] text-[0.95rem] leading-[1.7] [&_a]:underline-offset-4 [&_a:hover]:underline [&_blockquote]:my-4 [&_blockquote]:rounded-r-md [&_blockquote]:border-l-2 [&_blockquote]:py-2 [&_blockquote]:pr-3 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote>p]:my-0 [&_code]:rounded [&_code]:border [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em] [&_del]:line-through [&_em]:italic [&_h2]:mt-6 [&_h2]:font-serif [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-semibold [&_li]:my-0.5 [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:space-y-1 [&_ol]:pl-6 [&_p]:mt-3 [&_p:first-child]:mt-0 [&_pre]:my-4 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:border [&_pre]:p-4 [&_pre]:text-[0.85rem] [&_pre_code]:border-0 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_strong]:font-semibold [&_ul]:my-3 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-6"
           dangerouslySetInnerHTML={{ __html: renderMarkdown(post.body ?? "") }}
         />
       )}
@@ -253,7 +234,7 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
               >
                 <Link
                   href={`/posts/${item.id}`}
-                  className="text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg block rounded font-medium hover:text-brand focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
+                  className="text-fg focus-visible:ring-border-focus focus-visible:ring-offset-bg hover:text-brand block rounded font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
                 >
                   {item.title}
                 </Link>
