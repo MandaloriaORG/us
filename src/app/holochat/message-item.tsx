@@ -25,6 +25,7 @@ import type {
 } from "@/lib/holochat/types";
 import { ReactionPicker } from "./reaction-picker";
 import { ChatReportControl } from "./chat-report-control";
+import { EditHistoryViewer } from "./edit-history-viewer";
 import { MessageModerationControl, type ModerationAction } from "./message-moderation-control";
 
 export interface MessageItemProps {
@@ -81,6 +82,7 @@ export function MessageItem({
 }: MessageItemProps) {
   const [reportOpen, setReportOpen] = useState(false);
   const [moderation, setModeration] = useState<ModerationAction | null>(null);
+  const [editHistoryOpen, setEditHistoryOpen] = useState(false);
 
   const own = currentUser?.id === message.author_id;
   const visible = message.status === "visible";
@@ -222,6 +224,11 @@ export function MessageItem({
                 {own && visible ? (
                   <DropdownMenuItem onSelect={() => onEdit(message)}>Edit</DropdownMenuItem>
                 ) : null}
+                {(own || canModerate) && message.edited_at ? (
+                  <DropdownMenuItem onSelect={() => setEditHistoryOpen(true)}>
+                    Edit history
+                  </DropdownMenuItem>
+                ) : null}
                 {canSend && !own && visible ? (
                   <DropdownMenuItem onSelect={() => setReportOpen(true)}>Report</DropdownMenuItem>
                 ) : null}
@@ -286,6 +293,16 @@ export function MessageItem({
               expectedStatus={message.status}
               onCancel={() => setModeration(null)}
               onConfirm={confirmModeration}
+            />
+          </div>
+        ) : null}
+
+        {editHistoryOpen ? (
+          <div className="mt-2">
+            <EditHistoryViewer
+              currentBody={message.body}
+              messageId={message.id}
+              onClose={() => setEditHistoryOpen(false)}
             />
           </div>
         ) : null}

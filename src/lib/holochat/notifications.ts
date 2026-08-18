@@ -16,6 +16,7 @@ export const NOTIFICATION_TYPES = [
   "clan_invite",
   "warning",
   "announcement",
+  "report_resolved",
 ] as const;
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
@@ -30,6 +31,7 @@ export const NOTIFICATION_TYPE_LABELS: Record<NotificationType, string> = {
   clan_invite: "Clan and house invitations",
   warning: "Warnings and notices",
   announcement: "Important announcements",
+  report_resolved: "Report outcomes",
 };
 
 /** Short list-row label when the full sentence is too long for a row. */
@@ -42,6 +44,7 @@ export const NOTIFICATION_TYPE_SHORT_LABELS: Record<NotificationType, string> = 
   clan_invite: "Clan invitation",
   warning: "Warning",
   announcement: "Announcement",
+  report_resolved: "Report resolved",
 };
 
 /**
@@ -72,6 +75,7 @@ export function notificationHref(type: NotificationType, payload: Record<string,
     case "warning":
     case "announcement":
     case "mention":
+    case "report_resolved":
       return "/holochat";
     default:
       return "/holochat";
@@ -108,6 +112,8 @@ export function notificationSummary(
       return "You received a warning";
     case "announcement":
       return "The Council posted an announcement";
+    case "report_resolved":
+      return "Your report was resolved";
     default:
       return "New notification";
   }

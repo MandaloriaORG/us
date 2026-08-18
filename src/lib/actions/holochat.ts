@@ -10,11 +10,13 @@ import {
   CHAT_MESSAGE_DESTINATIONS,
   CHAT_MESSAGE_PAGE_SIZE,
   type ChatMessage,
+  type ChatMessageEdit,
   type NotificationItem,
 } from "@/lib/holochat/types";
 import {
   countUnreadNotifications,
   drainOutbox,
+  listMessageEdits,
   listMessages,
   listOwnNotifications,
 } from "@/lib/holochat/queries";
@@ -603,6 +605,30 @@ export async function adminAddChatChannelMember(input: unknown): Promise<Channel
   }
 }
 
+export type OutboxResult = HolochatActionResult<{ eventId: string }>;
+
+/**
+ * Re-queue one failed outbox event for a fresh delivery attempt. The RPC
+ * re-checks `admin.manage_settings` inside the database; this action only
+ * validates the id and refreshes the Council settings surface.
+ */
+export async function reprocessOutboxEvent(input: unknown): Promise<OutboxResult> {
+  const parsed = uuidSchema.safeParse(input);
+  if (!parsed.success) return invalidInput(parsed.error);
+
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.rpc("outbox_reprocess", { p_event_id: parsed.data });
+
+    if (error) return databaseFailure(error);
+
+    refresh(["/council/settings"]);
+    return { ok: true, eventId: parsed.data };
+  } catch (error) {
+    return databaseFailure(error);
+  }
+}
+
 export type NotificationResult = HolochatActionResult<{ notificationId: string }>;
 
 export async function markNotificationRead(input: unknown): Promise<NotificationResult> {
@@ -689,6 +715,23 @@ export async function getChatMessagesPage(input: unknown): Promise<ChatMessagesP
   });
 
   return { items: page.items, nextCursor: page.nextCursor };
+}
+
+const messageEditsSchema = z.object({
+  messageId: uuidSchema,
+  limit: z.number().int().min(1).max(50).default(20),
+});
+
+/**
+ * Edit history for one chat message, via the `list_chat_message_edits` RPC,
+ * which is scoped to the message author and chat moderators. A caller outside
+ * that set gets an empty list, matching the RPC's "not found" denial.
+ */
+export async function getChatMessageEdits(input: unknown): Promise<ChatMessageEdit[]> {
+  const parsed = messageEditsSchema.safeParse(input);
+  if (!parsed.success) return [];
+
+  return listMessageEdits(parsed.data.messageId, parsed.data.limit);
 }
 
 export interface NotificationsPage {

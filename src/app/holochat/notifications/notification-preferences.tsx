@@ -32,6 +32,7 @@ const TYPE_ICONS: Record<NotificationType, typeof ChatCircleIcon> = {
   clan_invite: ShieldIcon,
   warning: WarningIcon,
   announcement: MegaphoneIcon,
+  report_resolved: CheckCircleIcon,
 };
 
 export interface NotificationPreferencesProps {

@@ -3,7 +3,8 @@ import { ArrowLeftIcon, GearIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { EmptyState } from "@/components/ui/empty-state";
 import { can } from "@/lib/permissions";
-import { listChannels } from "@/lib/holochat/queries";
+import { adminListChannels, listChannels } from "@/lib/holochat/queries";
+import { ArchivedChannels } from "./archived-channels";
 import { ChannelAdmin } from "./channel-admin";
 
 export const metadata = {
@@ -27,7 +28,8 @@ export default async function ManageChannelsPage() {
     );
   }
 
-  const channels = await listChannels();
+  const [channels, admin] = await Promise.all([listChannels(), adminListChannels()]);
+  const archivedChannels = admin.filter((channel) => channel.status === "archived");
 
   return (
     <div className="mx-auto flex min-h-svh w-full max-w-4xl flex-col px-4 py-6 md:px-6">
@@ -46,6 +48,7 @@ export default async function ManageChannelsPage() {
       </header>
 
       <ChannelAdmin channels={channels} />
+      <ArchivedChannels archived={archivedChannels} />
     </div>
   );
 }

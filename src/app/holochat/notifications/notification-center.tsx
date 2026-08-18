@@ -8,6 +8,7 @@ import {
   BellRingingIcon,
   ChatCircleIcon,
   ChatTextIcon,
+  CheckCircleIcon,
   EnvelopeIcon,
   HeartIcon,
   MegaphoneIcon,
@@ -40,6 +41,7 @@ const TYPE_ICONS: Record<NotificationType, typeof ChatCircleIcon> = {
   clan_invite: ShieldIcon,
   warning: WarningIcon,
   announcement: MegaphoneIcon,
+  report_resolved: CheckCircleIcon,
 };
 
 function dayLabel(iso: string, now: Date = new Date()): string {

@@ -8,7 +8,7 @@ import {
 } from "@/lib/holochat/notifications";
 
 describe("notification vocabulary", () => {
-  it("covers exactly the eight database notification types", () => {
+  it("covers exactly the database notification types", () => {
     expect(NOTIFICATION_TYPES).toEqual([
       "post_reply",
       "comment_reply",
@@ -18,6 +18,7 @@ describe("notification vocabulary", () => {
       "clan_invite",
       "warning",
       "announcement",
+      "report_resolved",
     ]);
   });
 

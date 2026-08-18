@@ -43,6 +43,7 @@ const TYPE_ICONS: Record<NotificationType, typeof ChatCircleIcon> = {
   clan_invite: ShieldIcon,
   warning: WarningIcon,
   announcement: MegaphoneIcon,
+  report_resolved: CheckIcon,
 };
 
 const POLL_INTERVAL_MS = 60_000;

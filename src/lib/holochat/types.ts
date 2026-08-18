@@ -26,6 +26,26 @@ export type ChatChannelDetail = Nullable<
 >;
 
 /**
+ * The Council's channel-administration row: every channel, active or archived,
+ * with its status. Only a `chat.manage` holder can read it, so it is never the
+ * public summary type.
+ */
+export type AdminChannel = Nullable<
+  Functions["admin_list_chat_channels"]["Returns"][number],
+  "description" | "clan_id"
+>;
+
+/**
+ * A failed outbox event, for the Council's system-health surface. Readable only
+ * by an `admin.manage_settings` holder; the payload is ids and metadata, never
+ * a private body.
+ */
+export type FailedOutboxEvent = Nullable<
+  Functions["outbox_list_failed"]["Returns"][number],
+  "aggregate_type" | "aggregate_id" | "last_error"
+>;
+
+/**
  * The read RPC returns reaction data as `jsonb`; the queries module casts it to
  * keyed maps, so the row type declares the cast shape.
  */

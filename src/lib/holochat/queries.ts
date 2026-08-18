@@ -6,6 +6,7 @@ import { decodeCursor, encodeCursor, type ContentCursor } from "@/lib/content/cu
 import { listReactionTypes } from "@/lib/content/queries";
 import { getAuthorizationSnapshot } from "@/lib/permissions";
 import {
+  type AdminChannel,
   type CallerReactions,
   type ChatChannelDetail,
   type ChatChannelSummary,
@@ -84,6 +85,18 @@ export function shapeChatMessage(
 export async function listChannels(): Promise<ChatChannelSummary[]> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("list_chat_channels");
+  if (error) return [];
+  return data ?? [];
+}
+
+/**
+ * The Council's channel list, including archived channels, for the
+ * archived-channel reactivation surface. Readable only by a `chat.manage`
+ * holder; a failed read degrades to an empty list exactly like the public one.
+ */
+export async function adminListChannels(): Promise<AdminChannel[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("admin_list_chat_channels");
   if (error) return [];
   return data ?? [];
 }
