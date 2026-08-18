@@ -3036,6 +3036,7 @@ export type Database = {
         Args: { p_post_id: string };
         Returns: {
           accepts_comments: boolean;
+          author_avatar_path: string;
           author_display_name: string;
           author_id: string;
           body: string;
@@ -3128,6 +3129,7 @@ export type Database = {
           p_pinned_only?: boolean;
         };
         Returns: {
+          author_avatar_path: string;
           author_display_name: string;
           author_id: string;
           body: string;
@@ -3155,6 +3157,7 @@ export type Database = {
       list_clan_members: {
         Args: { p_clan_id: string; p_limit?: number };
         Returns: {
+          avatar_path: string;
           display_name: string;
           joined_at: string;
           member_id: string;
@@ -3468,6 +3471,7 @@ export type Database = {
           p_post_id: string;
         };
         Returns: {
+          author_avatar_path: string;
           author_display_name: string;
           author_id: string;
           body: string;
@@ -3500,6 +3504,7 @@ export type Database = {
           p_tag_slug?: string;
         };
         Returns: {
+          author_avatar_path: string;
           author_display_name: string;
           author_id: string;
           comments_count: number;
@@ -3526,6 +3531,7 @@ export type Database = {
           p_limit?: number;
         };
         Returns: {
+          author_avatar_path: string;
           author_display_name: string;
           author_id: string;
           comments_count: number;
